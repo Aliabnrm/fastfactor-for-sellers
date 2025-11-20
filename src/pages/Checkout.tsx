@@ -4,22 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { CheckCircle2, Upload, Store } from "lucide-react";
+import { CheckCircle2, Upload, Store, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
   product: string;
+  productPhoto: File | null;
   customerName: string;
   phoneNumber: string;
   address: string;
   postalCode: string;
+  cardLastDigits: string;
   paymentProof: File | null;
 }
 
@@ -28,23 +23,50 @@ const Checkout = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     product: "",
+    productPhoto: null,
     customerName: "",
     phoneNumber: "",
     address: "",
     postalCode: "",
+    cardLastDigits: "",
     paymentProof: null,
   });
   const [fileName, setFileName] = useState<string>("");
+  const [productPhotoName, setProductPhotoName] = useState<string>("");
+  
+  const productPrice = 250000; // قیمت محصول (تومان)
+  const shippingCost = 35000; // هزینه پست (تومان)
+  const totalPrice = productPrice + shippingCost;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation
     if (!formData.product || !formData.customerName || !formData.phoneNumber || 
-        !formData.address || !formData.postalCode || !formData.paymentProof) {
+        !formData.address || !formData.postalCode || !formData.cardLastDigits || !formData.paymentProof) {
       toast({
         title: "خطا",
-        description: "لطفاً تمام فیلدها را پر کنید",
+        description: "لطفاً تمام فیلدهای اجباری را پر کنید",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Postal code validation (10 digits)
+    if (!/^\d{10}$/.test(formData.postalCode)) {
+      toast({
+        title: "خطا",
+        description: "کد پستی باید ۱۰ رقم باشد",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Card last digits validation (4 digits)
+    if (!/^\d{4}$/.test(formData.cardLastDigits)) {
+      toast({
+        title: "خطا",
+        description: "۴ رقم آخر کارت باید عدد باشد",
         variant: "destructive",
       });
       return;
@@ -63,6 +85,14 @@ const Checkout = () => {
     if (file) {
       setFormData({ ...formData, paymentProof: file });
       setFileName(file.name);
+    }
+  };
+
+  const handleProductPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, productPhoto: file });
+      setProductPhotoName(file.name);
     }
   };
 
@@ -132,21 +162,68 @@ const Checkout = () => {
           <h2 className="text-xl font-semibold text-foreground mb-6">ثبت سفارش</h2>
           
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Product Selection */}
+            {/* Product Details */}
             <div className="space-y-2">
-              <Label htmlFor="product">محصول</Label>
-              <Select value={formData.product} onValueChange={(value) => setFormData({ ...formData, product: value })}>
-                <SelectTrigger id="product">
-                  <SelectValue placeholder="محصول مورد نظر را انتخاب کنید" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="scarf-a">روسری مدل A</SelectItem>
-                  <SelectItem value="scarf-b">روسری مدل B</SelectItem>
-                  <SelectItem value="scarf-c">روسری مدل C</SelectItem>
-                  <SelectItem value="shawl">شال</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="product">نام محصول / کد / رنگ و سایز *</Label>
+              <Input
+                id="product"
+                type="text"
+                placeholder="مثال: شال پلیسه مشکی"
+                value={formData.product}
+                onChange={(e) => setFormData({ ...formData, product: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground">
+                چیزی که سفارش دادید را دقیق بنویسید. مثال: شال پلیسه مشکی
+              </p>
             </div>
+
+            {/* Optional Product Photo */}
+            <div className="space-y-2">
+              <Label className="text-sm text-muted-foreground">عکس محصول (اختیاری)</Label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="productPhoto"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProductPhotoChange}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('productPhoto')?.click()}
+                  className="gap-2"
+                >
+                  <Camera className="w-4 h-4" />
+                  {productPhotoName || "آپلود عکس محصول"}
+                </Button>
+                {productPhotoName && (
+                  <span className="text-xs text-muted-foreground">✓</span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                اگر نام محصول را نمی‌دانید، عکسش را آپلود کنید
+              </p>
+            </div>
+
+            {/* Price Summary */}
+            <Card className="p-4 bg-accent/50">
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">قیمت محصول:</span>
+                  <span className="font-medium">{productPrice.toLocaleString('fa-IR')} تومان</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">هزینه پست:</span>
+                  <span className="font-medium">{shippingCost.toLocaleString('fa-IR')} تومان</span>
+                </div>
+                <div className="flex justify-between border-t border-border pt-2">
+                  <span className="font-semibold">جمع کل:</span>
+                  <span className="font-bold text-primary">{totalPrice.toLocaleString('fa-IR')} تومان</span>
+                </div>
+              </div>
+            </Card>
 
             {/* Customer Name */}
             <div className="space-y-2">
@@ -187,16 +264,37 @@ const Checkout = () => {
 
             {/* Postal Code */}
             <div className="space-y-2">
-              <Label htmlFor="postal">کد پستی</Label>
+              <Label htmlFor="postal">کد پستی *</Label>
               <Input
                 id="postal"
                 type="text"
                 placeholder="کد پستی ده رقمی"
                 value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value.replace(/\D/g, '') })}
                 maxLength={10}
                 dir="ltr"
               />
+              <p className="text-xs text-muted-foreground">
+                کد پستی باید دقیقاً ۱۰ رقم باشد
+              </p>
+            </div>
+
+            {/* Last 4 Digits of Card */}
+            <div className="space-y-2">
+              <Label htmlFor="cardDigits">۴ رقم آخر کارت *</Label>
+              <Input
+                id="cardDigits"
+                type="text"
+                placeholder="۱۲۳۴"
+                value={formData.cardLastDigits}
+                onChange={(e) => setFormData({ ...formData, cardLastDigits: e.target.value.replace(/\D/g, '') })}
+                maxLength={4}
+                dir="ltr"
+                className="text-center text-lg tracking-widest"
+              />
+              <p className="text-xs text-muted-foreground">
+                برای چک کردن راحت‌تر پرداخت شما
+              </p>
             </div>
 
             {/* Payment Proof Upload */}
