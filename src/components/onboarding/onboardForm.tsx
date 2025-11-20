@@ -141,7 +141,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           <Form.Item
             label="شماره کارت"
             name="cardNumber"
-            rules={cardNumberRules()}
+            rules={cardNumberRules}
           >
             <Input
               size="large"
