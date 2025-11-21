@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react";
 import { ReactNode, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useAuth } from "@/context/AuthContext";
+
 
 type DashboardHeaderProps = {
   rightSlot?: ReactNode;
@@ -13,19 +13,6 @@ const DashboardHeader = ({
   showSettingsShortcut = true,
 }: DashboardHeaderProps) => {
   const navigate = useNavigate();
-  // const { user } = useAuth();
-
-  // const avatarFallback = useMemo(() => {
-  //   if (user?.name) {
-  //     return user.name.charAt(0);
-  //   }
-
-  //   if (user?.mobile) {
-  //     return user.mobile.slice(-2);
-  //   }
-
-  //   return "ش";
-  // }, [user?.mobile, user?.name]);
 
   return (
     <header className="border-b border-border bg-card shadow-sm">

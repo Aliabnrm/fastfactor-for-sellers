@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Order } from "@/mock/orders";
+import { Order } from "@/types/orders";
 import StatusBadge from "./orderStatus";
 
 type Props2 = {

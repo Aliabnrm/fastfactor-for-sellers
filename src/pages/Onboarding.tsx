@@ -1,17 +1,11 @@
 import { Divider } from "antd";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/context/AuthContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import StepsSidebar from "@/components/onboarding/Sidebar";
 import OnboardingForm from "@/components/onboarding/onboardForm";
 
 const Onboarding = () => {
-  const { user, isReady } = useAuth();
   const navigate = useNavigate();
-
-  if (!isReady) return null;
-  if (!user) return <Navigate to="/auth" replace />;
-  if (user.isOnboarded) return <Navigate to="/dashboard" replace />;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 flex items-center justify-center px-4 py-12">

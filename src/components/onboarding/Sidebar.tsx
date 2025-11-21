@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Steps, Typography } from "antd";
 import { Sparkles, Store, Wallet, Truck } from "lucide-react";
-import { useEffect, useState } from "react";
 
 const stepsMeta = [
   {
@@ -21,7 +21,6 @@ const stepsMeta = [
 ];
 
 const StepsSidebar = () => {
-  // visual-only sidebar; the real step is controlled inside the form
   const [current] = useState(0);
 
   return (

@@ -1,80 +1,18 @@
-import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
 import { mobileRules } from "@/lib/validation/mobileRuls";
 import { passwordRules } from "@/lib/validation/password";
 import { Card, Form, Input, Tabs, Typography, Button } from "antd";
 
-type LoginFormValues = {
-  mobile: string;
-  password: string;
-};
-
-type SignupFormValues = LoginFormValues;
-
 const Auth = () => {
-  const { user, login, signup, isReady } = useAuth();
-  const navigate = useNavigate();
-  const [activeKey, setActiveKey] = useState<"login" | "signup">("login");
-  const [loading, setLoading] = useState({
-    login: false,
-    signup: false,
-  });
-
-  const [loginForm] = Form.useForm<LoginFormValues>();
-  const [signupForm] = Form.useForm<SignupFormValues>();
-
-  useEffect(() => {
-    if (!isReady || !user) {
-      return;
-    }
-
-    navigate(user.isOnboarded ? "/dashboard" : "/onboarding", {
-      replace: true,
-    });
-  }, [isReady, navigate, user]);
-
-  if (!isReady) {
-    return null;
-  }
-
-  const handleLogin = async (values: LoginFormValues) => {
-    setLoading((prev) => ({ ...prev, login: true }));
-    try {
-      const authenticatedUser = login(values);
-      toast.success("خوش آمدید!");
-      navigate(authenticatedUser.isOnboarded ? "/dashboard" : "/onboarding");
-    } finally {
-      setLoading((prev) => ({ ...prev, login: false }));
-    }
-  };
-
-  const handleSignup = async (values: SignupFormValues) => {
-    setLoading((prev) => ({ ...prev, signup: true }));
-    try {
-      const newUser = signup(values);
-      toast.success("ثبت‌نام با موفقیت انجام شد.");
-      navigate("/onboarding");
-      return newUser;
-    } finally {
-      setLoading((prev) => ({ ...prev, signup: false }));
-    }
-  };
+  // const navigate = useNavigate();
 
   const tabItems = [
     {
       key: "login",
       label: "ورود",
       children: (
-        <Form
-          layout="vertical"
-          form={loginForm}
-          onFinish={handleLogin}
-          requiredMark={false}
-          autoComplete="off"
-        >
+        <Form layout="vertical" requiredMark={false} autoComplete="off">
           <Form.Item label="شماره موبایل" name="mobile" rules={mobileRules}>
             <Input
               size="large"
@@ -85,13 +23,7 @@ const Auth = () => {
           <Form.Item label="رمز عبور" name="password" rules={passwordRules}>
             <Input.Password size="large" placeholder="رمز عبور" />
           </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            block
-            loading={loading.login}
-            className="mt-2"
-          >
+          <Button type="primary" htmlType="submit" block className="mt-2">
             ورود
           </Button>
         </Form>
@@ -101,13 +33,7 @@ const Auth = () => {
       key: "signup",
       label: "ثبت‌نام",
       children: (
-        <Form
-          layout="vertical"
-          form={signupForm}
-          onFinish={handleSignup}
-          requiredMark={false}
-          autoComplete="off"
-        >
+        <Form layout="vertical" requiredMark={false} autoComplete="off">
           <Form.Item label="شماره موبایل" name="mobile" rules={mobileRules}>
             <Input
               size="large"
@@ -118,13 +44,7 @@ const Auth = () => {
           <Form.Item label="رمز عبور" name="password" rules={passwordRules}>
             <Input.Password size="large" placeholder="یک رمز امن انتخاب کنید" />
           </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            block
-            loading={loading.signup}
-            className="mt-2"
-          >
+          <Button type="primary" htmlType="submit" block className="mt-2">
             ثبت‌نام رایگان
           </Button>
         </Form>
@@ -151,12 +71,7 @@ const Auth = () => {
           </Typography.Paragraph>
         </div>
 
-        <Tabs
-          centered
-          activeKey={activeKey}
-          onChange={(key) => setActiveKey(key as "login" | "signup")}
-          items={tabItems}
-        />
+        <Tabs centered items={tabItems} />
       </Card>
     </div>
   );
