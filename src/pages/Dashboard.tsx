@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Package, TrendingUp, Copy, Download, CheckCircle2, Clock, Truck } from "lucide-react";
+import { Package, TrendingUp, Copy, Download, CheckCircle2, Clock, Truck, Lock, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Table,
   TableBody,
@@ -31,14 +33,30 @@ const mockOrders: Order[] = [
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [orders] = useState<Order[]>(mockOrders);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(o => o.status === "pending").length;
   const verifiedOrders = orders.filter(o => o.status === "verified").length;
 
   const handleCopyLink = () => {
-    const shopLink = `${window.location.origin}/checkout/maryam-shop`;
+    if (!user?.isOnboarded) {
+      toast({
+        title: "فروشگاه فعال نیست",
+        description: "لطفا ابتدا تنظیمات را کامل کنید",
+        variant: "destructive",
+      });
+      return;
+    }
+    const shopLink = `${window.location.origin}/checkout/${user.slug}`;
     navigator.clipboard.writeText(shopLink);
     toast({
       title: "لینک کپی شد",
@@ -47,6 +65,14 @@ const Dashboard = () => {
   };
 
   const handleDownloadLabel = (orderId: string, customerName: string) => {
+    if (!user?.isOnboarded) {
+      toast({
+        title: "فروشگاه فعال نیست",
+        description: "لطفا ابتدا تنظیمات را کامل کنید",
+        variant: "destructive",
+      });
+      return;
+    }
     toast({
       title: "لیبل دانلود شد",
       description: `فایل PDF برای ${customerName} آماده است`,
@@ -81,6 +107,10 @@ const Dashboard = () => {
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -90,15 +120,49 @@ const Dashboard = () => {
             <Package className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-foreground">FastFactor</h1>
           </div>
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-            م
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground hidden md:inline">{user.name}</span>
+            <Button variant="ghost" size="sm" onClick={logout}>
+              خروج
+            </Button>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-6 space-y-6">
+        {/* Setup Card for Non-Onboarded Users */}
+        {!user.isOnboarded && (
+          <Card className="p-6 md:p-8 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <AlertCircle className="w-12 h-12 text-amber-600 dark:text-amber-400" />
+              <div>
+                <h2 className="text-2xl font-bold text-foreground mb-2">
+                  سلام {user.name}، خوش آمدید! 👋
+                </h2>
+                <p className="text-muted-foreground">
+                  فروشگاه شما هنوز فعال نیست. برای دریافت لینک اختصاصی و شروع فروش، تنظیمات را کامل کنید.
+                </p>
+              </div>
+              <Button 
+                size="lg" 
+                onClick={() => navigate('/onboarding')}
+                className="gap-2"
+              >
+                تکمیل مشخصات فروشگاه
+              </Button>
+            </div>
+          </Card>
+        )}
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${!user.isOnboarded ? 'opacity-50 pointer-events-none relative' : ''}`}>
+          {!user.isOnboarded && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 bg-background/50 backdrop-blur-sm rounded-lg">
+              <div className="text-center">
+                <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">فعال پس از تکمیل تنظیمات</p>
+              </div>
+            </div>
+          )}
           <Card className="p-6 shadow-md hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
@@ -137,7 +201,15 @@ const Dashboard = () => {
         </div>
 
         {/* Orders Table */}
-        <Card className="shadow-md">
+        <Card className={`shadow-md ${!user.isOnboarded ? 'opacity-50 pointer-events-none relative' : ''}`}>
+          {!user.isOnboarded && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 bg-background/50 backdrop-blur-sm rounded-lg">
+              <div className="text-center">
+                <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">سفارش‌ها پس از فعال‌سازی فروشگاه نمایش داده می‌شوند</p>
+              </div>
+            </div>
+          )}
           <div className="p-6 border-b border-border">
             <h2 className="text-lg font-semibold text-foreground">سفارش‌های من</h2>
           </div>
@@ -178,7 +250,14 @@ const Dashboard = () => {
         </Card>
 
         {/* Copy Shop Link Button */}
-        <Card className="p-6 shadow-md">
+        <Card className={`p-6 shadow-md ${!user.isOnboarded ? 'opacity-50 relative' : ''}`}>
+          {!user.isOnboarded && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 bg-background/50 backdrop-blur-sm rounded-lg">
+              <div className="text-center">
+                <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+              </div>
+            </div>
+          )}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="font-semibold text-foreground mb-1">لینک فروشگاه من</h3>
