@@ -1,11 +1,98 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Package, ShoppingBag, Zap } from "lucide-react";
+import { Package, ShoppingBag, Eye, LayoutDashboard, Settings, Zap } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
+  // State 1: New User (not onboarded)
+  if (user && !user.isOnboarded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex items-center justify-center p-4" dir="rtl">
+        <Card className="max-w-md w-full p-8 text-center shadow-lg">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+            <Package className="w-12 h-12 text-primary" />
+          </div>
+          <h1 className="text-3xl font-bold text-foreground mb-4">
+            سلام {user.name}، خوش آمدید! 👋
+          </h1>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            برای شروع فروش و دریافت لینک پرداخت، ابتدا باید مشخصات فروشگاه خود را تکمیل کنید.
+          </p>
+          <Button 
+            size="lg" 
+            onClick={() => navigate('/onboarding')}
+            className="w-full gap-2 text-lg h-14"
+          >
+            تکمیل اطلاعات فروشگاه 🚀
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  // State 2: Active User (onboarded)
+  if (user && user.isOnboarded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 p-4" dir="rtl">
+        <div className="container mx-auto py-16">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              پنل مدیریت {user.shopName}
+            </h1>
+            <p className="text-muted-foreground">مدیریت فروشگاه و سفارشات شما</p>
+          </div>
+
+          {/* Menu Grid */}
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+            <Card 
+              className="p-8 hover:shadow-lg transition-all cursor-pointer group"
+              onClick={() => navigate('/dashboard')}
+            >
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <LayoutDashboard className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">ورود به داشبورد فروش</h3>
+              <p className="text-muted-foreground">
+                مدیریت سفارش‌ها و پرینت لیبل
+              </p>
+            </Card>
+
+            <Card 
+              className="p-8 hover:shadow-lg transition-all cursor-pointer group"
+              onClick={() => navigate(`/checkout/${user.slug}`)}
+            >
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <Eye className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">مشاهده فرم مشتری</h3>
+              <p className="text-muted-foreground">
+                نمایش فرمی که مشتریان می‌بینند
+              </p>
+            </Card>
+          </div>
+
+          {/* Settings Link */}
+          <div className="text-center">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/onboarding')}
+              className="gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              تنظیمات فروشگاه
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default: Guest user - show original landing page
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
       <div className="container mx-auto px-4 py-16">
@@ -25,20 +112,11 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/login')}
               className="gap-2 text-lg h-12 px-8"
             >
               <Package className="w-5 h-5" />
-              داشبورد فروشنده
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              onClick={() => navigate('/checkout/maryam-shop')}
-              className="gap-2 text-lg h-12 px-8"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              نمایش فرم خرید
+              ورود / ثبت‌نام
             </Button>
           </div>
         </div>
