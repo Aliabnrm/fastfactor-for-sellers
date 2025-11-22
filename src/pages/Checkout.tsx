@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { CheckoutForm } from "@/components/Checkout/CheckoutForm";
-import { CheckoutSummary } from "@/components/Checkout/CheckoutSummary";
+import { CheckoutForm } from "@/components/checkout/CheckoutForm";
+import { CheckoutSummary } from "@/components/checkout/CheckoutSummary";
 
 export default function CheckoutPage() {
   const { toast } = useToast();
