@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthProviderWrapper";
 import { Package, ShoppingBag, Zap } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/context/AuthProviderWrapper";
+
 
 const Index = () => {
   const navigate = useNavigate();
