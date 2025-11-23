@@ -16,20 +16,20 @@ export const createSlugRules = (): Rule[] => [
   },
 ];
 
-export const cardNumberRules: Rule[] = [
-  { required: true, message: "شماره کارت را وارد کنید." },
-  {
-    validator: (_: unknown, value: string) => {
-      if (!value) {
-        return Promise.resolve();
-      }
-      const pure = value.replace(/-/g, "");
-      return /^\d{16}$/.test(pure)
-        ? Promise.resolve()
-        : Promise.reject(new Error("شماره کارت باید ۱۶ رقم باشد."));
-    },
-  },
-];
+// export const cardNumberRules: Rule[] = [
+//   { required: true, message: "شماره کارت را وارد کنید." },
+//   {
+//     validator: (_: unknown, value: string) => {
+//       if (!value) {
+//         return Promise.resolve();
+//       }
+//       const pure = value.replace(/-/g, "");
+//       return /^\d{16}$/.test(pure)
+//         ? Promise.resolve()
+//         : Promise.reject(new Error("شماره کارت باید ۱۶ رقم باشد."));
+//     },
+//   },
+// ];
 
 export const formatCardNumber = (value: string) =>
   value

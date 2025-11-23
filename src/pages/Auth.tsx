@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react";
 import { Card, Tabs, Typography } from "antd";
-import LoginForm from "@/components/auth/LoginForm";
 import SignupForm from "@/components/auth/SignupForm";
+import LoginForm from "@/components/auth/LoginForm";
 
 const Auth = () => {
   const tabItems = [

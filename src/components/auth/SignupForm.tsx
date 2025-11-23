@@ -1,23 +1,20 @@
 import { supabase } from "@/supabase";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
-import { mobileRules } from "@/lib/validation/mobileRuls";
 import { passwordRules } from "@/lib/validation/password";
 
 const SignupForm = () => {
   const navigate = useNavigate();
 
-  // because its to better we get email from user in login instead phone number and im converted phone number to fake email 
-  const phoneToEmail = (mobile) => `${mobile}@seller.app`;
-
   const handleSignup = async (values) => {
-    const email = phoneToEmail(values.mobile);
+    const email = values.email;
     const password = values.password;
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/auth?verified=true`,
         data: { mobile: values.mobile },
       },
     });
@@ -35,8 +32,15 @@ const SignupForm = () => {
       requiredMark={false}
       autoComplete="off"
     >
-      <Form.Item label="شماره موبایل" name="mobile" rules={mobileRules}>
-        <Input size="large" placeholder="مثال: 09123456789" inputMode="numeric" />
+      <Form.Item
+        label="ایمیل"
+        name="email"
+        rules={[
+          { required: true, message: "لطفا ایمیل خود را وارد کنید" },
+          { type: "email", message: "ایمیل معتبر وارد کنید" },
+        ]}
+      >
+        <Input size="large" placeholder="مثال: email@example.com" />
       </Form.Item>
 
       <Form.Item label="رمز عبور" name="password" rules={passwordRules}>

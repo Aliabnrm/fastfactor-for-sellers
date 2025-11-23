@@ -1,22 +1,116 @@
+import { supabase } from "@/supabase";
 import { LogOut, Save } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Button, Card, Form, Input, InputNumber, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Typography,
+  message,
+} from "antd";
+import useLogout from "@/hooks/useLogout";
+
+const { Title, Paragraph, Text } = Typography;
 
 const Settings = () => {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+
+  const { logout, loading: logoutLoading } = useLogout();
+
+  const fetchSellerProfile = async () => {
+    const { data: profile, error } = await supabase
+      .from("sellers")
+      .select("shop_name, card_owner, shipping_cost, card_number, email")
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      console.error("Error fetching seller profile:", error);
+      message.error("خطا در بارگذاری اطلاعات.");
+      return null;
+    }
+
+    return profile;
+  };
+
+  const handleUpdate = async (values) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from("sellers")
+        .update({
+          shop_name: values.shopName,
+          card_owner: values.ownerName,
+          shipping_cost: values.shippingCost,
+        })
+        .eq("id", (await supabase.auth.getUser()).data.user.id)
+        .select();
+
+      if (error) {
+        message.error(`خطا در ذخیره تغییرات: ${error.message}`);
+      } else {
+        message.success("تغییرات با موفقیت ذخیره شد.");
+      }
+    } catch (e) {
+      console.error("Update failed:", e);
+      message.error("خطای سیستمی هنگام ذخیره.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const profileData = await fetchSellerProfile();
+
+      if (profileData) {
+        const mappedData = {
+          shopName: profileData.shop_name,
+          ownerName: profileData.card_owner,
+          shippingCost: profileData.shipping_cost,
+          cardNumber: profileData.card_number,
+        };
+
+        form.setFieldsValue(mappedData);
+      }
+      setFetching(false);
+    };
+
+    loadProfile();
+  }, [form]);
+
+  const handleCardChange = (e) => {
+    const value = e.target.value;
+
+    const cleanedValue = value.replace(/\D/g, "");
+
+    const limitedValue = cleanedValue.substring(0, 16);
+
+    const formattedValue = limitedValue.replace(/(\d{4})(?=\d)/g, "$1-");
+
+    form.setFieldValue("cardNumber", formattedValue);
+  };
+
   return (
     <DashboardLayout showSettingsShortcut={false}>
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="space-y-1">
-          <Typography.Title level={3} className="!m-0">
+          <Title level={3} className="!m-0">
             تنظیمات فروشگاه
-          </Typography.Title>
-          <Typography.Paragraph className="text-muted-foreground !m-0">
+          </Title>
+          <Paragraph className="text-muted-foreground !m-0">
             اطلاعات فروشگاه و حساب خود را به‌روز نگه دارید.
-          </Typography.Paragraph>
+          </Paragraph>
         </div>
 
         <Form
+          form={form}
+          onFinish={handleUpdate}
           layout="vertical"
           requiredMark={false}
           autoComplete="off"
@@ -25,10 +119,11 @@ const Settings = () => {
           <Card
             className="shadow-sm border-border/60"
             bodyStyle={{ padding: 24 }}
+            loading={fetching}
           >
-            <Typography.Title level={4} className="!mt-0">
+            <Title level={4} className="!mt-0">
               اطلاعات کلی
-            </Typography.Title>
+            </Title>
             <Form.Item
               label="نام فروشگاه"
               name="shopName"
@@ -37,18 +132,19 @@ const Settings = () => {
               <Input size="large" placeholder="مثال: گالری مریم" />
             </Form.Item>
 
-            <Typography.Text type="warning" className="text-xs">
+            <Text type="warning" className="text-xs">
               تغییر لینک باعث غیرفعال شدن لینک‌های قبلی می‌شود.
-            </Typography.Text>
+            </Text>
           </Card>
 
           <Card
             className="shadow-sm border-border/60"
             bodyStyle={{ padding: 24 }}
+            loading={fetching}
           >
-            <Typography.Title level={4} className="!mt-0">
+            <Title level={4} className="!mt-0">
               مالی و ارسال
-            </Typography.Title>
+            </Title>
             <Form.Item
               label="نام صاحب کارت"
               name="ownerName"
@@ -58,14 +154,14 @@ const Settings = () => {
             >
               <Input size="large" placeholder="مثال: مریم رضایی" />
             </Form.Item>
-            {/* <Form.Item label="شماره کارت" name="cardNumber" rules={cardRules}>
+            <Form.Item label="شماره کارت" name="cardNumber">
               <Input
                 size="large"
                 placeholder="0000-0000-0000-0000"
                 inputMode="numeric"
                 onChange={handleCardChange}
               />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item
               label="هزینه ارسال ثابت (تومان)"
               name="shippingCost"
@@ -85,18 +181,19 @@ const Settings = () => {
           <Card
             className="shadow-sm border-border/60"
             bodyStyle={{ padding: 24 }}
+            loading={fetching}
           >
-            <Typography.Title level={4} className="!mt-0">
+            <Title level={4} className="!mt-0">
               حساب کاربری
-            </Typography.Title>
-            <Form.Item label="شماره موبایل">
-              {/* <Input size="large" value={user.mobile} disabled /> */}
-            </Form.Item>
+            </Title>
+
             <Button
               danger
               block
               size="large"
               icon={<LogOut className="w-4 h-4" />}
+              onClick={logout}
+              loading={logoutLoading}
             >
               خروج از حساب
             </Button>
@@ -106,7 +203,9 @@ const Settings = () => {
             <Button
               type="primary"
               size="large"
+              htmlType="submit"
               icon={<Save className="w-4 h-4" />}
+              loading={loading}
             >
               ذخیره تغییرات
             </Button>

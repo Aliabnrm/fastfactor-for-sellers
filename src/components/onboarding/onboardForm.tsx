@@ -1,6 +1,6 @@
+import { supabase } from "@/supabase";
 import { useState } from "react";
 import {
-  cardNumberRules,
   createSlugRules,
   formatCurrency,
   parseCurrency,
@@ -20,7 +20,6 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
 
   const next = async () => {
     try {
-      // validate only fields that belong to current step
       const fields = stepFields[current];
       await form.validateFields(fields);
       setCurrent((c) => c + 1);
@@ -34,14 +33,49 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
   const submit = async () => {
     try {
       setLoading(true);
-      // validate all fields before final submit
+
       await form.validateFields();
       const values = form.getFieldsValue(true);
-      // TODO: call API to save values
-      message.success("اطلاعات با موفقیت ذخیره شد");
-      onFinished?.();
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        message.error("خطا: کاربر احراز هویت نشده یا سشن منقضی شده است.");
+        setLoading(false);
+        return;
+      }
+
+      const sellerData = {
+        id: user.id,
+        email: user.email,
+
+        shop_name: values.shopName,
+        slug: values.slug,
+
+        card_owner: values.ownerName,
+        card_number: values.cardNumber,
+        shipping_cost: values.shippingCost,
+
+        is_onboarded: true,
+      };
+
+      const { error: dbError } = await supabase
+        .from("sellers")
+        .insert([sellerData]);
+
+      if (dbError) {
+        message.error(`خطا در ذخیره اطلاعات: ${dbError.message}`);
+      } else {
+        message.success(
+          "اطلاعات با موفقیت ذخیره شد و به داشبورد هدایت می‌شوید."
+        );
+        onFinished?.();
+      }
     } catch (err) {
-      // validation failed
+      console.error("Submission failed:", err);
     } finally {
       setLoading(false);
     }
@@ -97,7 +131,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
             <Form.Item
               label="شماره کارت"
               name="cardNumber"
-              rules={cardNumberRules}
+              // rules={cardNumberRules}
             >
               <Input
                 size="large"
