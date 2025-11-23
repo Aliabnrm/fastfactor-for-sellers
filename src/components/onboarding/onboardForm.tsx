@@ -1,94 +1,4 @@
-// import {
-//   cardNumberRules,
-//   createSlugRules,
-//   formatCurrency,
-//   parseCurrency,
-// } from "@/utils/formRules";
-// import { Form, Input, InputNumber, Button } from "antd";
-
-// const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
-//   return (
-//     <Form
-//       layout="vertical"
-//       requiredMark={false}
-//       autoComplete="off"
-//       className="space-y-4"
-//     >
-//       <>
-//         <h4 className="text-lg font-medium">فروشگاه خود را بسازید</h4>
-//         <Form.Item
-//           label="نام فروشگاه"
-//           name="shopName"
-//           rules={[{ required: true, message: "نام فروشگاه را وارد کنید." }]}
-//         >
-//           <Input size="large" placeholder="مثال: گالری مریم" />
-//         </Form.Item>
-
-//         <Form.Item
-//           label="آدرس فروشگاه (Slug)"
-//           name="slug"
-//           rules={createSlugRules()}
-//         >
-//           <Input
-//             size="large"
-//             placeholder="مثال: maryam-gallery"
-//             addonBefore={"myshop.ir/"}
-//           />
-//         </Form.Item>
-//       </>
-
-//       <>
-//         <h4 className="text-lg font-medium">اطلاعات جهت واریز مشتری</h4>
-//         <Form.Item
-//           label="نام صاحب کارت"
-//           name="ownerName"
-//           rules={[{ required: true, message: "نام صاحب کارت را وارد کنید." }]}
-//         >
-//           <Input size="large" placeholder="مثال: مریم رضایی" />
-//         </Form.Item>
-
-//         <Form.Item label="شماره کارت" name="cardNumber" rules={cardNumberRules}>
-//           <Input
-//             size="large"
-//             placeholder="0000-0000-0000-0000"
-//             inputMode="numeric"
-//           />
-//         </Form.Item>
-//       </>
-
-//       <>
-//         <h4 className="text-lg font-medium">هزینه ارسال</h4>
-//         <Form.Item
-//           label="هزینه ارسال ثابت"
-//           name="shippingCost"
-//           rules={[{ required: true, message: "هزینه ارسال را وارد کنید." }]}
-//         >
-//           <InputNumber
-//             size="large"
-//             className="w-full"
-//             min={0}
-//             controls={false}
-//             addonAfter="تومان"
-//             formatter={formatCurrency}
-//             parser={parseCurrency}
-//           />
-//         </Form.Item>
-//       </>
-
-//       <div className="flex flex-col sm:flex-row gap-3 mt-8">
-//         <Button block>بازگشت</Button>
-
-//         <Button type="primary" block>
-//           تأیید و رفتن به داشبورد
-//         </Button>
-//       </div>
-//     </Form>
-//   );
-// };
-
-// export default OnboardingForm;
-
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   cardNumberRules,
   createSlugRules,
@@ -96,8 +6,6 @@ import {
   parseCurrency,
 } from "@/utils/formRules";
 import { Form, Input, InputNumber, Button, Steps, message } from "antd";
-
-const { Step } = Steps;
 
 const stepFields: string[][] = [
   ["shopName", "slug"],

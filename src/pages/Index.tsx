@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Package, ShoppingBag, Eye, LayoutDashboard, Settings, Zap } from "lucide-react";
+import { Package, ShoppingBag, Zap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -20,7 +20,7 @@ const Index = () => {
             <Package className="w-12 h-12 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-4">
-            سلام علی، خوش آمدید! 👋
+            سلام خوش آمدید! 👋
           </h1>
           <p className="text-muted-foreground mb-8 leading-relaxed">
             برای شروع فروش و دریافت لینک پرداخت، ابتدا باید مشخصات فروشگاه خود

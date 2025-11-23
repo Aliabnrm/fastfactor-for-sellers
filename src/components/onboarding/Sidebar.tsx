@@ -35,7 +35,7 @@ const StepsSidebar = () => {
           تکمیل اطلاعات فروشگاه
         </Typography.Title>
         <Typography.Paragraph className="!mt-2 text-slate-500">
-          چند قدم ساده تا راه‌اندازی فروشگاه شما در فست‌فکتور.
+          چند قدم تا راه‌اندازی فروشگاه شما
         </Typography.Paragraph>
       </div>
 

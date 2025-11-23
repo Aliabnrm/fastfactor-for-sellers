@@ -73,7 +73,6 @@ const App = () => (
             />
             <Route path="/login" element={<Navigate to="/auth" replace />} />
             <Route path="/checkout/:shopId" element={<Checkout />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
