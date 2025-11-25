@@ -1,11 +1,8 @@
-import { supabase } from "@/supabase";
 import { useState } from "react";
-import {
-  createSlugRules,
-  formatCurrency,
-  parseCurrency,
-} from "@/utils/formRules";
-import { Form, Input, InputNumber, Button, Steps, message } from "antd";
+import { supabase } from "@/supabase";
+import { isSlugUnique } from "@/lib/isUniqeSlug";
+import { Form, Input, InputNumber, Button, message } from "antd";
+import { formatCurrency, parseCurrency } from "@/utils/formRules";
 
 const stepFields: string[][] = [
   ["shopName", "slug"],
@@ -22,15 +19,16 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
     try {
       const fields = stepFields[current];
       await form.validateFields(fields);
+
       setCurrent((c) => c + 1);
     } catch (err) {
-      // validation error - Antd will show messages
+      return;
     }
   };
 
   const prev = () => setCurrent((c) => Math.max(0, c - 1));
 
-  const submit = async () => {
+  const hadnleSubmit = async () => {
     try {
       setLoading(true);
 
@@ -64,7 +62,9 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
 
       const { error: dbError } = await supabase
         .from("sellers")
-        .insert([sellerData]);
+        .upsert(sellerData, { onConflict: "id" })
+        .select()
+        .single();
 
       if (dbError) {
         message.error(`خطا در ذخیره اطلاعات: ${dbError.message}`);
@@ -102,9 +102,30 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
             </Form.Item>
 
             <Form.Item
-              label="آدرس فروشگاه (Slug)"
+              label="آدرس فروشگاه"
               name="slug"
-              rules={createSlugRules()}
+              rules={[
+                { required: true, message: "آدرس فروشگاه الزامی است." },
+                {
+                  validator: async (_, value) => {
+                    if (!value) {
+                      return Promise.resolve();
+                    }
+
+                    const isUnique = await isSlugUnique(value);
+
+                    if (isUnique) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error(
+                        "این آدرس قبلاً توسط فروشنده دیگری رزرو شده است."
+                      )
+                    );
+                  },
+                },
+              ]}
             >
               <Input
                 size="large"
@@ -163,7 +184,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-8">
+        <div className="flex flex-col sm:flex-row gap-3 mt-0 pt-4">
           <Button block onClick={prev} disabled={current === 0}>
             بازگشت
           </Button>
@@ -173,7 +194,12 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
               مرحله بعد
             </Button>
           ) : (
-            <Button type="primary" block onClick={submit} loading={loading}>
+            <Button
+              type="primary"
+              block
+              onClick={hadnleSubmit}
+              loading={loading}
+            >
               ذخیره و رفتن به داشبورد
             </Button>
           )}

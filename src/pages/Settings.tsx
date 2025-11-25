@@ -2,7 +2,7 @@ import { supabase } from "@/supabase";
 import { LogOut, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import DashboardLayout from "@/components/dashboard/components/layout/DashboardLayout";
 import {
   Button,
   Card,
@@ -26,7 +26,7 @@ const Settings = () => {
   const fetchSellerProfile = async () => {
     const { data: profile, error } = await supabase
       .from("sellers")
-      .select("shop_name, card_owner, shipping_cost, card_number, email")
+      .select("shop_name, card_owner, shipping_cost, card_number, email, id")
       .single();
 
     if (error && error.code !== "PGRST116") {
@@ -47,6 +47,7 @@ const Settings = () => {
           shop_name: values.shopName,
           card_owner: values.ownerName,
           shipping_cost: values.shippingCost,
+          card_number: values.cardNumber,
         })
         .eq("id", (await supabase.auth.getUser()).data.user.id)
         .select();
@@ -116,11 +117,7 @@ const Settings = () => {
           autoComplete="off"
           className="space-y-5"
         >
-          <Card
-            className="shadow-sm border-border/60"
-            bodyStyle={{ padding: 24 }}
-            loading={fetching}
-          >
+          <Card className="shadow-sm border-border/60" loading={fetching}>
             <Title level={4} className="!mt-0">
               اطلاعات کلی
             </Title>
@@ -178,11 +175,7 @@ const Settings = () => {
             </Form.Item>
           </Card>
 
-          <Card
-            className="shadow-sm border-border/60"
-            bodyStyle={{ padding: 24 }}
-            loading={fetching}
-          >
+          <Card className="shadow-sm border-border/60" loading={fetching}>
             <Title level={4} className="!mt-0">
               حساب کاربری
             </Title>

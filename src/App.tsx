@@ -99,7 +99,7 @@ const App = () => (
 
               {/* OTHER */}
               <Route path="/login" element={<Navigate to="/auth" replace />} />
-              <Route path="/checkout/:shopId" element={<Checkout />} />
+              <Route path="/checkout/:slug" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProviderWrapper>
