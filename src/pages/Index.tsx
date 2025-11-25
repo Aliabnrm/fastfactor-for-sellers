@@ -2,18 +2,19 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Package, ShoppingBag, Zap } from "lucide-react";
-import { useAuth } from "@/context/AuthProviderWrapper";
-
+import useSellerProfile from "@/hooks/useSellerProfile";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
 
-  if (loading) return null;
+  const { user, profile, isLoading } = useSellerProfile();
 
-  console.log("user", user)
+  if (isLoading) return null;
 
-  if (user) {
+  const isProfileComplete = profile?.is_onboarded;
+  const sellerSlug = profile?.slug || "default-shop";
+
+  if (user && !isProfileComplete) {
     return (
       <div
         className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex items-center justify-center p-4"
@@ -70,7 +71,7 @@ const Index = () => {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => navigate("/checkout/maryam-shop")}
+              onClick={() => navigate(`/checkout/${sellerSlug}`)}
               className="gap-2 text-lg h-12 px-8"
             >
               <ShoppingBag className="w-5 h-5" />

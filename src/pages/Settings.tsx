@@ -47,6 +47,7 @@ const Settings = () => {
           shop_name: values.shopName,
           card_owner: values.ownerName,
           shipping_cost: values.shippingCost,
+          card_number: values.cardNumber
         })
         .eq("id", (await supabase.auth.getUser()).data.user.id)
         .select();
@@ -116,11 +117,7 @@ const Settings = () => {
           autoComplete="off"
           className="space-y-5"
         >
-          <Card
-            className="shadow-sm border-border/60"
-            bodyStyle={{ padding: 24 }}
-            loading={fetching}
-          >
+          <Card className="shadow-sm border-border/60" loading={fetching}>
             <Title level={4} className="!mt-0">
               اطلاعات کلی
             </Title>
@@ -178,11 +175,7 @@ const Settings = () => {
             </Form.Item>
           </Card>
 
-          <Card
-            className="shadow-sm border-border/60"
-            bodyStyle={{ padding: 24 }}
-            loading={fetching}
-          >
+          <Card className="shadow-sm border-border/60" loading={fetching}>
             <Title level={4} className="!mt-0">
               حساب کاربری
             </Title>
