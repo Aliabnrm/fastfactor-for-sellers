@@ -1,5 +1,6 @@
 import { FileUpload } from "./FileUpload";
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +23,22 @@ export const CheckoutForm = ({
 }: CheckoutFormProps) => {
   const { data, update } = useCheckoutForm();
   const { toast } = useToast();
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (data.paymentProof instanceof File) {
+      const url = URL.createObjectURL(data.paymentProof);
+      setPreviewUrl(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+        setPreviewUrl(null);
+      };
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [data.paymentProof]);
 
   const productPrice = 250000;
   const shippingCost = sellerInfo?.shipping_cost ?? 0;
@@ -139,6 +156,7 @@ export const CheckoutForm = ({
         <FileUpload
           id="paymentProof"
           label="تصویر فیش واریزی *"
+          previewUrl={previewUrl}
           fileName={data.paymentProof?.name ?? ""}
           onChange={(file) => update("paymentProof", file)}
         />

@@ -60,11 +60,11 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
         is_onboarded: true,
       };
 
-      console.log("sellerdata", sellerData);
-
       const { error: dbError } = await supabase
         .from("sellers")
-        .insert([sellerData]);
+        .upsert(sellerData, { onConflict: "id" })
+        .select()
+        .single();
 
       if (dbError) {
         message.error(`خطا در ذخیره اطلاعات: ${dbError.message}`);

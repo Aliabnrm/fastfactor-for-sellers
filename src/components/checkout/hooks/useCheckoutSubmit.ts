@@ -17,29 +17,27 @@ export const useCheckoutSubmit = (seller: any, setResult: any, toast: any) => {
     const total = productPrice + shipping;
 
     try {
-      let receipt = null;
+      let receiptUrl = null;
 
       if (paymentProof instanceof File) {
-        receipt = await uploadPaymentProof(seller.id, paymentProof);
+        receiptUrl = await uploadPaymentProof(seller.id, paymentProof);
       }
 
       const order = {
-        seller_id: seller.id,
-        customer_name: info.customerName,
-        customer_phone: info.phoneNumber,
-        product_name: info.product,
-        address: info.address,
-        postal_code: info.postalCode,
-        card_last_4: info.cardLastDigits,
-        product_image_url: null,
-        receipt_url: receipt,
-        total_price: total,
-        status: "pending",
+        p_address: info.address,
+        p_card_last_4: info.cardLastDigits,
+        p_customer_name: info.customerName,
+        p_customer_phone: info.phoneNumber,
+        p_postal_code: info.postalCode,
+        p_product_image_url: null,
+        p_product_name: info.product,
+        p_receipt_url: receiptUrl,
+        p_seller_id: seller.id,
+        p_total_price: total,
       };
 
-      const { error, data: newOrder } = await supabase
-        .from("orders")
-        .insert([order])
+      const { data: newOrder, error } = await supabase
+        .rpc("submit_order", order)
         .select()
         .single();
 

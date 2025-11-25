@@ -2,7 +2,7 @@ import { supabase } from "@/supabase";
 import { LogOut, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import DashboardLayout from "@/components/dashboard/components/layout/DashboardLayout";
 import {
   Button,
   Card,
@@ -26,7 +26,7 @@ const Settings = () => {
   const fetchSellerProfile = async () => {
     const { data: profile, error } = await supabase
       .from("sellers")
-      .select("shop_name, card_owner, shipping_cost, card_number, email")
+      .select("shop_name, card_owner, shipping_cost, card_number, email, id")
       .single();
 
     if (error && error.code !== "PGRST116") {
@@ -47,7 +47,7 @@ const Settings = () => {
           shop_name: values.shopName,
           card_owner: values.ownerName,
           shipping_cost: values.shippingCost,
-          card_number: values.cardNumber
+          card_number: values.cardNumber,
         })
         .eq("id", (await supabase.auth.getUser()).data.user.id)
         .select();

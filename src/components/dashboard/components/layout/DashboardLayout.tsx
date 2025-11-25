@@ -16,10 +16,14 @@ const DashboardLayout = ({
   contentClassName,
 }: DashboardLayoutProps) => (
   <div className="min-h-screen bg-background">
-    <DashboardHeader rightSlot={headerRightSlot} showSettingsShortcut={showSettingsShortcut} />
-    <main className={clsx("container mx-auto px-4 py-6", contentClassName)}>{children}</main>
+    <DashboardHeader
+      rightSlot={headerRightSlot}
+      showSettingsShortcut={showSettingsShortcut}
+    />
+    <main className={clsx("container mx-auto px-4 py-6", contentClassName)}>
+      {children}
+    </main>
   </div>
 );
 
 export default DashboardLayout;
-

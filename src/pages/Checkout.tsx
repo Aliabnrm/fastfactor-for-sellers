@@ -4,9 +4,9 @@ import { Alert, Button, Spin } from "antd";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import useFetchSellerBySlug from "@/hooks/useFetchSellersBySlug";
-import { CheckoutSummary } from "@/components/checkout/components/CheckoutSummary";
 import { CheckoutForm } from "@/components/checkout/components/CheckoutForm";
 import { useCheckoutSubmit } from "@/components/checkout/hooks/useCheckoutSubmit";
+import { CheckoutSummary } from "@/components/checkout/components/CheckoutSummary";
 
 export default function CheckoutPage() {
   const { toast } = useToast();
@@ -46,6 +46,7 @@ export default function CheckoutPage() {
     );
   }
 
+  console.log("resul", result)
   if (result) {
     return (
       <CheckoutSummary

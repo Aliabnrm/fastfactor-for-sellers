@@ -8,6 +8,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   const { user, profile, isLoading } = useSellerProfile();
+  console.log("userdata", profile)
 
   if (isLoading) return null;
 

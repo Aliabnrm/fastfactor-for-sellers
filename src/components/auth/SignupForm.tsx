@@ -10,7 +10,7 @@ const SignupForm = () => {
     const email = values.email;
     const password = values.password;
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -20,6 +20,22 @@ const SignupForm = () => {
     });
 
     if (error) return message.error(error.message);
+
+    const newUserId = data.user?.id;
+
+    if (newUserId) {
+      const { error: profileError } = await supabase
+        .from("sellers")
+        .insert({
+          id: newUserId,
+        })
+        .select()
+        .single();
+
+      if (profileError) {
+        console.error("Error creating seller profile:", profileError);
+      }
+    }
 
     message.success("ثبت‌نام با موفقیت انجام شد");
     navigate("/");
