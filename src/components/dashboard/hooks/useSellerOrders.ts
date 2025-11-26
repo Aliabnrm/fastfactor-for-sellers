@@ -1,11 +1,12 @@
 import { supabase } from "@/supabase";
-import { Order } from "@/types/checkout"; 
-import { useState, useEffect } from "react";
+import { Order } from "@/types/checkout";
+import { useState, useEffect, useCallback } from "react";
 
 interface UseSellerOrdersResult {
   orders: Order[];
   isLoading: boolean;
   error: Error | null;
+  revalidate: () => void;
 }
 
 export const useSellerOrders = (): UseSellerOrdersResult => {
@@ -13,6 +14,12 @@ export const useSellerOrders = (): UseSellerOrdersResult => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const revalidate = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     const checkAuthAndFetch = async () => {
@@ -22,6 +29,7 @@ export const useSellerOrders = (): UseSellerOrdersResult => {
 
       if (authError || !sessionData.session) {
         setIsLoading(false);
+        if (authError) setError(new Error(authError.message));
         return;
       }
 
@@ -63,7 +71,7 @@ export const useSellerOrders = (): UseSellerOrdersResult => {
     checkAuthAndFetch();
 
     return () => {};
-  }, []);
+  }, [refreshKey]);
 
-  return { orders, isLoading: isLoading || isAuthLoading, error };
+  return { orders, isLoading: isLoading || isAuthLoading, error, revalidate };
 };

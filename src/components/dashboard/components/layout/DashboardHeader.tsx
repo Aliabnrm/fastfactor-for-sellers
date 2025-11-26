@@ -18,7 +18,7 @@ const DashboardHeader = ({
     <header className="border-b border-border bg-card shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex justify-center items-center gap-2">
-          <span className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-extrabold text-lg">
+          <span className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-lg">
             F
           </span>
           <span className="text-xl font-bold text-foreground">

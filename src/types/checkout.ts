@@ -4,7 +4,7 @@ export type SellerInfo = {
   shipping_cost: number;
 };
 
-export type OrderStatus = "pending" | "confirmed" | "delivered";
+export type OrderStatus = "pending" | "confirmed" | "delivered" | "rejected";
 
 export interface Order {
   id: string;
