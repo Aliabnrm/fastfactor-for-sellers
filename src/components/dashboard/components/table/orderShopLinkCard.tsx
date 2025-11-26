@@ -22,12 +22,12 @@ const ShopLinkCard = ({ shopSlug }: ShopProps) => {
 
   return (
     <Card className="p-6 shadow-md">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-center text-center gap-4">
         <div>
           <h3 className="font-semibold mb-1">لینک فروشگاه من</h3>
-          <p className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             این لینک را در بیو اینستاگرام قرار دهید
-          </p>
+          </span>
         </div>
 
         <Button onClick={handleCopyLink} className="gap-2 w-full md:w-auto">

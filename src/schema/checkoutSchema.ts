@@ -7,6 +7,8 @@ const cardDigitsPattern = /^\d{4}$/;
 export const checkoutSchema = z.object({
   product: z.string().min(3, "نام محصول حداقل باید ۳ کاراکتر باشد."),
 
+  price: z.number({ coerce: true }).min(1000, "مبلغ محصول معتبر نیست"),
+  
   productPhoto: z.any().nullable().optional(),
 
   customerName: z.string().min(2, "نام و نام خانوادگی را وارد کنید."),

@@ -1,5 +1,5 @@
 import { OrderStatus } from "@/types/checkout";
-import { Clock, CheckCircle2, Truck } from "lucide-react";
+import { Clock, CheckCircle2, Truck, XCircle } from "lucide-react";
 
 export type StatusConfigMap = {
   [key in OrderStatus]: {
@@ -32,5 +32,12 @@ export const STATUS_ORDER_CONFIG: StatusConfigMap = {
     bgColor: "bg-blue-100",
     textColor: "text-blue-700",
     borderColor: "border-blue-300",
+  },
+  rejected: {
+    label: "رد شده",
+    icon: XCircle, 
+    bgColor: "bg-red-100", 
+    textColor: "text-red-700", 
+    borderColor: "border-red-300", // 
   },
 };

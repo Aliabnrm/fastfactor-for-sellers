@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Skeleton } from "antd";
+import useSellerProfile from "@/hooks/useSellerProfile";
 import OrdersList from "@/components/dashboard/components/table/orderList";
 import OrderStats from "@/components/dashboard/components/table/orderState";
 import { useSellerOrders } from "@/components/dashboard/hooks/useSellerOrders";
@@ -7,19 +8,25 @@ import ShopLinkCard from "@/components/dashboard/components/table/orderShopLinkC
 import DashboardLayout from "@/components/dashboard/components/layout/DashboardLayout";
 
 const Dashboard = () => {
-  const { orders, isLoading, error } = useSellerOrders();
+  const { orders, isLoading, error, revalidate } = useSellerOrders();
+  const { profile } = useSellerProfile();
 
-  const { totalOrders, pendingOrders, verifiedOrders } = useMemo(() => {
+  const sellerSlug = profile?.slug || "default-shop";
+
+  const { totalOrders, pendingOrders, verifiedOrders, deliveredOrders } = useMemo(() => {
     if (!orders) return { totalOrders: 0, pendingOrders: 0, verifiedOrders: 0 };
 
     const pending = orders.filter((o) => o.status === "pending").length;
 
-    const verified = orders.filter((o) => o.status === "confirmed").length; 
+    const verified = orders.filter((o) => o.status === "confirmed").length;
+    
+    const delivered = orders.filter((o) => o.status === "delivered").length;
 
     return {
       totalOrders: orders.length,
       pendingOrders: pending,
       verifiedOrders: verified,
+      deliveredOrders: delivered
     };
   }, [orders]);
 
@@ -33,11 +40,12 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 px-4 sm:px-0">
+      <div className="space-y-6 px-2 sm:px-0">
         <OrderStats
           totalOrders={totalOrders}
           pendingOrders={pendingOrders}
           verifiedOrders={verifiedOrders}
+          deliveredOrders={deliveredOrders}
         />
 
         {isLoading ? (
@@ -46,10 +54,10 @@ const Dashboard = () => {
             <Skeleton className="h-48 w-full" />
           </div>
         ) : (
-          <OrdersList orders={orders ?? []} />
+          <OrdersList orders={orders ?? []} revalidateOrders={revalidate} />
         )}
 
-        <ShopLinkCard shopSlug="maryam-shop" />
+        <ShopLinkCard shopSlug={sellerSlug} />
       </div>
     </DashboardLayout>
   );

@@ -40,7 +40,7 @@ export const CheckoutForm = ({
     }
   }, [data.paymentProof]);
 
-  const productPrice = 250000;
+  const productPrice = Number(data.price) || 0;
   const shippingCost = sellerInfo?.shipping_cost ?? 0;
   const shopName = sellerInfo?.shop_name ?? "فروشگاه";
   const total = productPrice + shippingCost;
@@ -61,6 +61,12 @@ export const CheckoutForm = ({
     onSubmit(validation.data);
   };
 
+  const formatCurrency = (val: number) => val.toLocaleString("fa-IR");
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "");
+    update("price", val ? Number(val) : "");
+  };
   return (
     <Card className="p-6 shadow-2xl max-w-md mx-auto">
       <div className="text-center mb-6 border-b pb-4">
@@ -78,20 +84,35 @@ export const CheckoutForm = ({
           />
         </div>
 
-        <Card className="p-4 bg-primary/10 text-sm space-y-2 border-primary/20">
+        <div className="space-y-2">
+          <Label>مبلغ توافق شده محصول (تومان) *</Label>
+          <Input
+            value={data.price ? Number(data.price).toLocaleString() : ""}
+            onChange={handlePriceChange}
+            placeholder="مبلغی که فروشنده اعلام کرده وارد کنید"
+            inputMode="numeric"
+          />
+        </div>
+        <Card className="p-4 bg-primary/10 text-sm space-y-2 border-primary/20 transition-all duration-300">
           <div className="flex justify-between">
             <span>قیمت محصول:</span>
-            <span>{productPrice.toLocaleString("fa-IR")} تومان</span>
+            <span
+              className={
+                productPrice > 0 ? "font-medium" : "text-muted-foreground"
+              }
+            >
+              {productPrice > 0 ? formatCurrency(productPrice) : "---"} تومان
+            </span>
           </div>
 
           <div className="flex justify-between">
-            <span>هزینه پست:</span>
-            <span>{shippingCost.toLocaleString("fa-IR")} تومان</span>
+            <span>هزینه پست (ثابت):</span>
+            <span>{formatCurrency(shippingCost)} تومان</span>
           </div>
 
-          <div className="flex justify-between border-t pt-2 font-bold text-lg">
-            <span>جمع کل:</span>
-            <span>{total.toLocaleString("fa-IR")} تومان</span>
+          <div className="flex justify-between border-t border-primary/20 pt-2 font-bold text-lg text-primary">
+            <span>مبلغ قابل پرداخت:</span>
+            <span>{formatCurrency(total)} تومان</span>
           </div>
         </Card>
 

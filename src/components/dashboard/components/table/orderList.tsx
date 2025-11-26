@@ -11,15 +11,19 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { formatJalali } from "@/utils/formatJalali";
 import DetailRow from "@/components/global/detailRow";
-import { Download, ChevronDown, CheckCircle } from "lucide-react";
+import { Download, ChevronDown, CheckCircle, XCircle } from "lucide-react";
+import { useUpdateOrderStatus } from "../../hooks/useUpdateOrderStatus";
 
 type OrdersListProps = {
   orders: Order[];
+  revalidateOrders: () => void;
 };
 
-const OrdersList = ({ orders }: OrdersListProps) => {
+const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
   const { toast } = useToast();
   const [openOrderId, setOpenOrderId] = useState<string | null>(null);
+
+  const { updateStatus, isLoading } = useUpdateOrderStatus(revalidateOrders);
 
   const toggleDetails = (orderId: string) => {
     setOpenOrderId((prevId) => (prevId === orderId ? null : orderId));
@@ -42,8 +46,8 @@ const OrdersList = ({ orders }: OrdersListProps) => {
 
   return (
     <div className="space-y-4">
-      {orders.map((order) => {
-        const isOpen = order.id === openOrderId;
+      {orders?.map((order) => {
+        const isOpen = order?.id === openOrderId;
 
         return (
           <Card
@@ -115,31 +119,70 @@ const OrdersList = ({ orders }: OrdersListProps) => {
             )}
 
             <CardFooter
-              className={`p-4 mt-2 flex flex-col gap-2 ${isOpen ? "border-t" : ""}`}
+              className={`p-4 mt-2 flex flex-col gap-2 ${
+                isOpen ? "border-t" : ""
+              }`}
             >
               <div className="flex w-full justify-between gap-2">
                 {order.status === "pending" && (
-                  <Button
-                    size="sm"
-                    className="w-full gap-2 bg-green-600 hover:bg-green-700"
-                  >
-                    <CheckCircle className="w-4 h-4" />
-                    تأیید پرداخت
-                  </Button>
+                  <>
+                    <Button
+                      size="sm"
+                      onClick={() => updateStatus(order.id, "confirmed")}
+                      className="w-full gap-2 bg-green-600 hover:bg-green-600/90 text-white font-semibold shadow"
+                      // disabled={isActionLoading}
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      تأیید واریز
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => updateStatus(order.id, "rejected")}
+                      variant="outline"
+                      className="w-full gap-2 border-red-500 text-red-500 hover:bg-red-500/10 font-semibold shadow"
+                      // disabled={isActionLoading}
+                    >
+                      <XCircle className="w-4 h-4" />
+                      رد سفارش
+                    </Button>
+                  </>
                 )}
 
-                {order?.status === "pending" && (
-                  <Button
-                    size="sm"
-                    variant="default"
-                    onClick={() =>
-                      handleDownloadLabel(order.id, order?.customer_name)
-                    }
-                    className="w-full gap-2 bg-primary hover:bg-primary/90"
+                {order.status === "confirmed" && (
+                  <>
+                    <Button
+                      size="sm"
+                      onClick={() => updateStatus(order.id, "delivered")}
+                      className="w-full gap-2 bg-primary/90 hover:bg-primary text-white font-semibold shadow"
+                      // disabled={isActionLoading}
+                    >
+                      <Download className="w-4 h-4" />
+                      بسته ارسال شد
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        handleDownloadLabel(order.id, order.customer_name)
+                      }
+                      variant="outline"
+                      className="w-full gap-2 text-primary font-semibold shadow"
+                    >
+                      دانلود لیبل پستی
+                    </Button>
+                  </>
+                )}
+
+                {(order.status === "delivered" ||
+                  order.status === "rejected") && (
+                  <span
+                    className={`w-full text-center text-sm font-semibold py-2 rounded-lg ${
+                      order.status === "delivered"
+                        ? "text-green-600 bg-green-50"
+                        : "text-red-600 bg-red-50"
+                    }`}
                   >
-                    <Download className="w-4 h-4" />
-                    دانلود لیبل پستی
-                  </Button>
+                    {order.status === "delivered" ? "تکمیل شده" : "رد شده"}
+                  </span>
                 )}
               </div>
 
@@ -164,5 +207,3 @@ const OrdersList = ({ orders }: OrdersListProps) => {
 };
 
 export default OrdersList;
-
-
