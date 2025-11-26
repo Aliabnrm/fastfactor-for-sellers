@@ -12,7 +12,7 @@ export const useCheckoutSubmit = (seller: any, setResult: any, toast: any) => {
     setIsSubmitting(true);
     const { paymentProof, ...info } = data;
 
-    const productPrice = 250000;
+    const productPrice = Number(info.price) || 0;
     const shipping = seller.shipping_cost ?? 0;
     const total = productPrice + shipping;
 
