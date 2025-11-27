@@ -1,0 +1,84 @@
+import { Card } from "../ui/card";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
+import { Package, ShoppingBag, Zap } from "lucide-react";
+
+const FeatureSection = ({ sellerSlug }: any) => {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+              <Package className="w-12 h-12 text-primary" />
+            </div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            FastFactor
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            ابزار هوشمند فروش برای فروشندگان
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              onClick={() => navigate("/order")}
+              className="gap-2 text-lg h-12 px-8"
+            >
+              <Package className="w-5 h-5" />
+              داشبورد فروشنده
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate(`/checkout/${sellerSlug}`)}
+              className="gap-2 text-lg h-12 px-8"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              فرم خرید
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <Card className="p-6 text-center shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <Zap className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-foreground mb-2">
+              ثبت سریع سفارش
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              مشتریان شما به راحتی آدرس و فیش پرداخت را ارسال می‌کنند
+            </p>
+          </Card>
+
+          <Card className="p-6 text-center shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+              <Package className="w-6 h-6 text-success" />
+            </div>
+            <h3 className="font-semibold text-foreground mb-2">
+              مدیریت سفارش‌ها
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              تمام سفارش‌ها در یک جا و به صورت منظم
+            </p>
+          </Card>
+
+          <Card className="p-6 text-center shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
+              <ShoppingBag className="w-6 h-6 text-accent-foreground" />
+            </div>
+            <h3 className="font-semibold text-foreground mb-2">لینک اختصاصی</h3>
+            <p className="text-sm text-muted-foreground">
+              یک لینک برای بیو اینستاگرام که همه چیز را ساده می‌کند
+            </p>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FeatureSection;

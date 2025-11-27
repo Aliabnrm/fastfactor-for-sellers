@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase";
+import { supabase } from "@/lib/supabase";
 import { Order } from "@/types/checkout";
 import { useState, useEffect, useCallback } from "react";
 

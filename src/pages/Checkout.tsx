@@ -14,7 +14,7 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
   const [result, setResult] = useState(null);
 
-  const { seller, isLoading, error } = useSellerBySlug(slug);
+  const { data: seller, isLoading, error } = useSellerBySlug(slug);
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
     seller,
     setResult,

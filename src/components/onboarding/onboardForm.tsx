@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/supabase";
+import { supabase } from "@/lib/supabase";
 import { isSlugUnique } from "@/lib/isUniqeSlug";
 import { Form, Input, InputNumber, Button, message } from "antd";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";

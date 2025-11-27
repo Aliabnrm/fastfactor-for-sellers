@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase";
+import { supabase } from "@/lib/supabase";
 
 export const isSlugUnique = async (slug) => {
   const { data, error } = await supabase

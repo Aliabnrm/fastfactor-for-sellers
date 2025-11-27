@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { formatJalali } from "@/utils/formatJalali";
 import DetailRow from "@/components/global/detailRow";
 import { Download, ChevronDown, CheckCircle, XCircle } from "lucide-react";
-import { useUpdateOrderStatus } from "../../hooks/useUpdateOrderStatus";
+import { useUpdateOrderStatus } from "../hooks/useUpdateOrderStatus";
 
 type OrdersListProps = {
   orders: Order[];

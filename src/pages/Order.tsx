@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import { Skeleton } from "antd";
 import useSellerProfile from "@/hooks/useSellerProfile";
 import MainLayout from "@/components/global/layout/MainLayout";
-import LinkCard from "@/components/order/components/table/LinkCard";
-import OrdersList from "@/components/order/components/table/orderList";
-import OrderStats from "@/components/order/components/table/statusCrad";
+import LinkCard from "@/components/order/table/linkCard";
+import OrdersList from "@/components/order/table/orderList";
+import OrderStats from "@/components/order/table/statusCrad";
 import { useSellerOrders } from "@/components/order/hooks/useSellerOrders";
 
 const Order = () => {
-  const { orders, isLoading, error, revalidate } = useSellerOrders();
   const { profile } = useSellerProfile();
+  const { orders, isLoading, error, revalidate } = useSellerOrders();
 
   const sellerSlug = profile?.slug || "default-shop";
 
@@ -33,7 +33,7 @@ const Order = () => {
     }, [orders]);
 
   if (error) {
-    return <MainLayout>خطا در بارگذاری سفارشات: {error.message}</MainLayout>;
+    return <MainLayout>خطا در بارگذاری سفارشات: {error?.message}</MainLayout>;
   }
 
   return (

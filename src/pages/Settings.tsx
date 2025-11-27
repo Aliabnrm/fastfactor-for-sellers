@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase";
+import { supabase } from "@/lib/supabase";
 import { LogOut, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";
