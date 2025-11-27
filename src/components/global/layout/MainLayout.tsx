@@ -1,22 +1,22 @@
-import { ReactNode } from "react";
 import clsx from "clsx";
-import DashboardHeader from "./DashboardHeader";
+import { ReactNode } from "react";
+import MainHeader from "./MainHeader";
 
-type DashboardLayoutProps = {
+type MainLayoutProps = {
   children: ReactNode;
   headerRightSlot?: ReactNode;
   showSettingsShortcut?: boolean;
   contentClassName?: string;
 };
 
-const DashboardLayout = ({
+const MainLayout = ({
   children,
   headerRightSlot,
   showSettingsShortcut = true,
   contentClassName,
-}: DashboardLayoutProps) => (
+}: MainLayoutProps) => (
   <div className="min-h-screen bg-background">
-    <DashboardHeader
+    <MainHeader
       rightSlot={headerRightSlot}
       showSettingsShortcut={showSettingsShortcut}
     />
@@ -26,4 +26,4 @@ const DashboardLayout = ({
   </div>
 );
 
-export default DashboardLayout;
+export default MainLayout;

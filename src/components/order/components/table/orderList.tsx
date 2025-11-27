@@ -5,7 +5,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useState } from "react";
-import StatusBadge from "./orderStatus";
+import StatusBadge from "./statusBadge";
 import { Order } from "@/types/checkout";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";

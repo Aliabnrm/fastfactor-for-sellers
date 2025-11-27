@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Package, ShoppingBag, Zap } from "lucide-react";
 import useSellerProfile from "@/hooks/useSellerProfile";
 
-const Index = () => {
+const Home = () => {
   const navigate = useNavigate();
 
   const { user, profile, isLoading } = useSellerProfile();
@@ -58,12 +58,12 @@ const Index = () => {
             FastFactor
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            ابزار هوشمند فروش برای فروشندگان اینستاگرام
+            ابزار هوشمند فروش برای فروشندگان 
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/order")}
               className="gap-2 text-lg h-12 px-8"
             >
               <Package className="w-5 h-5" />
@@ -76,7 +76,7 @@ const Index = () => {
               className="gap-2 text-lg h-12 px-8"
             >
               <ShoppingBag className="w-5 h-5" />
-              نمایش فرم خرید
+               فرم خرید
             </Button>
           </div>
         </div>
@@ -122,4 +122,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Home;

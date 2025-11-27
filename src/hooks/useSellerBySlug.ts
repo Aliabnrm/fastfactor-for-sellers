@@ -1,7 +1,7 @@
 import { supabase } from "@/supabase";
 import { useState, useEffect } from "react";
 
-const useFetchSellerBySlug = (slug) => {
+const useSellerBySlug = (slug) => {
   const [seller, setSeller] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,4 +39,4 @@ const useFetchSellerBySlug = (slug) => {
   return { seller, isLoading, error };
 };
 
-export default useFetchSellerBySlug;
+export default useSellerBySlug;

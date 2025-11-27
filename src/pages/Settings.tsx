@@ -2,7 +2,6 @@ import { supabase } from "@/supabase";
 import { LogOut, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { formatCurrency, parseCurrency } from "@/utils/formRules";
-import DashboardLayout from "@/components/dashboard/components/layout/DashboardLayout";
 import {
   Button,
   Card,
@@ -13,6 +12,7 @@ import {
   message,
 } from "antd";
 import useLogout from "@/hooks/useLogout";
+import MainLayout from "@/components/global/layout/MainLayout";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -98,7 +98,7 @@ const Settings = () => {
   };
 
   return (
-    <DashboardLayout showSettingsShortcut={false}>
+    <MainLayout showSettingsShortcut={false}>
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="space-y-1">
           <Title level={3} className="!m-0">
@@ -205,7 +205,7 @@ const Settings = () => {
           </div>
         </Form>
       </div>
-    </DashboardLayout>
+    </MainLayout>
   );
 };
 

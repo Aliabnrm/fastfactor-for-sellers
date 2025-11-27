@@ -3,15 +3,15 @@ import { ReactNode, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-type DashboardHeaderProps = {
+type MainHeaderProps = {
   rightSlot?: ReactNode;
   showSettingsShortcut?: boolean;
 };
 
-const DashboardHeader = ({
+const MainHeader = ({
   rightSlot,
   showSettingsShortcut = true,
-}: DashboardHeaderProps) => {
+}: MainHeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ const DashboardHeader = ({
                 <button
                   type="button"
                   aria-label="تنظیمات"
-                  onClick={() => navigate("/dashboard/settings")}
+                  onClick={() => navigate("/order/settings")}
                   className="w-11 h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
                 >
                   <Settings className="w-5 h-5" />
@@ -48,4 +48,4 @@ const DashboardHeader = ({
   );
 };
 
-export default DashboardHeader;
+export default MainHeader;
