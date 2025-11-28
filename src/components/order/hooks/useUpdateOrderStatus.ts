@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/supabase"; 
+import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { OrderStatus } from "@/types/checkout";
 

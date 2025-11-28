@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { Alert, Button, Spin } from "antd";
 import { useToast } from "@/hooks/use-toast";
+import useSellerBySlug from "@/hooks/useSellerBySlug";
 import { useNavigate, useParams } from "react-router-dom";
-import useFetchSellerBySlug from "@/hooks/useFetchSellersBySlug";
 import { CheckoutForm } from "@/components/checkout/components/CheckoutForm";
 import { useCheckoutSubmit } from "@/components/checkout/hooks/useCheckoutSubmit";
 import { CheckoutSummary } from "@/components/checkout/components/CheckoutSummary";
@@ -14,7 +14,7 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
   const [result, setResult] = useState(null);
 
-  const { seller, isLoading, error } = useFetchSellerBySlug(slug);
+  const { data: seller, isLoading, error } = useSellerBySlug(slug);
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
     seller,
     setResult,
@@ -46,7 +46,6 @@ export default function CheckoutPage() {
     );
   }
 
-  console.log("resul", result)
   if (result) {
     return (
       <CheckoutSummary

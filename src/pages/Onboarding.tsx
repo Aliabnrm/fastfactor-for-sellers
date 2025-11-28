@@ -1,6 +1,6 @@
 import { Divider } from "antd";
 import { Card } from "@/components/ui/card";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StepsSidebar from "@/components/onboarding/Sidebar";
 import OnboardingForm from "@/components/onboarding/onboardForm";
 
@@ -23,7 +23,7 @@ const Onboarding = () => {
 
           <div className="md:flex-1">
             <OnboardingForm
-              onFinished={() => navigate("/dashboard", { replace: true })}
+              onFinished={() => navigate("/order", { replace: true })}
             />
           </div>
         </div>

@@ -1,20 +1,20 @@
+import Home from "./pages/Home";
 import Auth from "./pages/Auth";
-import Index from "./pages/Index";
+import Order from "./pages/Order";
 import faIR from "antd/locale/fa_IR";
 import { ConfigProvider } from "antd";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
-import Dashboard from "./pages/Dashboard";
 import Onboarding from "./pages/Onboarding";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicAuthRoute from "./PublicAuthRoute";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import AuthProviderWrapper from "@/context/AuthProviderWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AuthProviderWrapper from "@/context/AuthProviderWrapper";
-import PublicAuthRoute from "./PublicAuthRoute";
-import ProtectedRoute from "./ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -65,7 +65,7 @@ const App = () => (
                 path="/"
                 element={
                   <ProtectedRoute>
-                    <Index />
+                    <Home />
                   </ProtectedRoute>
                 }
               />
@@ -80,16 +80,16 @@ const App = () => (
               />
 
               <Route
-                path="/dashboard"
+                path="/order"
                 element={
                   <ProtectedRoute>
-                    <Dashboard />
+                    <Order />
                   </ProtectedRoute>
                 }
               />
 
               <Route
-                path="/dashboard/settings"
+                path="/order/settings"
                 element={
                   <ProtectedRoute>
                     <Settings />

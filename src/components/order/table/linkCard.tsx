@@ -7,7 +7,7 @@ type ShopProps = {
   shopSlug: string;
 };
 
-const ShopLinkCard = ({ shopSlug }: ShopProps) => {
+const LinkCard = ({ shopSlug }: ShopProps) => {
   const { toast } = useToast();
 
   const handleCopyLink = () => {
@@ -39,4 +39,4 @@ const ShopLinkCard = ({ shopSlug }: ShopProps) => {
   );
 };
 
-export default ShopLinkCard;
+export default LinkCard;

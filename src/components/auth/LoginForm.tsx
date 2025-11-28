@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase";
+import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
 import { passwordRules } from "@/lib/validation/password";
