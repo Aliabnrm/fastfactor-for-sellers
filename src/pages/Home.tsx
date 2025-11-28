@@ -5,15 +5,17 @@ import FeatureSection from "@/components/home/featureSection";
 const Home = () => {
   const { user, profile, isLoading } = useSellerProfile();
 
-  const isProfileComplete = profile?.is_onboarded;
-  const sellerSlug = profile?.slug || "default-shop";
-
   if (isLoading) return null;
-  if (user && !isProfileComplete) {
+
+  if (user && (profile === null || profile?.is_onboarded === false)) {
     return <HeroSection />;
   }
 
-  return <FeatureSection sellerSlug={sellerSlug} />;
+  if (user && profile?.is_onboarded === true) {
+    return <FeatureSection sellerSlug={profile?.slug} />;
+  }
+
+  return null;
 };
 
 export default Home;

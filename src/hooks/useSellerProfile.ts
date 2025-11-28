@@ -7,7 +7,7 @@ const useSellerProfile = () => {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["seller-profile", user?.id],
-    queryFn: fetchSellerProfile,
+    queryFn: () => fetchSellerProfile(user.id),
     enabled: !!user,
     staleTime: 1000 * 60 * 5,
   });

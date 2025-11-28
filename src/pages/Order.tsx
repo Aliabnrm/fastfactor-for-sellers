@@ -1,15 +1,17 @@
 import { useMemo } from "react";
 import { Skeleton } from "antd";
+import useOrder from "@/hooks/useOrder";
 import useSellerProfile from "@/hooks/useSellerProfile";
-import MainLayout from "@/components/global/layout/MainLayout";
 import LinkCard from "@/components/order/table/linkCard";
 import OrdersList from "@/components/order/table/orderList";
 import OrderStats from "@/components/order/table/statusCrad";
-import { useSellerOrders } from "@/components/order/hooks/useSellerOrders";
+import MainLayout from "@/components/global/layout/MainLayout";
 
 const Order = () => {
-  const { profile } = useSellerProfile();
-  const { orders, isLoading, error, revalidate } = useSellerOrders();
+  const { profile, isLoading: isProfileLoading } = useSellerProfile();
+  const { orders, isLoading: isOrdersLoading, error, revalidate } = useOrder();
+
+  const overallLoading = isProfileLoading || isOrdersLoading;
 
   const sellerSlug = profile?.slug || "default-shop";
 
@@ -36,6 +38,18 @@ const Order = () => {
     return <MainLayout>خطا در بارگذاری سفارشات: {error?.message}</MainLayout>;
   }
 
+  if (overallLoading) {
+    return (
+      <MainLayout>
+        <div className="space-y-6 px-2 sm:px-0">
+          <Skeleton active className="h-20 w-full" />
+          <Skeleton className="h-48 w-full" />
+          <Skeleton className="h-48 w-full" />
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       <div className="space-y-6 px-2 sm:px-0">
@@ -46,14 +60,7 @@ const Order = () => {
           deliveredOrders={deliveredOrders}
         />
 
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-48 w-full" />
-            <Skeleton className="h-48 w-full" />
-          </div>
-        ) : (
-          <OrdersList orders={orders ?? []} revalidateOrders={revalidate} />
-        )}
+        <OrdersList orders={orders ?? []} revalidateOrders={revalidate} />
 
         <LinkCard shopSlug={sellerSlug} />
       </div>
