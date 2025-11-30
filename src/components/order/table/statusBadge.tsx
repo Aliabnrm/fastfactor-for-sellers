@@ -11,7 +11,7 @@ const StatusBadge = ({ status }: { status: OrderStatus }) => {
   return (
     <Badge
       className={`
-        flex items-center gap-1 px-2 py-1 border 
+        flex items-center min-w-fit gap-1 px-2 py-1 border 
         rounded-md text-xs font-medium 
         ${data.bgColor} 
         ${data.textColor}

@@ -4,7 +4,7 @@ import useOrder from "@/hooks/useOrder";
 import useSellerProfile from "@/hooks/useSellerProfile";
 import LinkCard from "@/components/order/table/linkCard";
 import OrdersList from "@/components/order/table/orderList";
-import OrderStats from "@/components/order/table/statusCrad";
+import StatusCard from "@/components/order/table/statusCrad";
 import MainLayout from "@/components/global/layout/MainLayout";
 
 const Order = () => {
@@ -53,7 +53,7 @@ const Order = () => {
   return (
     <MainLayout>
       <div className="space-y-6 px-2 sm:px-0">
-        <OrderStats
+        <StatusCard
           totalOrders={totalOrders}
           pendingOrders={pendingOrders}
           verifiedOrders={verifiedOrders}

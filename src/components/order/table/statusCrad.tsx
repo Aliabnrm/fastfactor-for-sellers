@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Package, TrendingUp, Clock, Truck } from "lucide-react";
 
-type OrderStatsProps = {
+type StatusCardProps = {
   totalOrders: number;
   pendingOrders: number;
   verifiedOrders: number;
@@ -16,12 +16,12 @@ type CardDetailProps = {
   textColor: string;
 };
 
-const OrderStats = ({
+const StatusCard = ({
   totalOrders,
   pendingOrders,
   verifiedOrders,
   deliveredOrders,
-}: OrderStatsProps) => {
+}: StatusCardProps) => {
   const cardDetails: CardDetailProps[] = [
     {
       label: "کل سفارش‌ها",
@@ -83,4 +83,4 @@ const OrderStats = ({
   );
 };
 
-export default OrderStats;
+export default StatusCard;
