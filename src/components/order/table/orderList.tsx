@@ -51,17 +51,19 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
 
         return (
           <Card
-            key={order.id}
+            key={order?.id}
             className="shadow-lg border-2 border-transparent hover:border-primary/50 transition-all duration-200"
           >
-            <CardHeader className="p-4 flex flex-row items-center justify-between">
-              <div>
-                <p className="font-bold text-base">{order?.customer_name}</p>
-                <p className="text-[14px] text-muted-foreground mt-1">
-                  تاریخ ثبت سفارش : {formatJalali(order?.created_at)}
-                </p>
+            <CardHeader className="p-4 flex flex-col justify-between">
+              <span className="font-bold text-base">
+                {order?.customer_name}
+              </span>
+              <div className="flex w-full flex-row items-center justify-between">
+                <span className="text-[12px] sm:text-[14px] text-muted-foreground mt-1">
+                  تاریخ ثبت  : {formatJalali(order?.created_at)}
+                </span>
+                <StatusBadge status={order?.status} />
               </div>
-              <StatusBadge status={order.status} />
             </CardHeader>
 
             <CardContent className="px-4 py-2 space-y-1 border-t">

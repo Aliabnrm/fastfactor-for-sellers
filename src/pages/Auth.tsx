@@ -19,7 +19,7 @@ const Auth = () => {
           </div>
 
           <Typography.Title level={4} className="!m-0">
-            ورود یا ثبت‌نام فروشندگان اینستاگرام
+            ورود یا ثبت‌نام فروشندگان
           </Typography.Title>
           <Typography.Paragraph className="text-slate-500 !mb-0">
             تنها با شماره موبایل خود وارد دنیای فروش سریع و مطمئن شوید.
