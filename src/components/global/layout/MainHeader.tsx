@@ -1,29 +1,26 @@
-import { Settings } from "lucide-react";
-import { ReactNode, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Settings } from 'lucide-react'
+import { ReactNode, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type MainHeaderProps = {
-  rightSlot?: ReactNode;
-  showSettingsShortcut?: boolean;
-};
+  rightSlot?: ReactNode
+  showSettingsShortcut?: boolean
+}
 
 const MainHeader = ({
   rightSlot,
   showSettingsShortcut = true,
 }: MainHeaderProps) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <header className="border-b border-border bg-card shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex justify-center items-center gap-2">
-          <span className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-lg">
+      <div className="container mx-auto flex items-center justify-between px-4 py-4">
+        <div className="flex items-center justify-center gap-2">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-lg font-extrabold text-primary">
             F
           </span>
-          <span className="text-xl font-bold text-foreground">
-            FastFactor
-          </span>
+          <span className="text-xl font-bold text-foreground">FastFactor</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -33,10 +30,10 @@ const MainHeader = ({
                 <button
                   type="button"
                   aria-label="تنظیمات"
-                  onClick={() => navigate("/order/settings")}
-                  className="w-11 h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                  onClick={() => navigate('/order/settings')}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                 >
-                  <Settings className="w-5 h-5" />
+                  <Settings className="h-5 w-5" />
                 </button>
               )}
           {/* <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
@@ -45,7 +42,7 @@ const MainHeader = ({
         </div>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default MainHeader;
+export default MainHeader

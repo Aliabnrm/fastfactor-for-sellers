@@ -1,17 +1,17 @@
-import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthProviderWrapper";
+import { ReactNode } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '@/context/AuthProviderWrapper'
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export default function PublicAuthRoute({ children }: Props) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuth()
 
-  if (loading) return null;
+  if (loading) return null
 
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/" replace />
 
-  return children;
+  return children
 }

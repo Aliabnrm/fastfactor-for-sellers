@@ -1,5 +1,5 @@
-import { Card, Form, Input, Typography } from "antd";
-const { Title, Text } = Typography;
+import { Card, Form, Input, Typography } from 'antd'
+const { Title, Text } = Typography
 
 export const SellerInfoCard = ({ form }) => (
   <Card>
@@ -7,7 +7,7 @@ export const SellerInfoCard = ({ form }) => (
     <Form.Item
       label="نام فروشگاه"
       name="shopName"
-      rules={[{ required: true, message: "نام فروشگاه را وارد کنید." }]}
+      rules={[{ required: true, message: 'نام فروشگاه را وارد کنید.' }]}
     >
       <Input size="large" placeholder="مثال: گالری مریم" />
     </Form.Item>
@@ -15,4 +15,4 @@ export const SellerInfoCard = ({ form }) => (
       تغییر لینک باعث غیرفعال شدن لینک‌های قبلی می‌شود.
     </Text>
   </Card>
-);
+)

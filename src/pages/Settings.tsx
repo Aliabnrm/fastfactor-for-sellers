@@ -1,19 +1,19 @@
-import { useEffect } from "react";
-import { Save } from "lucide-react";
-import { Form, Button } from "antd";
-import useLogout from "@/hooks/useLogout";
-import useSellerProfile from "@/hooks/useSellerProfile";
-import MainLayout from "@/components/global/layout/MainLayout";
-import { SellerInfoCard } from "@/components/setting/infoCard";
-import { AccountCard } from "@/components/setting/accountCard";
-import { PaymentCard } from "@/components/setting/paymentCard";
-import { useUpdateSellerProfile } from "@/hooks/useUpdateSellerProfile";
+import { useEffect } from 'react'
+import { Save } from 'lucide-react'
+import { Form, Button } from 'antd'
+import useLogout from '@/hooks/useLogout'
+import useSellerProfile from '@/hooks/useSellerProfile'
+import MainLayout from '@/components/global/layout/MainLayout'
+import { SellerInfoCard } from '@/components/setting/infoCard'
+import { AccountCard } from '@/components/setting/accountCard'
+import { PaymentCard } from '@/components/setting/paymentCard'
+import { useUpdateSellerProfile } from '@/hooks/useUpdateSellerProfile'
 
 const Settings = () => {
-  const [form] = Form.useForm();
-  const { profile } = useSellerProfile();
-  const updateMutation = useUpdateSellerProfile();
-  const { logout, loading: logoutLoading } = useLogout();
+  const [form] = Form.useForm()
+  const { profile } = useSellerProfile()
+  const updateMutation = useUpdateSellerProfile()
+  const { logout, loading: logoutLoading } = useLogout()
 
   useEffect(() => {
     if (profile) {
@@ -22,23 +22,23 @@ const Settings = () => {
         ownerName: profile.card_owner,
         shippingCost: profile.shipping_cost,
         cardNumber: profile.card_number,
-      });
+      })
     }
-  }, [profile, form]);
+  }, [profile, form])
 
-  const handleUpdate = (values) => {
+  const handleUpdate = values => {
     updateMutation.mutate({
       shop_name: values.shopName,
       card_owner: values.ownerName,
       shipping_cost: values.shippingCost,
       card_number: values.cardNumber,
-    });
-  };
+    })
+  }
 
-  const handleCardChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "").substring(0, 16);
-    form.setFieldValue("cardNumber", value.replace(/(\d{4})(?=\d)/g, "$1-"));
-  };
+  const handleCardChange = e => {
+    const value = e.target.value.replace(/\D/g, '').substring(0, 16)
+    form.setFieldValue('cardNumber', value.replace(/(\d{4})(?=\d)/g, '$1-'))
+  }
 
   return (
     <MainLayout showSettingsShortcut={false}>
@@ -51,7 +51,7 @@ const Settings = () => {
         <SellerInfoCard form={form} />
         <PaymentCard form={form} handleCardChange={handleCardChange} />
         <AccountCard logout={logout} logoutLoading={logoutLoading} />
-        <div className="sticky bottom-0 bg-background/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-3 shadow-lg flex justify-end">
+        <div className="sticky bottom-0 flex justify-end rounded-2xl border border-border bg-background/90 px-4 py-3 shadow-lg backdrop-blur-sm">
           <Button
             type="primary"
             size="large"
@@ -64,10 +64,10 @@ const Settings = () => {
         </div>
       </Form>
     </MainLayout>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings
 
 // import { supabase } from "@/lib/supabase";
 // import { LogOut, Save } from "lucide-react";

@@ -1,11 +1,11 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from '@/lib/supabase'
 
-export const isSlugUnique = async (slug) => {
+export const isSlugUnique = async slug => {
   const { data, error } = await supabase
-    .from("sellers")
-    .select("slug")
-    .eq("slug", slug)
-    .maybeSingle();
+    .from('sellers')
+    .select('slug')
+    .eq('slug', slug)
+    .maybeSingle()
 
-  return !data;
-};
+  return !data
+}

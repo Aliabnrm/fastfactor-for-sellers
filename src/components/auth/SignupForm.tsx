@@ -1,14 +1,14 @@
-import { supabase } from "@/lib/supabase";
-import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, message } from "antd";
-import { passwordRules } from "@/lib/validation/password";
+import { supabase } from '@/lib/supabase'
+import { useNavigate } from 'react-router-dom'
+import { Form, Input, Button, message } from 'antd'
+import { passwordRules } from '@/lib/validation/password'
 
 const SignupForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const handleSignup = async (values) => {
-    const email = values.email;
-    const password = values.password;
+  const handleSignup = async values => {
+    const email = values.email
+    const password = values.password
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -17,29 +17,29 @@ const SignupForm = () => {
         emailRedirectTo: `${window.location.origin}/auth?verified=true`,
         data: { mobile: values.mobile },
       },
-    });
+    })
 
-    if (error) return message.error(error.message);
+    if (error) return message.error(error.message)
 
-    const newUserId = data.user?.id;
+    const newUserId = data.user?.id
 
     if (newUserId) {
       const { error: profileError } = await supabase
-        .from("sellers")
+        .from('sellers')
         .insert({
           id: newUserId,
         })
         .select()
-        .single();
+        .single()
 
       if (profileError) {
-        console.error("Error creating seller profile:", profileError);
+        console.error('Error creating seller profile:', profileError)
       }
     }
 
-    message.success("ثبت‌نام با موفقیت انجام شد");
-    navigate("/");
-  };
+    message.success('ثبت‌نام با موفقیت انجام شد')
+    navigate('/')
+  }
 
   return (
     <Form
@@ -52,8 +52,8 @@ const SignupForm = () => {
         label="ایمیل"
         name="email"
         rules={[
-          { required: true, message: "لطفا ایمیل خود را وارد کنید" },
-          { type: "email", message: "ایمیل معتبر وارد کنید" },
+          { required: true, message: 'لطفا ایمیل خود را وارد کنید' },
+          { type: 'email', message: 'ایمیل معتبر وارد کنید' },
         ]}
       >
         <Input size="large" placeholder="مثال: email@example.com" />
@@ -67,7 +67,7 @@ const SignupForm = () => {
         ثبت‌نام رایگان
       </Button>
     </Form>
-  );
-};
+  )
+}
 
-export default SignupForm;
+export default SignupForm

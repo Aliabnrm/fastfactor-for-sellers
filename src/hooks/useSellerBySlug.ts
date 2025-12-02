@@ -1,22 +1,17 @@
-import { getSellerBySlug } from "@/services/sellers/seller";
-import { useQuery } from "@tanstack/react-query";
+import { getSellerBySlug } from '@/services/sellers/seller'
+import { useQuery } from '@tanstack/react-query'
 
-
-export const useSellerBySlug = (slug) => {
+export const useSellerBySlug = slug => {
   return useQuery({
-    queryKey: ["seller", slug],
+    queryKey: ['seller', slug],
     queryFn: () => getSellerBySlug(slug),
-    enabled: !!slug, 
-    retry: 1,        
-    staleTime: 1000 * 60 * 2, 
-  });
-};
+    enabled: !!slug,
+    retry: 1,
+    staleTime: 1000 * 60 * 2,
+  })
+}
 
-export default useSellerBySlug;
-
-
-
-
+export default useSellerBySlug
 
 // import { supabase } from "@/lib/supabase";
 // import { useState, useEffect } from "react";

@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { Steps, Typography } from "antd";
-import { Sparkles, Store, Wallet, Truck } from "lucide-react";
+import { useState } from 'react'
+import { Steps, Typography } from 'antd'
+import { Sparkles, Store, Wallet, Truck } from 'lucide-react'
 
 const stepsMeta = [
   {
-    title: "هویت فروشگاه",
-    description: "فروشگاه خود را بسازید",
+    title: 'هویت فروشگاه',
+    description: 'فروشگاه خود را بسازید',
     icon: <Store className="h-4 w-4" />,
   },
   {
-    title: "اطلاعات مالی",
-    description: "اطلاعات جهت واریز مشتری",
+    title: 'اطلاعات مالی',
+    description: 'اطلاعات جهت واریز مشتری',
     icon: <Wallet className="h-4 w-4" />,
   },
   {
-    title: "تنظیمات ارسال",
-    description: "هزینه ارسال ثابت",
+    title: 'تنظیمات ارسال',
+    description: 'هزینه ارسال ثابت',
     icon: <Truck className="h-4 w-4" />,
   },
-];
+]
 
 const StepsSidebar = () => {
-  const [current] = useState(0);
+  const [current] = useState(0)
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 text-emerald-600 text-xl font-semibold">
+      <div className="flex items-center gap-2 text-xl font-semibold text-emerald-600">
         <Sparkles className="h-6 w-6" />
         <span>FastFactor</span>
       </div>
@@ -42,14 +42,14 @@ const StepsSidebar = () => {
       <Steps
         direction="vertical"
         current={current}
-        items={stepsMeta.map((s) => ({
+        items={stepsMeta.map(s => ({
           title: s.title,
           description: s.description,
           icon: s.icon,
         }))}
       />
     </div>
-  );
-};
+  )
+}
 
-export default StepsSidebar;
+export default StepsSidebar
