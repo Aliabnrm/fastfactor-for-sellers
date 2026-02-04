@@ -1,6 +1,6 @@
 import './index.css'
-import App from './App.tsx'
 import 'antd/dist/reset.css'
+import AppRoutes from './AppRoutes.tsx'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 
@@ -13,4 +13,4 @@ registerSW({
   },
 })
 
-createRoot(document.getElementById('root')!).render(<App />)
+createRoot(document.getElementById('root')!).render(<AppRoutes />)

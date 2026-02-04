@@ -1,24 +1,25 @@
 import Home from './pages/Home'
 import Auth from './pages/Auth'
-import faIR from 'antd/locale/fa_IR'
 import { ConfigProvider } from 'antd'
+import faIR from 'antd/locale/fa_IR'
+import OrderPage from './pages/Order'
 import Checkout from './pages/Checkout'
+import ProfilePage from './pages/Profile'
 import NotFound from './pages/NotFound'
 import Onboarding from './pages/Onboarding'
-import ProtectedRoute from './ProtectedRoute'
-import PublicAuthRoute from './PublicAuthRoute'
 import { Toaster } from '@/components/ui/toaster'
+import ProtectedRoute from './guard/ProtectedRoute'
+import PublicAuthRoute from './guard/PublicAuthRoute'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import AuthProviderWrapper from '@/context/AuthProviderWrapper'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import ProfilePage from './pages/Profile'
-import OrderPage from './pages/Order'
+
 
 const queryClient = new QueryClient()
 
-const App = () => (
+const AppRoutes = () => (
   <QueryClientProvider client={queryClient}>
     <ConfigProvider
       locale={faIR}
@@ -109,4 +110,4 @@ const App = () => (
   </QueryClientProvider>
 )
 
-export default App
+export default AppRoutes

@@ -41,7 +41,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <MainLayout showProfileShortcut={false}>
+    <MainLayout showProfile={false}>
       <Form
         form={form}
         layout="vertical"

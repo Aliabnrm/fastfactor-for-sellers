@@ -4,21 +4,21 @@ import MainHeader from './MainHeader'
 
 type MainLayoutProps = {
   children: ReactNode
+  showProfile?: boolean
   contentClassName?: string
   headerRightSlot?: ReactNode
-  showProfileShortcut?: boolean
 }
 
 const MainLayout = ({
   children,
   headerRightSlot,
   contentClassName,
-  showProfileShortcut = true,
+  showProfile = true,
 }: MainLayoutProps) => (
   <div className="min-h-screen bg-background">
     <MainHeader
+      showProfile={showProfile}
       rightSlot={headerRightSlot}
-      showProfileShortcut={showProfileShortcut}
     />
     <main className={clsx('container mx-auto px-4 py-6', contentClassName)}>
       {children}
