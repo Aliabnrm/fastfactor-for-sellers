@@ -1,86 +1,44 @@
-import { Card } from "@/components/ui/card";
-import { Package, TrendingUp, Clock, Truck } from "lucide-react";
+import { Card } from '@/components/ui/card'
+import { STATUS_CARD_CONFIG } from '@/config/orderStatus'
 
 type StatusCardProps = {
-  totalOrders: number;
-  pendingOrders: number;
-  verifiedOrders: number;
-  deliveredOrders: number;
-};
+  totalOrders: number
+  pendingOrders: number
+  verifiedOrders: number
+  deliveredOrders: number
+}
 
-type CardDetailProps = {
-  label: string;
-  value: number;
-  icon: React.ElementType;
-  bgColor: string;
-  textColor: string;
-};
-
-const StatusCard = ({
-  totalOrders,
-  pendingOrders,
-  verifiedOrders,
-  deliveredOrders,
-}: StatusCardProps) => {
-  const cardDetails: CardDetailProps[] = [
-    {
-      label: "کل سفارش‌ها",
-      value: totalOrders,
-      icon: Package,
-      bgColor: "bg-primary/10",
-      textColor: "text-primary",
-    },
-    {
-      label: "در انتظار بررسی",
-      value: pendingOrders,
-      icon: Clock,
-      bgColor: "bg-accent/10",
-      textColor: "text-accent-foreground",
-    },
-    {
-      label: "تایید شده",
-      value: verifiedOrders,
-      icon: TrendingUp,
-      bgColor: "bg-success/10",
-      textColor: "text-success",
-    },
-    {
-      label: "ارسال شده",
-      value: deliveredOrders,
-      icon: Truck,
-      bgColor: "bg-success/10",
-      textColor: "text-success",
-    },
-  ];
-
+const StatusCard = (props: StatusCardProps) => {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-      {cardDetails?.map((item?) => {
-        const Icon = item?.icon;
+      {STATUS_CARD_CONFIG.map((item) => {
+        const Icon = item.icon
+        const value = props[item.key]
+
         return (
           <Card
-            key={item?.label}
-            className="p-3 shadow-sm max-h-[150px] items-center justify-center flex hover:shadow-md transition-shadow rounded-xl sm:col-span-1"
+            key={item.key}
+            className="flex max-h-[150px] items-center justify-center rounded-xl p-3 shadow-sm transition-shadow hover:shadow-md"
           >
-            <div className="flex sm:flex-row flex-col sm:items-center items-center justify-between h-full">
-              <div className="text-center sm:text-left flex flex-col gap-1 h-full">
+            <div className="flex h-full flex-col items-center justify-between sm:flex-row">
+              <div className="flex h-full flex-col gap-1 text-center sm:text-left">
                 <span className="text-sm text-muted-foreground">
-                  {item?.label}
+                  {item.label}
                 </span>
-                <span className="text-2xl font-bold">{item?.value}</span>
+                <span className="text-2xl font-bold">{value}</span>
               </div>
 
               <div
-                className={`${item?.bgColor} w-11 h-11 sm:h-full rounded-full flex items-center justify-center`}
+                className={`${item.bgColor} flex h-11 w-11 items-center justify-center rounded-full`}
               >
-                <Icon className={`w-5 h-5 ${item?.textColor}`} />
+                <Icon className={`h-5 w-5 ${item.textColor}`} />
               </div>
             </div>
           </Card>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default StatusCard;
+export default StatusCard

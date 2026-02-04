@@ -1,22 +1,22 @@
-import Home from "./pages/Home";
-import Auth from "./pages/Auth";
-import Order from "./pages/Order";
-import faIR from "antd/locale/fa_IR";
-import { ConfigProvider } from "antd";
-import Checkout from "./pages/Checkout";
-import NotFound from "./pages/NotFound";
-import Settings from "./pages/Settings";
-import Onboarding from "./pages/Onboarding";
-import ProtectedRoute from "./ProtectedRoute";
-import PublicAuthRoute from "./PublicAuthRoute";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import AuthProviderWrapper from "@/context/AuthProviderWrapper";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Home from './pages/Home'
+import Auth from './pages/Auth'
+import faIR from 'antd/locale/fa_IR'
+import { ConfigProvider } from 'antd'
+import Checkout from './pages/Checkout'
+import NotFound from './pages/NotFound'
+import Onboarding from './pages/Onboarding'
+import ProtectedRoute from './ProtectedRoute'
+import PublicAuthRoute from './PublicAuthRoute'
+import { Toaster } from '@/components/ui/toaster'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { Toaster as Sonner } from '@/components/ui/sonner'
+import AuthProviderWrapper from '@/context/AuthProviderWrapper'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import ProfilePage from './pages/Profile'
+import OrderPage from './pages/Order'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -25,7 +25,7 @@ const App = () => (
       direction="rtl"
       theme={{
         token: {
-          colorPrimary: "#059669",
+          colorPrimary: '#059669',
           borderRadius: 12,
           fontFamily:
             "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -37,8 +37,8 @@ const App = () => (
             fontWeight: 600,
           },
           Tabs: {
-            itemSelectedColor: "#059669",
-            inkBarColor: "#059669",
+            itemSelectedColor: '#059669',
+            inkBarColor: '#059669',
           },
         },
       }}
@@ -83,16 +83,16 @@ const App = () => (
                 path="/order"
                 element={
                   <ProtectedRoute>
-                    <Order />
+                    <OrderPage />
                   </ProtectedRoute>
                 }
               />
 
               <Route
-                path="/order/settings"
+                path="/profile"
                 element={
                   <ProtectedRoute>
-                    <Settings />
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
@@ -107,6 +107,6 @@ const App = () => (
       </TooltipProvider>
     </ConfigProvider>
   </QueryClientProvider>
-);
+)
 
-export default App;
+export default App

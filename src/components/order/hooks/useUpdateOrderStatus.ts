@@ -1,39 +1,39 @@
-import { useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { useToast } from "@/hooks/use-toast";
-import { OrderStatus } from "@/types/checkout";
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useToast } from '@/hooks/use-toast'
+import { OrderStatus } from '@/types/order.types'
 
 export const useUpdateOrderStatus = (refreshOrders: () => void) => {
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
 
   const updateStatus = async (orderId: string, newStatus: OrderStatus) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const { error } = await supabase.rpc("update_order_status", {
+      const { error } = await supabase.rpc('update_order_status', {
         p_order_id: orderId,
         p_new_status: newStatus,
-      });
+      })
 
-      if (error) throw error;
+      if (error) throw error
 
       toast({
-        title: "وضعیت به‌روزرسانی شد",
+        title: 'وضعیت به‌روزرسانی شد',
         description: `سفارش با موفقیت به وضعیت ${newStatus} تغییر یافت.`,
-        variant: "default",
-      });
+        variant: 'default',
+      })
 
-      refreshOrders();
+      refreshOrders()
     } catch (e) {
       toast({
-        title: "خطا در آپدیت وضعیت",
-        description: "مشکلی پیش آمد، لطفاً دوباره تلاش کنید.",
-        variant: "destructive",
-      });
+        title: 'خطا در آپدیت وضعیت',
+        description: 'مشکلی پیش آمد، لطفاً دوباره تلاش کنید.',
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  return { updateStatus, isLoading };
-};
+  return { updateStatus, isLoading }
+}

@@ -1,12 +1,12 @@
-import { Upload, XCircle } from "lucide-react";
-import { Label } from "@/components/ui/label";
+import { Upload, XCircle } from 'lucide-react'
+import { Label } from '@/components/ui/label'
 
 interface FileUploadProps {
-  id: string;
-  label: string;
-  fileName: string;
-  previewUrl?: string;
-  onChange: (file: File | null) => void;
+  id: string
+  label: string
+  fileName: string
+  previewUrl?: string
+  onChange: (file: File | null) => void
 }
 
 export const FileUpload = ({
@@ -17,37 +17,37 @@ export const FileUpload = ({
   previewUrl,
 }: FileUploadProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.files?.[0] ?? null);
-  };
+    onChange(e.target.files?.[0] ?? null)
+  }
 
   const handleFileRemove = () => {
-    onChange(null);
+    onChange(null)
 
-    const fileInput = document.getElementById(id) as HTMLInputElement | null;
+    const fileInput = document.getElementById(id) as HTMLInputElement | null
     if (fileInput) {
-      fileInput.value = "";
+      fileInput.value = ''
     }
-  };
+  }
 
   if (previewUrl) {
     return (
       <div className="space-y-2">
         <Label>{label}</Label>
 
-        <div className="relative border border-primary/50 rounded-lg p-2 bg-secondary/20">
+        <div className="relative rounded-lg border border-primary/50 bg-secondary/20 p-2">
           <img
             src={previewUrl}
             alt="پیش‌نمایش فیش واریزی"
-            className="w-full max-h-[200px] object-cover rounded"
+            className="max-h-[200px] w-full rounded object-cover"
           />
 
           <button
             type="button"
             onClick={handleFileRemove}
-            className="absolute top-4 left-4 text-red-500  rounded-full  transition-transform hover:scale-110"
+            className="absolute left-4 top-4 rounded-full text-red-500 transition-transform hover:scale-110"
             aria-label="حذف فایل"
           >
-            <XCircle className="w-6 h-6" fill="white" />
+            <XCircle className="h-6 w-6" fill="white" />
           </button>
 
           <input
@@ -59,7 +59,7 @@ export const FileUpload = ({
           />
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -70,21 +70,21 @@ export const FileUpload = ({
         id={id}
         type="file"
         accept="image/*"
-        className="hidden "
+        className="hidden"
         onChange={handleFileChange}
       />
 
       <label
         htmlFor={id}
-        className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer block"
+        className="block cursor-pointer rounded-lg border-2 border-dashed border-border p-6 text-center transition-colors hover:border-primary"
       >
-        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+        <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
 
         {fileName ? (
           <p className="text-sm font-medium text-foreground">{fileName}</p>
         ) : (
           <>
-            <p className="text-sm font-medium text-foreground mb-1">
+            <p className="mb-1 text-sm font-medium text-foreground">
               تصویر فیش واریزی
             </p>
             <p className="text-xs text-muted-foreground">
@@ -94,5 +94,5 @@ export const FileUpload = ({
         )}
       </label>
     </div>
-  );
-};
+  )
+}

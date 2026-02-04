@@ -1,43 +1,43 @@
-import { useState } from "react";
-import { isSlugUnique } from "@/lib/isUniqeSlug";
-import { Form, Input, InputNumber, Button } from "antd";
-import { useUpsertSeller } from "@/hooks/useUpsertSeller";
-import { formatCurrency, parseCurrency } from "@/utils/formRules";
+import { useState } from 'react'
+import { isSlugUnique } from '@/lib/isUniqeSlug'
+import { Form, Input, InputNumber, Button } from 'antd'
+import { useUpsertSeller } from '@/hooks/useUpsertSeller'
+import { formatCurrency, parseCurrency } from '@/utils/formRules'
 
 const stepFields = [
-  ["shopName", "slug"],
-  ["ownerName", "cardNumber"],
-  ["shippingCost"],
-];
+  ['shopName', 'slug'],
+  ['ownerName', 'cardNumber'],
+  ['shippingCost'],
+]
 
 const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
-  const [form] = Form.useForm();
-  const [current, setCurrent] = useState(0);
+  const [form] = Form.useForm()
+  const [current, setCurrent] = useState(0)
 
-  const mutation = useUpsertSeller(onFinished);
+  const mutation = useUpsertSeller(onFinished)
 
   const next = async () => {
     try {
-      await form.validateFields(stepFields[current]);
-      setCurrent((c) => c + 1);
+      await form.validateFields(stepFields[current])
+      setCurrent(c => c + 1)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
-  const prev = () => setCurrent((c) => c - 1);
+  const prev = () => setCurrent(c => c - 1)
 
   const handleSubmit = async () => {
     try {
-      await form.validateFields();
-      mutation.mutate(form.getFieldsValue(true));
+      await form.validateFields()
+      mutation.mutate(form.getFieldsValue(true))
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="mx-auto max-w-2xl p-4">
       <Form
         form={form}
         layout="vertical"
@@ -49,7 +49,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
             <Form.Item
               label="نام فروشگاه"
               name="shopName"
-              rules={[{ required: true, message: "نام فروشگاه را وارد کنید." }]}
+              rules={[{ required: true, message: 'نام فروشگاه را وارد کنید.' }]}
             >
               <Input size="large" placeholder="مثال: گالری مریم" />
             </Form.Item>
@@ -58,17 +58,17 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
               label="آدرس فروشگاه"
               name="slug"
               rules={[
-                { required: true, message: "آدرس فروشگاه الزامی است." },
+                { required: true, message: 'آدرس فروشگاه الزامی است.' },
                 {
                   validator: async (_, value) => {
-                    if (!value) return Promise.resolve();
+                    if (!value) return Promise.resolve()
 
-                    const unique = await isSlugUnique(value);
+                    const unique = await isSlugUnique(value)
                     return unique
                       ? Promise.resolve()
                       : Promise.reject(
-                          new Error("این آدرس قبلاً رزرو شده است.")
-                        );
+                          new Error('این آدرس قبلاً رزرو شده است.'),
+                        )
                   },
                 },
               ]}
@@ -88,7 +88,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
               label="نام صاحب کارت"
               name="ownerName"
               rules={[
-                { required: true, message: "نام صاحب کارت را وارد کنید." },
+                { required: true, message: 'نام صاحب کارت را وارد کنید.' },
               ]}
             >
               <Input size="large" placeholder="مثال: مریم رضایی" />
@@ -108,7 +108,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           <Form.Item
             label="هزینه ارسال ثابت"
             name="shippingCost"
-            rules={[{ required: true, message: "هزینه ارسال را وارد کنید." }]}
+            rules={[{ required: true, message: 'هزینه ارسال را وارد کنید.' }]}
           >
             <InputNumber
               size="large"
@@ -122,7 +122,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           </Form.Item>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-4">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <Button block onClick={prev} disabled={current === 0}>
             بازگشت
           </Button>
@@ -144,10 +144,10 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
         </div>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default OnboardingForm;
+export default OnboardingForm
 
 // import { useState } from "react";
 // import { supabase } from "@/lib/supabase";

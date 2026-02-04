@@ -1,42 +1,42 @@
-import { Copy } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { Copy } from 'lucide-react'
+import { Card } from '@/components/ui/card'
+import { useToast } from '@/hooks/use-toast'
+import { Button } from '@/components/ui/button'
 
 type ShopProps = {
-  shopSlug: string;
-};
+  shopSlug: string
+}
 
 const LinkCard = ({ shopSlug }: ShopProps) => {
-  const { toast } = useToast();
+  const { toast } = useToast()
 
   const handleCopyLink = () => {
-    const link = `${window.location.origin}/checkout/${shopSlug}`;
-    navigator.clipboard.writeText(link);
+    const link = `${window.location.origin}/checkout/${shopSlug}`
+    navigator.clipboard.writeText(link)
 
     toast({
-      title: "لینک کپی شد",
-      description: "لینک فروشگاه شما در کلیپ‌بورد کپی شد",
-    });
-  };
+      title: 'لینک کپی شد',
+      description: 'لینک فروشگاه شما در کلیپ‌بورد کپی شد',
+    })
+  }
 
   return (
     <Card className="p-6 shadow-md">
-      <div className="flex flex-col md:flex-row items-center justify-center text-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 text-center md:flex-row">
         <div>
-          <h3 className="font-semibold mb-1">لینک فروشگاه من</h3>
+          <h3 className="mb-1 font-semibold">لینک فروشگاه من</h3>
           <span className="text-sm text-muted-foreground">
             این لینک را در بیو اینستاگرام قرار دهید
           </span>
         </div>
 
-        <Button onClick={handleCopyLink} className="gap-2 w-full md:w-auto">
-          <Copy className="w-4 h-4" />
+        <Button onClick={handleCopyLink} className="w-full gap-2 md:w-auto">
+          <Copy className="h-4 w-4" />
           کپی لینک فروشگاه
         </Button>
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default LinkCard;
+export default LinkCard

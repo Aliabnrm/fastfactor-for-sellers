@@ -4,52 +4,52 @@ import {
   useEffect,
   useContext,
   createContext,
-} from "react";
-import { supabase } from "@/lib/supabase";
-import type { User } from "@supabase/supabase-js";
+} from 'react'
+import { supabase } from '@/lib/supabase'
+import type { User } from '@supabase/supabase-js'
 interface AuthContextType {
-  user: User | null;
-  loading: boolean;
+  user: User | null
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-});
+})
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext)
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export default function AuthProviderWrapper({ children }: Props) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // 1) Load session
     const loadSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    };
+      const { data } = await supabase.auth.getSession()
+      setUser(data.session?.user ?? null)
+      setLoading(false)
+    }
 
-    loadSession();
+    loadSession()
 
     // 2) listen to login/logout
     const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-    });
+      setUser(session?.user ?? null)
+    })
 
     return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
+      listener.subscription.unsubscribe()
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }

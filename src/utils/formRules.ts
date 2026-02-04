@@ -1,20 +1,22 @@
-import type { Rule } from "antd/es/form";
+import type { Rule } from 'antd/es/form'
 
-export const SLUG_REGEX = /^[a-z0-9-]+$/;
+export const SLUG_REGEX = /^[a-z0-9-]+$/
 
 export const createSlugRules = (): Rule[] => [
-  { required: true, message: "نام لینک فروشگاه را وارد کنید." },
+  { required: true, message: 'نام لینک فروشگاه را وارد کنید.' },
   {
     validator: (_: unknown, value: string) => {
       if (!value) {
-        return Promise.resolve();
+        return Promise.resolve()
       }
       return SLUG_REGEX.test(value)
         ? Promise.resolve()
-        : Promise.reject(new Error("آدرس باید فقط شامل حروف انگلیسی، اعداد و خط تیره باشد."));
+        : Promise.reject(
+            new Error('آدرس باید فقط شامل حروف انگلیسی، اعداد و خط تیره باشد.'),
+          )
     },
   },
-];
+]
 
 // export const cardNumberRules: Rule[] = [
 //   { required: true, message: "شماره کارت را وارد کنید." },
@@ -33,24 +35,23 @@ export const createSlugRules = (): Rule[] => [
 
 export const formatCardNumber = (value: string) =>
   value
-    .replace(/\D/g, "")
+    .replace(/\D/g, '')
     .slice(0, 16)
-    .replace(/(\d{4})(?=\d)/g, "$1-")
-    .replace(/-$/, "");
+    .replace(/(\d{4})(?=\d)/g, '$1-')
+    .replace(/-$/, '')
 
 export const formatCurrency = (value?: string | number | null) => {
-  if (value === undefined || value === null || value === "") {
-    return "";
+  if (value === undefined || value === null || value === '') {
+    return ''
   }
-  const numeric = typeof value === "number" ? value.toString() : value;
-  return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+  const numeric = typeof value === 'number' ? value.toString() : value
+  return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
 
 export const parseCurrency = (value?: string | number | null) => {
-  if (value === undefined || value === null || value === "") {
-    return undefined;
+  if (value === undefined || value === null || value === '') {
+    return undefined
   }
-  const normalized = typeof value === "number" ? value.toString() : value;
-  return Number(normalized.replace(/,/g, ""));
-};
-
+  const normalized = typeof value === 'number' ? value.toString() : value
+  return Number(normalized.replace(/,/g, ''))
+}
