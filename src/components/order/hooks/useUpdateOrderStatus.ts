@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useToast } from '@/hooks/use-toast'
-import { OrderStatus } from '@/types/checkout'
+import { OrderStatus } from '@/types/order.types'
 
 export const useUpdateOrderStatus = (refreshOrders: () => void) => {
   const { toast } = useToast()

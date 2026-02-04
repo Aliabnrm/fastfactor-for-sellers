@@ -1,15 +1,15 @@
 import { Card, Button } from 'antd'
-import { LogOut } from 'lucide-react'
+import { LogOut, LucideLogOut } from 'lucide-react'
 
-export const AccountCard = ({ logout, logoutLoading }) => (
+export const AccountLogoutCard = ({ logout, logoutLoading }) => (
   <Card>
     <Button
-      danger
       block
+      danger
       size="large"
-      icon={<LogOut />}
       onClick={logout}
       loading={logoutLoading}
+      icon={<LucideLogOut className='w-5 h-5 mt-2' />}
     >
       خروج از حساب
     </Button>

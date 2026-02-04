@@ -4,7 +4,7 @@ import { Alert, Button, Spin } from 'antd'
 import { useToast } from '@/hooks/use-toast'
 import useSellerBySlug from '@/hooks/useSellerBySlug'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CheckoutForm } from '@/components/checkout/components/CheckoutForm'
+import { CheckoutForm } from '@/components/checkout/CheckoutForm'
 import { useCheckoutSubmit } from '@/components/checkout/hooks/useCheckoutSubmit'
 import { CheckoutSummary } from '@/components/checkout/components/CheckoutSummary'
 
@@ -14,11 +14,11 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
 
-  const { data: seller, isLoading, error } = useSellerBySlug(slug)
+  const { data: sellerShopInfo, isLoading, error } = useSellerBySlug(slug)
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
-    seller,
-    setResult,
     toast,
+    setResult,
+    sellerShopInfo,
   )
 
   if (isLoading || isSubmitting) {
@@ -32,7 +32,7 @@ export default function CheckoutPage() {
     )
   }
 
-  if (error || !seller) {
+  if (error || !sellerShopInfo) {
     return (
       <div className="mx-auto max-w-lg space-y-4 p-20 text-center">
         <Alert
@@ -58,9 +58,9 @@ export default function CheckoutPage() {
 
   return (
     <CheckoutForm
-      onSubmit={handleCheckoutSubmit}
-      sellerInfo={seller}
       isSubmitting={isSubmitting}
+      onSubmit={handleCheckoutSubmit}
+      sellerShopInfo={sellerShopInfo}
     />
   )
 }

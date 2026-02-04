@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { OrderStatus } from '@/types/checkout'
+import { OrderStatus } from '@/types/order.types'
 import { STATUS_ORDER_CONFIG } from '@/config/orderStatus'
 
 const StatusBadge = ({ status }: { status: OrderStatus }) => {

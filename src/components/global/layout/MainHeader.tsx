@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 type MainHeaderProps = {
   rightSlot?: ReactNode
-  showSettingsShortcut?: boolean
+  showProfileShortcut?: boolean
 }
 
 const MainHeader = ({
   rightSlot,
-  showSettingsShortcut = true,
+  showProfileShortcut = true,
 }: MainHeaderProps) => {
   const navigate = useNavigate()
 
@@ -26,11 +26,11 @@ const MainHeader = ({
         <div className="flex items-center gap-3">
           {rightSlot
             ? rightSlot
-            : showSettingsShortcut && (
+            : showProfileShortcut && (
                 <button
                   type="button"
                   aria-label="تنظیمات"
-                  onClick={() => navigate('/order/settings')}
+                  onClick={() => navigate('/profile')}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   <Settings className="h-5 w-5" />

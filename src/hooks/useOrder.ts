@@ -3,18 +3,18 @@ import { fetchSellerOrders } from '@/services/orders/order'
 
 export const useOrder = () => {
   const query = useQuery({
-    queryKey: ['seller-orders'],
-    queryFn: fetchSellerOrders,
-    staleTime: 1000 * 60,
     retry: 1,
+    staleTime: 1000 * 60,
     refetchOnWindowFocus: true,
+    queryFn: fetchSellerOrders,
+    queryKey: ['seller-orders'],
   })
 
   return {
-    orders: query.data ?? [],
-    isLoading: query.isLoading,
     error: query.error,
+    orders: query.data ?? [],
     revalidate: query.refetch,
+    isLoading: query.isLoading,
   }
 }
 

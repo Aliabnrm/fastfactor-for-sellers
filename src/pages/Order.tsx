@@ -7,7 +7,7 @@ import OrdersList from '@/components/order/table/orderList'
 import StatusCard from '@/components/order/table/statusCrad'
 import MainLayout from '@/components/global/layout/MainLayout'
 
-const Order = () => {
+const OrderPage = () => {
   const { profile, isLoading: isProfileLoading } = useSellerProfile()
   const { orders, isLoading: isOrdersLoading, error, revalidate } = useOrder()
 
@@ -68,4 +68,4 @@ const Order = () => {
   )
 }
 
-export default Order
+export default OrderPage

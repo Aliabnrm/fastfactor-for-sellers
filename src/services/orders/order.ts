@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { Order } from '@/types/checkout'
+import { Order } from '@/types/order.types'
 
 export const fetchSellerOrders = async (): Promise<Order[]> => {
   const { data: sessionData } = await supabase.auth.getSession()

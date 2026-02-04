@@ -40,8 +40,8 @@ const StepsSidebar = () => {
       </div>
 
       <Steps
-        direction="vertical"
         current={current}
+        direction="vertical"
         items={stepsMeta.map(s => ({
           title: s.title,
           description: s.description,

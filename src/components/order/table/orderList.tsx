@@ -1,13 +1,13 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { useState } from 'react'
 import StatusBadge from './statusBadge'
-import { Order } from '@/types/checkout'
+import { Order } from '@/types/order.types'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { formatJalali } from '@/utils/formatJalali'
 import DetailRow from '@/components/global/detailRow'
-import { Download, ChevronDown, CheckCircle, XCircle } from 'lucide-react'
 import { useUpdateOrderStatus } from '../hooks/useUpdateOrderStatus'
+import { Download, ChevronDown, CheckCircle, XCircle } from 'lucide-react'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 
 type OrdersListProps = {
   orders: Order[]
@@ -116,9 +116,8 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
             )}
 
             <CardFooter
-              className={`mt-2 flex flex-col gap-2 p-4 ${
-                isOpen ? 'border-t' : ''
-              }`}
+              className={`mt-2 flex flex-col gap-2 p-4 ${isOpen ? 'border-t' : ''
+                }`}
             >
               <div className="flex w-full justify-between gap-2">
                 {order.status === 'pending' && (
@@ -127,7 +126,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       size="sm"
                       onClick={() => updateStatus(order.id, 'confirmed')}
                       className="w-full gap-2 bg-green-600 font-semibold text-white shadow hover:bg-green-600/90"
-                      // disabled={isActionLoading}
+                    // disabled={isActionLoading}
                     >
                       <CheckCircle className="h-4 w-4" />
                       تأیید واریز
@@ -137,7 +136,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       onClick={() => updateStatus(order.id, 'rejected')}
                       variant="outline"
                       className="w-full gap-2 border-red-500 font-semibold text-red-500 shadow hover:bg-red-500/10"
-                      // disabled={isActionLoading}
+                    // disabled={isActionLoading}
                     >
                       <XCircle className="h-4 w-4" />
                       رد سفارش
@@ -151,7 +150,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       size="sm"
                       onClick={() => updateStatus(order.id, 'delivered')}
                       className="w-full gap-2 bg-primary/90 font-semibold text-white shadow hover:bg-primary"
-                      // disabled={isActionLoading}
+                    // disabled={isActionLoading}
                     >
                       <Download className="h-4 w-4" />
                       بسته ارسال شد
@@ -171,16 +170,15 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
 
                 {(order.status === 'delivered' ||
                   order.status === 'rejected') && (
-                  <span
-                    className={`w-full rounded-lg py-2 text-center text-sm font-semibold ${
-                      order.status === 'delivered'
+                    <span
+                      className={`w-full rounded-lg py-2 text-center text-sm font-semibold ${order.status === 'delivered'
                         ? 'bg-green-50 text-green-600'
                         : 'bg-red-50 text-red-600'
-                    }`}
-                  >
-                    {order.status === 'delivered' ? 'تکمیل شده' : 'رد شده'}
-                  </span>
-                )}
+                        }`}
+                    >
+                      {order.status === 'delivered' ? 'تکمیل شده' : 'رد شده'}
+                    </span>
+                  )}
               </div>
 
               <Button
@@ -190,9 +188,8 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
               >
                 {isOpen ? 'بستن جزئیات' : 'مشاهده جزئیات کامل'}
                 <ChevronDown
-                  className={`h-4 w-4 transition-transform ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
+                  className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''
+                    }`}
                 />
               </Button>
             </CardFooter>

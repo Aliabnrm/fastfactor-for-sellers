@@ -5,11 +5,10 @@ import react from '@vitejs/plugin-react-swc'
 import { componentTagger } from 'lovable-tagger'
 
 // yarn preview cli for run with PWA
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: '::',
-    port: 8080,
+    port: 5173,
   },
   plugins: [
     react(),

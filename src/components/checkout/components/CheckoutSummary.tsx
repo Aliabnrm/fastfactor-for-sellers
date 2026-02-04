@@ -1,4 +1,4 @@
-import { Order } from '@/types/checkout'
+import { Order } from '@/types/order.types'
 import { CheckCircle2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
