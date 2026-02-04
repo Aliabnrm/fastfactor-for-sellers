@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { isSlugUnique } from '@/lib/isUniqeSlug'
+import { isSlugUnique } from '@/utils/isUniqeSlug'
 import { Form, Input, InputNumber, Button } from 'antd'
 import { useUpsertSeller } from '@/hooks/useUpsertSeller'
 import { formatCurrency, parseCurrency } from '@/utils/formRules'
