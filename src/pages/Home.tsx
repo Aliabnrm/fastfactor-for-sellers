@@ -2,7 +2,7 @@ import useSellerProfile from '@/hooks/useSellerProfile'
 import HeroSection from '@/components/home/heroSection'
 import FeatureSection from '@/components/home/featureSection'
 
-const Home = () => {
+const HomePage = () => {
   const { user, profile, isLoading } = useSellerProfile()
 
   if (isLoading) return null
@@ -18,4 +18,4 @@ const Home = () => {
   return null
 }
 
-export default Home
+export default HomePage
