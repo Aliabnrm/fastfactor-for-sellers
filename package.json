@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "lint": "eslint .",
-    "build": "vite build",
     "preview": "vite preview",
+    "build": "yarn lint && vite build",
     "build:dev": "vite build --mode development"
   },
   "dependencies": {

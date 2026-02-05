@@ -1,6 +1,6 @@
-import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/context/AuthProviderWrapper'
+import { useAuth } from '@/hooks/useAuth'
 import { ReactNode } from 'react'
+import { Navigate } from 'react-router-dom'
 
 interface Props {
   children: ReactNode
