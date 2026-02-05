@@ -1,12 +1,12 @@
-import Home from './pages/Home'
-import Auth from './pages/Auth'
+import AuthPage from './pages/Auth'
+import HomePage from './pages/Home'
 import { ConfigProvider } from 'antd'
 import faIR from 'antd/locale/fa_IR'
 import OrderPage from './pages/Order'
 import Checkout from './pages/Checkout'
 import ProfilePage from './pages/Profile'
-import NotFound from './pages/NotFound'
-import Onboarding from './pages/Onboarding'
+import NotFoundPage from './pages/NotFound'
+import OnboardingPage from './pages/Onboarding'
 import { Toaster } from '@/components/ui/toaster'
 import ProtectedRoute from './guard/ProtectedRoute'
 import PublicAuthRoute from './guard/PublicAuthRoute'
@@ -56,7 +56,7 @@ const AppRoutes = () => (
                 path="/auth"
                 element={
                   <PublicAuthRoute>
-                    <Auth />
+                    <AuthPage />
                   </PublicAuthRoute>
                 }
               />
@@ -66,7 +66,7 @@ const AppRoutes = () => (
                 path="/"
                 element={
                   <ProtectedRoute>
-                    <Home />
+                    <HomePage />
                   </ProtectedRoute>
                 }
               />
@@ -75,7 +75,7 @@ const AppRoutes = () => (
                 path="/onboarding"
                 element={
                   <ProtectedRoute>
-                    <Onboarding />
+                    <OnboardingPage />
                   </ProtectedRoute>
                 }
               />
@@ -101,7 +101,7 @@ const AppRoutes = () => (
               {/* OTHER */}
               <Route path="/login" element={<Navigate to="/auth" replace />} />
               <Route path="/checkout/:slug" element={<Checkout />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AuthProviderWrapper>
         </BrowserRouter>

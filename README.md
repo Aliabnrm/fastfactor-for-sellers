@@ -1,82 +1,103 @@
-# Welcome to your Lovable project
+# FastFactor for Sellers
 
-## Project info
+FastFactor is a seller‑focused web app that creates a shareable checkout link, collects order and payment proof, and provides a lightweight dashboard to manage incoming orders. It is optimized for mobile usage and can be installed as a PWA.
 
-**URL**: https://lovable.dev/projects/ad1bc6fe-0c67-410b-a45d-91927627e358
+## Key Features
+- Seller onboarding, authentication, and profile management
+- Public checkout form per seller (`/checkout/:sellerSlug`)
+- Order capture with customer details and payment proof upload
+- Seller dashboard for viewing and updating orders
+- PWA support for installable, app‑like experience
 
-## How can I edit this code?
+## Tech Stack
+- React + TypeScript
+- Vite
+- Tailwind CSS + shadcn-ui
+- React Router
+- TanStack Query
+- Supabase (Auth, Database, Storage)
+- Vite PWA Plugin
 
-There are several ways of editing your application.
+## Prerequisites
+- Node.js 18+ (LTS recommended)
+- Yarn (recommended) or npm
 
-**Use Lovable**
+## Getting Started
+1. Install dependencies:
 
-Simply visit the
-[Lovable Project](https://lovable.dev/projects/ad1bc6fe-0c67-410b-a45d-91927627e358)
-and start prompting.
+```bash
+yarn
+# or
+npm install
+```
 
-Changes made via Lovable will be committed automatically to this repo.
+2. Create environment variables:
 
-**Use your preferred IDE**
+```bash
+cp .env.local.example .env.local
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push
-changes. Pushed changes will also be reflected in Lovable.
+3. Start the development server:
 
-The only requirement is having Node.js & npm installed -
-[install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+yarn dev
+# or
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Environment Variables
+The app expects these variables at build time:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```env
+VITE_SUPABASE_URL=YOUR_SUPABASE_URL
+VITE_SUPABASE_KEY=YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY
+```
 
-**Use GitHub Codespaces**
+Notes:
+- `src/lib/supabase.ts` uses `VITE_SUPABASE_KEY`.
+- The auto‑generated client at `src/integrations/supabase/client.ts` expects `VITE_SUPABASE_PUBLISHABLE_KEY`. If you plan to use that client, align the variable name with the code.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once
-  you're done.
+### Example `.env.local`
+Create a sample file to avoid committing secrets:
 
-## What technologies are used for this project?
+```bash
+cat <<'ENV' > .env.local.example
+VITE_SUPABASE_URL=YOUR_SUPABASE_URL
+VITE_SUPABASE_KEY=YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY
+ENV
+```
 
-This project is built with:
+## Available Scripts
+- `yarn dev`: start dev server
+- `yarn build`: production build
+- `yarn build:dev`: build with `development` mode
+- `yarn preview`: preview production build
+- `yarn lint`: run ESLint
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Project Structure
+- `src/pages`: top‑level routes (Auth, Home, Checkout, Order, Profile, Onboarding)
+- `src/components`: UI and feature components
+- `src/services`: Supabase data access layer
+- `src/hooks`: custom hooks
+- `src/lib`: shared clients and utilities
+- `src/integrations`: auto‑generated integrations
+- `supabase/`: Supabase project config
 
-## How can I deploy this project?
+## PWA Configuration
+`vite.config.ts` includes a Workbox rule for Supabase caching. Replace `YOUR_PROJECT_ID` with your real Supabase project ID to enable API caching.
 
-Simply open
-[Lovable](https://lovable.dev/projects/ad1bc6fe-0c67-410b-a45d-91927627e358) and
-click on Share -> Publish.
+## Build & Deploy
+Create a production build:
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+yarn build
+```
 
-Yes, you can!
+The output will be in `dist/` and can be deployed to any static host.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect
-Domain.
+## Contributing
+- Keep changes focused and small
+- Run `yarn lint` before opening a PR
 
-Read more here:
-[Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## License
+No license file is currently included. Add one if you plan to distribute the project.

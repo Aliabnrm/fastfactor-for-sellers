@@ -3,7 +3,7 @@ import { Card, Tabs, Typography } from 'antd'
 import LoginForm from '@/components/auth/LoginForm'
 import SignupForm from '@/components/auth/SignupForm'
 
-const Auth = () => {
+const AuthPage = () => {
   const tabItems = [
     { key: 'login', label: 'ورود', children: <LoginForm /> },
     { key: 'signup', label: 'ثبت‌نام', children: <SignupForm /> },
@@ -32,4 +32,4 @@ const Auth = () => {
   )
 }
 
-export default Auth
+export default AuthPage

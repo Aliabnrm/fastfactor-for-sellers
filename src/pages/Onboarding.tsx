@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import StepsSidebar from '@/components/onboarding/Sidebar'
 import OnboardingForm from '@/components/onboarding/onboardForm'
 
-const Onboarding = () => {
+const OnboardingPage = () => {
   const navigate = useNavigate()
 
   return (
@@ -31,4 +31,4 @@ const Onboarding = () => {
     </div>
   )
 }
-export default Onboarding
+export default OnboardingPage
