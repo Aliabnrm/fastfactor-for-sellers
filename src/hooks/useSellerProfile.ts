@@ -1,9 +1,10 @@
-import useAuthUser from './useAuthUser'
+import { useAuth } from './useAuth'
 import { useQuery } from '@tanstack/react-query'
 import { fetchSellerProfile } from '@/services/sellers/seller'
 
 const useSellerProfile = () => {
-  const user = useAuthUser()
+  const { user } = useAuth()
+
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['seller-profile', user?.id],

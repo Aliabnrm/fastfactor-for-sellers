@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useDebounce } from 'ahooks'
+import { useEffect, useState } from 'react'
 import { isSlugUnique } from '@/utils/isUniqeSlug'
 import { Form, Input, InputNumber, Button } from 'antd'
 import { useUpsertSeller } from '@/hooks/useUpsertSeller'
@@ -12,11 +13,35 @@ const stepFields = [
 
 const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
   const [form] = Form.useForm()
+  const [slug, setSlug] = useState('')
   const [current, setCurrent] = useState(0)
+  const [isUnique, setIsUnique] = useState<boolean | null>(null)
+
+  const debouncedSlug = useDebounce(slug, { wait: 600 })
+
+  useEffect(() => {
+    if (!debouncedSlug) return
+
+    let cancelled = false
+
+    const check = async () => {
+      const unique = await isSlugUnique(debouncedSlug)
+      if (!cancelled) {
+        setIsUnique(unique)
+      }
+    }
+
+    check()
+
+    return () => {
+      cancelled = true
+    }
+  }, [debouncedSlug])
+
 
   const mutation = useUpsertSeller(onFinished)
 
-  const next = async () => {
+  const handleNextStep = async () => {
     try {
       await form.validateFields(stepFields[current])
       setCurrent(c => c + 1)
@@ -60,14 +85,12 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
               rules={[
                 { required: true, message: 'آدرس فروشگاه الزامی است.' },
                 {
-                  validator: async (_, value) => {
-                    if (!value) return Promise.resolve()
-
-                    const unique = await isSlugUnique(value)
-                    return unique
+                  validator: () => {
+                    if (isUnique === null) return Promise.resolve()
+                    return isUnique
                       ? Promise.resolve()
                       : Promise.reject(
-                        new Error('این آدرس قبلاً رزرو شده است.'),
+                        new Error('این آدرس قبلاً رزرو شده است.')
                       )
                   },
                 },
@@ -75,10 +98,15 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
             >
               <Input
                 size="large"
-                placeholder="maryam-gallery"
                 addonBefore="myshop.ir/"
+                placeholder="maryam-gallery"
+                onChange={e => {
+                  setSlug(e.target.value)
+                  setIsUnique(null) // reset validation while typing
+                }}
               />
             </Form.Item>
+
           </>
         )}
 
@@ -128,7 +156,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           </Button>
 
           {current < stepFields.length - 1 ? (
-            <Button type="primary" block onClick={next}>
+            <Button type="primary" block onClick={handleNextStep}>
               مرحله بعد
             </Button>
           ) : (
