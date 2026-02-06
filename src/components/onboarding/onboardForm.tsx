@@ -14,7 +14,7 @@ const stepFields = [
 const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
   const [form] = Form.useForm()
   const [slug, setSlug] = useState('')
-  const [current, setCurrent] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
   const [isUnique, setIsUnique] = useState<boolean | null>(null)
 
   const debouncedSlug = useDebounce(slug, { wait: 600 })
@@ -43,14 +43,14 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
 
   const handleNextStep = async () => {
     try {
-      await form.validateFields(stepFields[current])
-      setCurrent(c => c + 1)
+      await form.validateFields(stepFields[currentStep])
+      setCurrentStep(c => c + 1)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const prev = () => setCurrent(c => c - 1)
+  const prev = () => setCurrentStep(c => c - 1)
 
   const handleSubmit = async () => {
     try {
@@ -66,14 +66,14 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
       <Form
         form={form}
         layout="vertical"
-        requiredMark={false}
         autoComplete="off"
+        requiredMark={false}
       >
-        {current === 0 && (
+        {currentStep === 0 && (
           <>
             <Form.Item
-              label="نام فروشگاه"
               name="shopName"
+              label="نام فروشگاه"
               rules={[{ required: true, message: 'نام فروشگاه را وارد کنید.' }]}
             >
               <Input size="large" placeholder="مثال: گالری مریم" />
@@ -110,11 +110,11 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
           </>
         )}
 
-        {current === 1 && (
+        {currentStep === 1 && (
           <>
             <Form.Item
-              label="نام صاحب کارت"
               name="ownerName"
+              label="نام صاحب کارت"
               rules={[
                 { required: true, message: 'نام صاحب کارت را وارد کنید.' },
               ]}
@@ -125,44 +125,44 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
             <Form.Item label="شماره کارت" name="cardNumber">
               <Input
                 size="large"
-                placeholder="0000-0000-0000-0000"
                 inputMode="numeric"
+                placeholder="0000-0000-0000-0000"
               />
             </Form.Item>
           </>
         )}
 
-        {current === 2 && (
+        {currentStep === 2 && (
           <Form.Item
             label="هزینه ارسال ثابت"
             name="shippingCost"
             rules={[{ required: true, message: 'هزینه ارسال را وارد کنید.' }]}
           >
             <InputNumber
-              size="large"
-              className="w-full"
               min={0}
+              size="large"
               controls={false}
+              className="w-full"
               addonAfter="تومان"
-              formatter={formatCurrency}
               parser={parseCurrency}
+              formatter={formatCurrency}
             />
           </Form.Item>
         )}
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-          <Button block onClick={prev} disabled={current === 0}>
+          <Button block onClick={prev} disabled={currentStep === 0}>
             بازگشت
           </Button>
 
-          {current < stepFields.length - 1 ? (
+          {currentStep < stepFields.length - 1 ? (
             <Button type="primary" block onClick={handleNextStep}>
               مرحله بعد
             </Button>
           ) : (
             <Button
-              type="primary"
               block
+              type="primary"
               onClick={handleSubmit}
               loading={mutation.isPending}
             >

@@ -26,10 +26,10 @@ const LoginForm = () => {
 
   return (
     <Form
-      onFinish={handleLogin}
       layout="vertical"
-      requiredMark={false}
       autoComplete="off"
+      requiredMark={false}
+      onFinish={handleLogin}
     >
       <Form.Item
         label="ایمیل"

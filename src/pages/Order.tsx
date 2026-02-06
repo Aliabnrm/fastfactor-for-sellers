@@ -2,18 +2,18 @@ import { useMemo } from 'react'
 import { Skeleton } from 'antd'
 import useOrder from '@/hooks/useOrder'
 import useSellerProfile from '@/hooks/useSellerProfile'
-import LinkCard from '@/components/order/table/linkCard'
-import OrdersList from '@/components/order/table/orderList'
-import StatusCard from '@/components/order/table/statusCrad'
+import LinkCard from '@/components/order/list/linkCard'
+import OrdersList from '@/components/order/list/orderList'
+import StatusCard from '@/components/order/list/statusCrad'
 import MainLayout from '@/components/global/layout/MainLayout'
 
 const OrderPage = () => {
-  const { profile, isLoading: isProfileLoading } = useSellerProfile()
+  const { profileInfo, isLoading: isProfileLoading } = useSellerProfile()
   const { orders, isLoading: isOrdersLoading, error, revalidate } = useOrder()
 
   const overallLoading = isProfileLoading || isOrdersLoading
 
-  const sellerSlug = profile?.slug || 'default-shop'
+  const sellerSlug = profileInfo?.slug || 'default-shop'
 
   const { totalOrders, pendingOrders, verifiedOrders, deliveredOrders } =
     useMemo(() => {

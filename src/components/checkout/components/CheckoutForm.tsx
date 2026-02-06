@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { SellerInfo } from '@/types/checkout'
 import { Button } from '@/components/ui/button'
+import { SellerShop } from '@/types/seller.types'
 import { Textarea } from '@/components/ui/textarea'
 import { useCheckoutForm } from '../hooks/useCheckoutForm'
 import { CheckoutData, checkoutSchema } from '@/schema/checkoutSchema'
+import { formatToFa } from '@/utils/formRules'
 
 interface CheckoutFormProps {
   onSubmit: (data: CheckoutData) => void
-  sellerInfo: SellerInfo
+  sellerInfo: SellerShop
   isSubmitting: boolean
 }
 
@@ -21,9 +22,8 @@ export const CheckoutForm = ({
   sellerInfo,
   isSubmitting,
 }: CheckoutFormProps) => {
-  const { data, update } = useCheckoutForm()
   const { toast } = useToast()
-
+  const { data, update } = useCheckoutForm()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -40,9 +40,10 @@ export const CheckoutForm = ({
     }
   }, [data.paymentProof])
 
+  const shopName = sellerInfo?.shop_name ?? 'فروشگاه'
+
   const productPrice = Number(data.price) || 0
   const shippingCost = sellerInfo?.shipping_cost ?? 0
-  const shopName = sellerInfo?.shop_name ?? 'فروشگاه'
   const total = productPrice + shippingCost
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -61,12 +62,11 @@ export const CheckoutForm = ({
     onSubmit(validation.data)
   }
 
-  const formatCurrency = (val: number) => val.toLocaleString('fa-IR')
-
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, '')
     update('price', val ? Number(val) : '')
   }
+
   return (
     <Card className="mx-auto max-w-md p-6 shadow-2xl">
       <div className="mb-6 border-b pb-4 text-center">
@@ -101,18 +101,18 @@ export const CheckoutForm = ({
                 productPrice > 0 ? 'font-medium' : 'text-muted-foreground'
               }
             >
-              {productPrice > 0 ? formatCurrency(productPrice) : '---'} تومان
+              {productPrice > 0 ? formatToFa(productPrice) : '---'} تومان
             </span>
           </div>
 
           <div className="flex justify-between">
             <span>هزینه پست (ثابت):</span>
-            <span>{formatCurrency(shippingCost)} تومان</span>
+            <span>{formatToFa(shippingCost)} تومان</span>
           </div>
 
           <div className="flex justify-between border-t border-primary/20 pt-2 text-lg font-bold text-primary">
             <span>مبلغ قابل پرداخت:</span>
-            <span>{formatCurrency(total)} تومان</span>
+            <span>{formatToFa(total)} تومان</span>
           </div>
         </Card>
 

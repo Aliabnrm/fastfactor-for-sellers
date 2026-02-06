@@ -9,6 +9,7 @@ import { SellerShop } from '@/types/seller.types'
 import { Textarea } from '@/components/ui/textarea'
 import { useCheckoutForm } from './hooks/useCheckoutForm'
 import { CheckoutData, checkoutSchema } from '@/schema/checkoutSchema'
+import { formatToFa } from '@/utils/formRules'
 
 interface CheckoutFormProps {
   isSubmitting: boolean
@@ -61,8 +62,6 @@ export const CheckoutForm = ({
     onSubmit(validation.data)
   }
 
-  const formatCurrency = (val: number) => val.toLocaleString('fa-IR')
-
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, '')
     update('price', val ? Number(val) : '')
@@ -101,18 +100,18 @@ export const CheckoutForm = ({
                 productPrice > 0 ? 'font-medium' : 'text-muted-foreground'
               }
             >
-              {productPrice > 0 ? formatCurrency(productPrice) : '---'} تومان
+              {productPrice > 0 ? formatToFa(productPrice) : '---'} تومان
             </span>
           </div>
 
           <div className="flex justify-between">
             <span>هزینه پست (ثابت):</span>
-            <span>{formatCurrency(shippingCost)} تومان</span>
+            <span>{formatToFa(shippingCost)} تومان</span>
           </div>
 
           <div className="flex justify-between border-t border-primary/20 pt-2 text-lg font-bold text-primary">
             <span>مبلغ قابل پرداخت:</span>
-            <span>{formatCurrency(total)} تومان</span>
+            <span>{formatToFa(total)} تومان</span>
           </div>
         </Card>
 

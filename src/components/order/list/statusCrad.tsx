@@ -11,7 +11,7 @@ type StatusCardProps = {
 const StatusCard = (props: StatusCardProps) => {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-      {STATUS_CARD_CONFIG.map((item) => {
+      {STATUS_CARD_CONFIG?.map((item) => {
         const Icon = item.icon
         const value = props[item.key]
 

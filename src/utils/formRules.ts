@@ -48,6 +48,8 @@ export const formatCurrency = (value?: string | number | null) => {
   return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export const formatToFa = (val: number) => val.toLocaleString('fa-IR')
+
 export const parseCurrency = (value?: string | number | null) => {
   if (value === undefined || value === null || value === '') {
     return undefined

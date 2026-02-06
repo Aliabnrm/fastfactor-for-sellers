@@ -4,8 +4,7 @@ import { fetchSellerProfile } from '@/services/sellers/seller'
 
 const useSellerProfile = () => {
   const { user } = useAuth()
-
-
+  
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['seller-profile', user?.id],
     queryFn: () => fetchSellerProfile(user.id),
@@ -15,10 +14,10 @@ const useSellerProfile = () => {
 
   return {
     user,
-    profile: data,
-    isLoading,
     isError,
     refetch,
+    isLoading,
+    profileInfo: data,
   }
 }
 

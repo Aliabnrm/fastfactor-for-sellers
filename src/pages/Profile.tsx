@@ -4,27 +4,27 @@ import { Form, Button } from 'antd'
 import useLogout from '@/hooks/useLogout'
 import useSellerProfile from '@/hooks/useSellerProfile'
 import { PaymentCard } from '@/components/profile/paymentCard'
-import MainLayout from '@/components/global/layout/MainLayout'
 import { SellerInfoCard } from '@/components/profile/infoCard'
+import MainLayout from '@/components/global/layout/MainLayout'
 import { AccountLogoutCard } from '@/components/profile/logoutCard'
 import { useUpdateSellerProfile } from '@/hooks/useUpdateSellerProfile'
 
 const ProfilePage = () => {
   const [form] = Form.useForm()
-  const { profile } = useSellerProfile()
+  const { profileInfo } = useSellerProfile()
   const updateMutation = useUpdateSellerProfile()
   const { logout, loading: logoutLoading } = useLogout()
 
   useEffect(() => {
-    if (profile) {
+    if (profileInfo) {
       form.setFieldsValue({
-        shopName: profile.shop_name,
-        ownerName: profile.card_owner,
-        shippingCost: profile.shipping_cost,
-        cardNumber: profile.card_number,
+        shopName: profileInfo.shop_name,
+        ownerName: profileInfo.card_owner,
+        shippingCost: profileInfo.shipping_cost,
+        cardNumber: profileInfo.card_number,
       })
     }
-  }, [profile, form])
+  }, [profileInfo, form])
 
   const handleUpdate = values => {
     updateMutation.mutate({
@@ -52,6 +52,7 @@ const ProfilePage = () => {
         <SellerInfoCard form={form} />
         <PaymentCard form={form} handleCardChange={handleCardNumberChange} />
         <AccountLogoutCard logout={logout} logoutLoading={logoutLoading} />
+
         <div className="sticky bottom-0 w-full flex justify-start rounded-2xl border border-border bg-background/90 px-6 py-3 shadow-lg backdrop-blur-sm">
           <Button
             size="large"

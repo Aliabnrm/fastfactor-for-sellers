@@ -58,9 +58,9 @@ export const upsertSellerProfile = async (values: any) => {
 
   const sellerData = {
     id: user.id,
+    slug: values.slug,
     email: user.email,
     shop_name: values.shopName,
-    slug: values.slug,
     card_owner: values.ownerName,
     card_number: values.cardNumber,
     shipping_cost: values.shippingCost,
