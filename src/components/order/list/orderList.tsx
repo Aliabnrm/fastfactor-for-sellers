@@ -34,7 +34,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
   if (!orders?.length) {
     return (
       <p className="py-10 text-center text-muted-foreground">
-        هیچ سفارشی ثبت نشده است
+         سفارشی ثبت نشده است
       </p>
     )
   }

@@ -11,20 +11,22 @@ import { useUpdateSellerProfile } from '@/hooks/useUpdateSellerProfile'
 
 const ProfilePage = () => {
   const [form] = Form.useForm()
-  const { profileInfo } = useSellerProfile()
+
+  const { sellerProfile } = useSellerProfile()
+  const { logout, logoutLoading } = useLogout()
+
   const updateMutation = useUpdateSellerProfile()
-  const { logout, loading: logoutLoading } = useLogout()
 
   useEffect(() => {
-    if (profileInfo) {
+    if (sellerProfile) {
       form.setFieldsValue({
-        shopName: profileInfo.shop_name,
-        ownerName: profileInfo.card_owner,
-        shippingCost: profileInfo.shipping_cost,
-        cardNumber: profileInfo.card_number,
+        shopName: sellerProfile.shop_name,
+        ownerName: sellerProfile.card_owner,
+        shippingCost: sellerProfile.shipping_cost,
+        cardNumber: sellerProfile.card_number,
       })
     }
-  }, [profileInfo, form])
+  }, [sellerProfile, form])
 
   const handleUpdate = values => {
     updateMutation.mutate({

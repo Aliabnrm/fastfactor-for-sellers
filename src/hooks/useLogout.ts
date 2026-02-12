@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom'
 
 const useLogout = () => {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const [logoutLoading, setLogoutLoading] = useState(false)
 
   const logout = useCallback(async () => {
-    setLoading(true)
+    setLogoutLoading(true)
 
     const { error } = await supabase.auth.signOut()
 
-    setLoading(false)
+    setLogoutLoading(false)
 
     if (error) {
       console.error('Logout error:', error)
@@ -25,7 +25,7 @@ const useLogout = () => {
     return true
   }, [navigate])
 
-  return { logout, loading }
+  return { logout, logoutLoading }
 }
 
 export default useLogout

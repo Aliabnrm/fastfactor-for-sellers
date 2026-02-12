@@ -8,12 +8,12 @@ import StatusCard from '@/components/order/list/statusCrad'
 import MainLayout from '@/components/global/layout/MainLayout'
 
 const OrderPage = () => {
-  const { profileInfo, isLoading: isProfileLoading } = useSellerProfile()
+  const { sellerProfile, isLoading: isProfileLoading } = useSellerProfile()
   const { orders, isLoading: isOrdersLoading, error, revalidate } = useOrder()
 
   const overallLoading = isProfileLoading || isOrdersLoading
 
-  const sellerSlug = profileInfo?.slug || 'default-shop'
+  const sellerSlug = sellerProfile?.slug || 'default-shop'
 
   const { totalOrders, pendingOrders, verifiedOrders, deliveredOrders } =
     useMemo(() => {

@@ -3,16 +3,19 @@ import HeroSection from '@/components/home/heroSection'
 import FeatureSection from '@/components/home/featureSection'
 
 const HomePage = () => {
-  const { user, profileInfo, isLoading } = useSellerProfile()
+  const { user, sellerProfile, isLoading } = useSellerProfile()
+
+  const isOnboarded = sellerProfile?.is_onboarded === true
+  const hasProfile = sellerProfile === null && sellerProfile?.is_onboarded === false
 
   if (isLoading) return null
 
-  if (user && (profileInfo === null || profileInfo?.is_onboarded === false)) {
+  if (user && hasProfile) {
     return <HeroSection />
   }
 
-  if (user && profileInfo?.is_onboarded === true) {
-    return <FeatureSection sellerSlug={profileInfo?.slug} />
+  if (user && isOnboarded) {
+    return <FeatureSection sellerSlug={sellerProfile?.slug} />
   }
 
   return null

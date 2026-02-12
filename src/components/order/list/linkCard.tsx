@@ -26,13 +26,13 @@ const LinkCard = ({ shopSlug }: ShopProps) => {
         <div>
           <h3 className="mb-1 font-semibold">لینک فروشگاه من</h3>
           <span className="text-sm text-muted-foreground">
-            این لینک را در بیو اینستاگرام قرار دهید
+            این لینک را در بیو خود قرار دهید
           </span>
         </div>
 
         <Button onClick={handleCopyLink} className="w-full gap-2 md:w-auto">
           <Copy className="h-4 w-4" />
-          کپی لینک فروشگاه
+           لینک فروشگاه
         </Button>
       </div>
     </Card>

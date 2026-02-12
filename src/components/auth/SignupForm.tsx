@@ -52,8 +52,8 @@ const SignupForm = () => {
         label="ایمیل"
         name="email"
         rules={[
-          { required: true, message: 'لطفا ایمیل خود را وارد کنید' },
           { type: 'email', message: 'ایمیل معتبر وارد کنید' },
+          { required: true, message: 'لطفا ایمیل خود را وارد کنید' },
         ]}
       >
         <Input size="large" placeholder="مثال: email@example.com" />
