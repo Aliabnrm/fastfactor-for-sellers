@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { Order } from '@/types/order.types'
 
+// GET Orders List
 export const fetchSellerOrders = async (): Promise<Order[]> => {
   const { data: sessionData } = await supabase.auth.getSession()
 

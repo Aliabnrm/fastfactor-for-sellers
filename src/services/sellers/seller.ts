@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 
+// GET SellerProfile
 export const fetchSellerProfile = async userId => {
   const { data, error } = await supabase
     .from('sellers')
@@ -16,6 +17,7 @@ export const fetchSellerProfile = async userId => {
   return data || null
 }
 
+// GET SellerProfile BY Id
 export const getSellerBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('sellers')
@@ -30,6 +32,7 @@ export const getSellerBySlug = async (slug: string) => {
   return data || null
 }
 
+// PUT SellerProfile
 export const updateSellerProfile = async values => {
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) throw new Error('کاربر لاگین نیست')
@@ -48,6 +51,7 @@ export const updateSellerProfile = async values => {
   return true
 }
 
+// Upsert SellerProfile
 export const upsertSellerProfile = async (values: any) => {
   const { data: auth } = await supabase.auth.getUser()
   const user = auth.user

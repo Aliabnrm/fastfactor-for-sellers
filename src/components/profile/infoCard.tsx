@@ -1,5 +1,5 @@
+import { MessageCircleWarningIcon } from 'lucide-react'
 import { Card, Form, Input, Space, Typography } from 'antd'
-import { FileWarningIcon, MessageCircleWarningIcon } from 'lucide-react'
 
 const { Title, Text } = Typography
 
@@ -15,7 +15,7 @@ export const SellerInfoCard = ({ form }) => (
         <Input size="large" placeholder="مثال: فروشگاه وگاس" />
       </Form.Item>
       <Text type="warning" className="text-xs flex flex-row gap-1 items-center">
-        <MessageCircleWarningIcon className='w-4 h-4 mb-1'/>
+        <MessageCircleWarningIcon className='w-4 h-4 mb-1' />
         تغییر لینک باعث غیرفعال شدن لینک‌های قبلی می‌شود.
       </Text>
     </Space>

@@ -2,8 +2,8 @@ import { useDebounce } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { isSlugUnique } from '@/utils/isUniqeSlug'
 import { Form, Input, InputNumber, Button } from 'antd'
-import { useUpsertSeller } from '@/hooks/useUpsertSeller'
 import { formatCurrency, parseCurrency } from '@/utils/formRules'
+import { useCompleteSellerOnboardin } from '@/hooks/useCompleteSellerOnboardin'
 
 const stepFields = [
   ['shopName', 'slug'],
@@ -39,7 +39,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
   }, [debouncedSlug])
 
 
-  const mutation = useUpsertSeller(onFinished)
+  const completeOnboarding = useCompleteSellerOnboardin(onFinished)
 
   const handleNextStep = async () => {
     try {
@@ -55,7 +55,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
   const handleSubmit = async () => {
     try {
       await form.validateFields()
-      mutation.mutate(form.getFieldsValue(true))
+      completeOnboarding.mutate(form.getFieldsValue(true))
     } catch (err) {
       console.log(err)
     }
@@ -164,7 +164,7 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
               block
               type="primary"
               onClick={handleSubmit}
-              loading={mutation.isPending}
+              loading={completeOnboarding.isPending}
             >
               ذخیره و رفتن به داشبورد
             </Button>

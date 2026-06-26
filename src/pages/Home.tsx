@@ -1,3 +1,4 @@
+import { Spin } from 'antd'
 import useSellerProfile from '@/hooks/useSellerProfile'
 import HeroSection from '@/components/home/heroSection'
 import FeatureSection from '@/components/home/featureSection'
@@ -8,7 +9,10 @@ const HomePage = () => {
   const isOnboarded = sellerProfile?.is_onboarded === true
   const hasProfile = sellerProfile === null && sellerProfile?.is_onboarded === false
 
-  if (isLoading) return null
+  if (isLoading)
+    return <div className='flex flex-col w-full h-screen justify-center items-center'>
+      <Spin size="large" />
+    </div>
 
   if (user && hasProfile) {
     return <HeroSection />
