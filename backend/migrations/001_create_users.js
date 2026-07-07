@@ -26,16 +26,6 @@ export const up = (pgm) => {
       notNull: true,
     },
 
-    first_name: {
-      type: "varchar(100)",
-      notNull: true,
-    },
-
-    last_name: {
-      type: "varchar(100)",
-      notNull: true,
-    },
-
     created_at: {
       type: "timestamptz",
       notNull: true,

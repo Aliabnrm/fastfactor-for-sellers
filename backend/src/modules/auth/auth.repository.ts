@@ -1,6 +1,17 @@
 import pool from "../../database/index.js";
 import type { RegisterDTO, User } from "./auth.types.js";
 
+export const findUserById = async (id: string): Promise<User | null> => {
+  const result = await pool.query(
+    `SELECT *
+     FROM users
+     WHERE id = $1`,
+    [id],
+  );
+
+  return result.rows[0] ?? null;
+};
+
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   const result = await pool.query("SELECT * FROM users WHERE email = $1", [
     email,
@@ -14,10 +25,10 @@ export const createUser = async (
   passwordHash: string,
 ): Promise<User> => {
   const result = await pool.query(
-    `INSERT INTO users (email, password_hash, first_name, last_name)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO users (email, password_hash)
+     VALUES ($1, $2)
      RETURNING *`,
-    [data.email, passwordHash, data.first_name, data.last_name],
+    [data.email, passwordHash],
   );
 
   return result.rows[0];

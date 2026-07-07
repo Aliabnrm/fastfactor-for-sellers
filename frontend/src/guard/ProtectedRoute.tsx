@@ -1,17 +1,29 @@
-import { useAuth } from '@/hooks/useAuth'
-import { ReactNode } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import type { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export default function ProtectedRoute({ children }: Props) {
-  const { user, loading } = useAuth()
+export default function ProtectedRoute({
+  children,
+}: Props) {
+  const {
+    user,
+    loading,
+    isAuthenticated,
+  } = useAuth();
 
-  if (loading) return null
+  console.log("authh", isAuthenticated, user)
 
-  if (!user) return <Navigate to="/auth" replace />
+  if (loading) {
+    return null;
+  }
 
-  return children
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+
+  return children;
 }

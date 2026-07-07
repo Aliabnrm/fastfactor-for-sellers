@@ -5,6 +5,7 @@ import {
   findRefreshToken,
   saveRefreshToken,
   revokeRefreshToken,
+  findUserById,
 } from "./auth.repository.js";
 import type { AuthResponse, LoginDTO, RegisterDTO } from "./auth.types.js";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt.js";
@@ -34,8 +35,6 @@ export const register = async (data: RegisterDTO): Promise<AuthResponse> => {
     user: {
       id: user.id,
       email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
     },
     accessToken,
     refreshToken,
@@ -118,4 +117,20 @@ export const refresh = async (refreshToken: string) => {
 // logout
 export const logout = async (refreshToken: string) => {
   await revokeRefreshToken(refreshToken);
+};
+
+// getMe
+export const getMe = async (userId: string) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new AuthenticationError("کاربر یافت نشد");
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+  };
 };
