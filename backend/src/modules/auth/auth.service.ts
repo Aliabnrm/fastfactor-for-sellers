@@ -75,41 +75,47 @@ export const login = async (data: LoginDTO): Promise<AuthResponse> => {
 };
 
 // refresh token
-export const refresh = async (refreshToken: string) => {
-  // 1. بررسی وجود در DB
+export const refresh = async (refreshToken: string): Promise<AuthResponse> => {
   const storedToken = await findRefreshToken(refreshToken);
 
   if (!storedToken) {
-    throw new Error("Invalid refresh token");
+    throw new AuthenticationError("Refresh Token نامعتبر است");
   }
 
-  // 2. بررسی revoke
   if (storedToken.is_revoked) {
-    throw new AuthenticationError("نشست کاربر نامعتبر است");
+    throw new AuthenticationError("Refresh Token باطل شده است");
   }
 
-  // 3. بررسی expiry
   if (new Date(storedToken.expires_at) < new Date()) {
     throw new AuthenticationError("نشست کاربر منقضی شده است");
   }
 
-  const userId = storedToken.user_id;
+  const user = await findUserById(storedToken.user_id);
 
-  // 4. revoke token فعلی (rotation)
+  if (!user) {
+    throw new AuthenticationError("کاربر یافت نشد");
+  }
+
   await revokeRefreshToken(refreshToken);
 
-  // 5. تولید توکن جدید
-  const newAccessToken = generateAccessToken(userId);
-  const newRefreshToken = generateRefreshToken(userId);
+  const accessToken = generateAccessToken(user.id);
 
-  // 6. ذخیره refresh جدید
+  const newRefreshToken = generateRefreshToken(user.id);
+
   const expiresAt = new Date();
+
   expiresAt.setDate(expiresAt.getDate() + 7);
 
-  await saveRefreshToken(userId, newRefreshToken, expiresAt);
+  await saveRefreshToken(user.id, newRefreshToken, expiresAt);
 
   return {
-    accessToken: newAccessToken,
+    user: {
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+    },
+    accessToken,
     refreshToken: newRefreshToken,
   };
 };

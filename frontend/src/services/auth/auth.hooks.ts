@@ -17,7 +17,7 @@ export const useRegister = () => {
 
 export const useRefreshToken = () => {
   return useMutation({
-    mutationFn: (data: RefreshDTO) => refreshApi(api, data),
+    mutationFn: () => refreshApi(api),
   })
 }
 

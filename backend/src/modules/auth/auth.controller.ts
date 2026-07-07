@@ -32,7 +32,7 @@ export const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const refresh = catchAsync(async (req: Request, res: Response) => {
+export const refresh = catchAsync(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
@@ -41,13 +41,10 @@ export const refresh = catchAsync(async (req: Request, res: Response) => {
 
   const result = await authService.refresh(refreshToken);
 
-  /**
-   * چون Token Rotation داریم،
-   * Cookie باید با Token جدید جایگزین شود.
-   */
   res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
 
   return res.status(200).json({
+    user: result.user,
     accessToken: result.accessToken,
   });
 });

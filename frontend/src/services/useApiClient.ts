@@ -1,7 +1,7 @@
 import axios from 'axios'
+import { tokenStore } from '@/lib/auth/tokenStore'
 import { API_BASE_PATH } from '../entities/baseUrl'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
-import { tokenStore } from '@/lib/auth/tokenStore'
 
 const backendUrl = import.meta.env.VITE_API_URL
 
@@ -31,6 +31,8 @@ const processQueue = (error: unknown, token?: string) => {
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = tokenStore.get()
+
+  console.log('TOKEN', token)
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -71,14 +73,13 @@ api.interceptors.response.use(
     originalRequest._retry = true
     isRefreshing = true
 
+    const refreshClient = axios.create({
+      baseURL: `${backendUrl}${API_BASE_PATH}`,
+      withCredentials: true,
+    })
+
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}${API_BASE_PATH}/auth/refresh`,
-        {},
-        {
-          withCredentials: true,
-        },
-      )
+    const response = await refreshClient.post('/auth/refresh')
 
       const newAccessToken = response.data.accessToken
 

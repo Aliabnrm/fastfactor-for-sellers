@@ -27,10 +27,8 @@ export const registerApi = async (api: AxiosInstance, body: SignupDTO) => {
   return AuthResponseSchema.parse(res.data)
 }
 
-export const refreshApi = async (api: AxiosInstance, body: RefreshDTO) => {
-  RefreshSchema.parse(body)
-
-  const res = await api.post('/auth/refresh', body)
+export const refreshApi = async (api: AxiosInstance) => {
+  const res = await api.post('/auth/refresh')
 
   return RefreshResponseSchema.parse(res.data)
 }
@@ -39,10 +37,9 @@ export const logoutApi = async (api: AxiosInstance) => {
   await api.post('/auth/logout')
 }
 
-
 // GET /auth/me
 export const getMeApi = async (api: AxiosInstance) => {
-  const res = await api.get("/auth/me");
+  const res = await api.get('/auth/me')
 
-  return UserSchema.parse(res.data.user);
-};
+  return UserSchema.parse(res.data)
+}
