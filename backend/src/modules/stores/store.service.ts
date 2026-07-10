@@ -21,7 +21,6 @@ export const onboarding = async (
   return await storeRepository.createStore(ownerId, data);
 };
 
-
 export const getMyStore = async (ownerId: string): Promise<Store> => {
   const store = await storeRepository.getStoreByOwnerId(ownerId);
 
@@ -32,7 +31,6 @@ export const getMyStore = async (ownerId: string): Promise<Store> => {
   return store;
 };
 
-
 export const getStoreBySlug = async (slug: string): Promise<Store> => {
   const store = await storeRepository.getStoreBySlug(slug);
 
@@ -42,7 +40,6 @@ export const getStoreBySlug = async (slug: string): Promise<Store> => {
 
   return store;
 };
-
 
 export const updateMyStore = async (
   ownerId: string,
@@ -63,4 +60,14 @@ export const updateMyStore = async (
   }
 
   return await storeRepository.updateStore(ownerId, data);
+};
+
+export const checkSlug = async (slug: string) => {
+  const normalizedSlug = slug.trim().toLowerCase();
+
+  const exists = await storeRepository.slugExists(normalizedSlug);
+
+  return {
+    available: !exists,
+  };
 };

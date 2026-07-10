@@ -1,11 +1,7 @@
 import type { Request, Response } from "express";
 import * as storeService from "./store.service.js";
-import { catchAsync } from "../../utils/catchAsync.js";
 import { AppError } from "../../errors/AppError.js";
-
-interface StoreSlugParams {
-  slug: string;
-}
+import { catchAsync } from "../../utils/catchAsync.js";
 
 export const onboarding = catchAsync(async (req: Request, res: Response) => {
   const store = await storeService.onboarding(req.user!.userId, req.body);
@@ -48,5 +44,20 @@ export const getStoreBySlug = catchAsync(async (req, res) => {
   return res.status(200).json({
     success: true,
     data: store,
+  });
+});
+
+export const checkSlug = catchAsync(async (req, res) => {
+  const slug = String(req.params.slug ?? "").trim();
+
+  if (!slug) {
+    throw new AppError("Slug is required.", 400);
+  }
+
+  const result = await storeService.checkSlug(slug);
+
+  return res.status(200).json({
+    success: true,
+    data: result,
   });
 });

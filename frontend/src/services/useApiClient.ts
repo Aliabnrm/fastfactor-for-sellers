@@ -32,8 +32,6 @@ const processQueue = (error: unknown, token?: string) => {
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = tokenStore.get()
 
-  console.log('TOKEN', token)
-
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -79,7 +77,7 @@ api.interceptors.response.use(
     })
 
     try {
-    const response = await refreshClient.post('/auth/refresh')
+      const response = await refreshClient.post('/auth/refresh')
 
       const newAccessToken = response.data.accessToken
 

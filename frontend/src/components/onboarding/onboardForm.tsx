@@ -1,65 +1,85 @@
-import { useDebounce } from 'ahooks'
-import { useEffect, useState } from 'react'
-import { isSlugUnique } from '@/utils/isUniqeSlug'
-import { Form, Input, InputNumber, Button } from 'antd'
-import { formatCurrency, parseCurrency } from '@/utils/formRules'
-import { useCompleteSellerOnboardin } from '@/hooks/useCompleteSellerOnboardin'
+import { useDebounce } from "ahooks";
+import { useEffect, useState } from "react";
+import { formatCurrency, parseCurrency } from "@/utils/formRules";
+import { Form, Input, InputNumber, Button, Spin, message } from "antd";
+import { useCheckSlug, useCreateStore } from "@/services/store/store.hooks";
 
 const stepFields = [
-  ['shopName', 'slug'],
-  ['ownerName', 'cardNumber'],
-  ['shippingCost'],
-]
+  ["shop_name", "slug"],
+  ["card_owner", "card_number"],
+  ["shipping_cost"],
+];
 
-const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
-  const [form] = Form.useForm()
-  const [slug, setSlug] = useState('')
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isUnique, setIsUnique] = useState<boolean | null>(null)
+interface Props {
+  onFinished?: () => void;
+}
 
-  const debouncedSlug = useDebounce(slug, { wait: 600 })
+export default function OnboardingForm({ onFinished }: Props) {
+  const [form] = Form.useForm();
+  const [slug, setSlug] = useState("");
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const debouncedSlug = useDebounce(slug, {
+    wait: 600,
+  });
+
+  const { data: slugResult, isFetching: isCheckingSlug, } = useCheckSlug(debouncedSlug);
+
+  const { mutate: createStore, isPending } = useCreateStore();
+
 
   useEffect(() => {
-    if (!debouncedSlug) return
+    if (debouncedSlug) {
+      form.validateFields(["slug"]);
+    }
+  }, [slugResult, debouncedSlug, form]);
 
-    let cancelled = false
+  const nextStep = async () => {
+    try {
+      await form.validateFields(stepFields[currentStep]);
 
-    const check = async () => {
-      const unique = await isSlugUnique(debouncedSlug)
-      if (!cancelled) {
-        setIsUnique(unique)
+      setCurrentStep(prev => prev + 1);
+    } catch (error: any) {
+      if (!error?.errorFields) {
+        message.error("خطایی رخ داد.");
       }
     }
+  };
 
-    check()
+  const previousStep = () => {
+    setCurrentStep(prev => prev - 1);
+  };
 
-    return () => {
-      cancelled = true
-    }
-  }, [debouncedSlug])
+  console.log(form.getFieldsValue(true));
+  console.log(currentStep);
+  console.log(form.getFieldValue("shipping_cost"));
 
-
-  const completeOnboarding = useCompleteSellerOnboardin(onFinished)
-
-  const handleNextStep = async () => {
+  const submit = async () => {
     try {
-      await form.validateFields(stepFields[currentStep])
-      setCurrentStep(c => c + 1)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+      console.log("before validate");
 
-  const prev = () => setCurrentStep(c => c - 1)
+      const values = await form.validateFields();
 
-  const handleSubmit = async () => {
-    try {
-      await form.validateFields()
-      completeOnboarding.mutate(form.getFieldsValue(true))
-    } catch (err) {
-      console.log(err)
+      console.log("after validate", values);
+      // await form.validateFields();
+
+      createStore(form.getFieldsValue(true), {
+        onSuccess: () => {
+          onFinished?.();
+        },
+        onError: (error: any) => {
+          message.error(
+            error?.response?.data?.message ??
+            "خطا در ایجاد فروشگاه",
+          );
+        },
+      });
+    } catch (error: any) {
+      if (!error?.errorFields) {
+        message.error("خطایی رخ داد.");
+      }
     }
-  }
+  };
 
   return (
     <div className="mx-auto max-w-2xl p-4">
@@ -72,27 +92,47 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
         {currentStep === 0 && (
           <>
             <Form.Item
-              name="shopName"
+              name="shop_name"
               label="نام فروشگاه"
-              rules={[{ required: true, message: 'نام فروشگاه را وارد کنید.' }]}
+              rules={[
+                {
+                  required: true,
+                  message: "نام فروشگاه را وارد کنید.",
+                },
+              ]}
             >
-              <Input size="large" placeholder="مثال: گالری مریم" />
+              <Input
+                size="large"
+                placeholder="مثال: گالری مریم"
+              />
             </Form.Item>
 
             <Form.Item
-              label="آدرس فروشگاه"
               name="slug"
+              label="آدرس فروشگاه"
               rules={[
-                { required: true, message: 'آدرس فروشگاه الزامی است.' },
                 {
-                  validator: () => {
-                    if (isUnique === null) return Promise.resolve()
-                    return isUnique
-                      ? Promise.resolve()
-                      : Promise.reject(
-                        new Error('این آدرس قبلاً رزرو شده است.')
-                      )
-                  },
+                  required: true,
+                  message: "آدرس فروشگاه الزامی است.",
+                },
+                {
+                  validator: async (_, value) => {
+                    if (!value) {
+                      return Promise.resolve();
+                    }
+
+                    if (isCheckingSlug) {
+                      return Promise.resolve();
+                    }
+
+                    if (slugResult?.available) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error("این آدرس قبلاً رزرو شده است.")
+                    );
+                  }
                 },
               ]}
             >
@@ -100,29 +140,45 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
                 size="large"
                 addonBefore="myshop.ir/"
                 placeholder="maryam-gallery"
-                onChange={e => {
-                  setSlug(e.target.value)
-                  setIsUnique(null) // reset validation while typing
+                suffix={
+                  isCheckingSlug ? <Spin size="small" /> : null
+                }
+                onChange={(e) => {
+                  setSlug(e.target.value);
                 }}
               />
             </Form.Item>
-
           </>
         )}
 
         {currentStep === 1 && (
           <>
             <Form.Item
-              name="ownerName"
+              name="card_owner"
               label="نام صاحب کارت"
               rules={[
-                { required: true, message: 'نام صاحب کارت را وارد کنید.' },
+                {
+                  required: true,
+                  message: "نام صاحب کارت را وارد کنید.",
+                },
               ]}
             >
-              <Input size="large" placeholder="مثال: مریم رضایی" />
+              <Input
+                size="large"
+                placeholder="مثال: مریم رضایی"
+              />
             </Form.Item>
 
-            <Form.Item label="شماره کارت" name="cardNumber">
+            <Form.Item
+              name="card_number"
+              label="شماره کارت"
+              rules={[
+                {
+                  required: true,
+                  message: "شماره کارت را وارد کنید.",
+                },
+              ]}
+            >
               <Input
                 size="large"
                 inputMode="numeric"
@@ -134,9 +190,15 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
 
         {currentStep === 2 && (
           <Form.Item
+            preserve
+            name="shipping_cost"
             label="هزینه ارسال ثابت"
-            name="shippingCost"
-            rules={[{ required: true, message: 'هزینه ارسال را وارد کنید.' }]}
+            rules={[
+              {
+                required: true,
+                message: "هزینه ارسال را وارد کنید.",
+              },
+            ]}
           >
             <InputNumber
               min={0}
@@ -151,28 +213,35 @@ const OnboardingForm = ({ onFinished }: { onFinished?: () => void }) => {
         )}
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-          <Button block onClick={prev} disabled={currentStep === 0}>
+          <Button
+            block
+            onClick={previousStep}
+            disabled={currentStep === 0}
+          >
             بازگشت
           </Button>
 
           {currentStep < stepFields.length - 1 ? (
-            <Button type="primary" block onClick={handleNextStep}>
+            <Button
+              block
+              type="primary"
+              onClick={nextStep}
+              disabled={isCheckingSlug}
+            >
               مرحله بعد
             </Button>
           ) : (
             <Button
               block
               type="primary"
-              onClick={handleSubmit}
-              loading={completeOnboarding.isPending}
+              onClick={submit}
+              loading={isPending}
             >
               ذخیره و رفتن به داشبورد
             </Button>
           )}
         </div>
       </Form>
-    </div>
-  )
+    </div >
+  );
 }
-
-export default OnboardingForm

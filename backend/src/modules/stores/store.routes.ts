@@ -19,4 +19,8 @@ router.patch("/me", authMiddleware, storeController.updateMyStore);
 /*GET /api/v1/stores/:slug */
 router.get("/:slug", storeController.getStoreBySlug);
 
+
+/*GET /api/v1/stores/:slug */
+router.get("/check-slug/:slug", storeController.checkSlug);
+
 export default router;

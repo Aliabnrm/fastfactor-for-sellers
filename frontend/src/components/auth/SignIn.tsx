@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth'
+import { Form, Input, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button, message } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { useLogin } from '@/services/auth/auth.hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,23 +23,13 @@ const SignInPage = () => {
 
   const onSubmit = async (data: SigninDTO) => {
     try {
-      console.log("before login");
       const response = await login.mutateAsync(data);
-
-      console.log("login success", response);
-
       setAuth(response.user, response.accessToken);
-
-      console.log("after setAuth");
 
       navigate("/", { replace: true });
 
-      console.log("after navigate");
     } catch (error: any) {
       console.log("LOGIN ERROR", error);
-      console.log("response", error.response);
-      console.log("data", error.response?.data);
-
       alert(error?.response?.data?.message ?? error.message);
     }
   }
