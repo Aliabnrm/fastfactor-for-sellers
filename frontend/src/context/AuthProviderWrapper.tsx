@@ -4,7 +4,6 @@ import type { User } from "@/schema/auth.schema";
 import { tokenStore } from "@/lib/auth/tokenStore";
 import { useEffect, useState, type ReactNode } from "react";
 import { getMeApi, logoutApi, refreshApi } from "@/services/auth/auth.api";
-import { useRefreshToken } from "@/services/auth/auth.hooks";
 
 interface Props {
   children: ReactNode;
@@ -47,51 +46,18 @@ export default function AuthProviderWrapper({ children }: Props) {
     }
   };
 
-  /**
-   * اولین بار که برنامه بالا می‌آید
-   */
-
-  const refreshMutation = useRefreshToken();
-
-  // useEffect(() => {
-  //   const bootstrap = async () => {
-  //     try {
-  //       const { accessToken } = await refreshMutation.mutateAsync()
-
-  //       tokenStore.set(accessToken)
-
-  //       const currentUser = await getMeApi(api)
-
-  //       setUser(currentUser)
-  //     } catch {
-  //       tokenStore.clear()
-  //       setUser(null)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-
-  //   bootstrap()
-  // }, [])
   useEffect(() => {
     const bootstrap = async () => {
-      console.log("BOOTSTRAP START")
-
       try {
-        // const { accessToken } = await refreshMutation.mutateAsync()
         const { accessToken } = await refreshApi(api)
-
-        console.log("REFRESH SUCCESS", accessToken)
 
         tokenStore.set(accessToken)
 
         const currentUser = await getMeApi(api)
 
-        console.log("GET ME SUCCESS", currentUser)
-
         setUser(currentUser)
       } catch (e) {
-        console.log("BOOTSTRAP ERROR", e)
+        // console.log("BOOTSTRAP ERROR", e)
 
         tokenStore.clear()
         setUser(null)

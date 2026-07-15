@@ -7,7 +7,7 @@ export const StoreSchema = z.object({
   updated_at: z.string(),
   created_at: z.string(),
   is_onboarded: z.boolean(),
-  shipping_cost: z.number(),
+  shipping_cost: z.string(),
   slug: z.string().nullable(),
   shop_name: z.string().nullable(),
   card_owner: z.string().nullable(),

@@ -9,5 +9,5 @@ export const coreApi = axios.create({
     'Content-Type': 'application/json',
     Accept: '*/*',
   },
-  withCredentials: false,
+  withCredentials: true,
 })
