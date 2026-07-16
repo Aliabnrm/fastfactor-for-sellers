@@ -1,7 +1,7 @@
 import api from '../useApiClient.ts'
 import { useMutation } from '@tanstack/react-query'
-import { loginApi, logoutApi, refreshApi, registerApi } from './auth.api'
-import { RefreshDTO, SigninDTO, SignupDTO } from '@/schema/auth.schema.ts'
+import { loginApi, refreshApi, registerApi } from './auth.api'
+import { SigninDTO, SignupDTO } from '@/schema/auth.schema.ts'
 
 export const useLogin = () => {
   return useMutation({
@@ -20,8 +20,3 @@ export const useRefreshToken = () => {
     mutationFn: () => refreshApi(api),
   })
 }
-
-export const useLogout = () =>
-  useMutation({
-    mutationFn: () => logoutApi(api),
-  })

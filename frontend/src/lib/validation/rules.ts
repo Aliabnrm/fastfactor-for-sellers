@@ -22,3 +22,32 @@ export const passwordRules: Rule[] = [
     message: 'رمز عبور حداقل باید ۶ کاراکتر باشد.',
   },
 ]
+
+
+export const shopNameRules: Rule[] = [
+  {
+    required: true,
+    message: 'نام فروشگاه را وارد کنید.',
+  },
+]
+
+export const cardOwnerRules: Rule[] = [
+  {
+    required: true,
+    message: 'نام صاحب کارت را وارد کنید.',
+  },
+]
+
+export const cardNumberRules: Rule[] = [
+  {
+    required: true,
+    message: 'شماره کارت را وارد کنید.',
+  },
+]
+
+export const shippingCostRules: Rule[] = [
+  {
+    required: true,
+    message: 'هزینه ارسال را وارد کنید.',
+  },
+]

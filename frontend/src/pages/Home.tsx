@@ -1,8 +1,8 @@
+import axios from "axios";
 import { Spin } from "antd";
 import HeroSection from "@/components/home/heroSection";
 import { useMyStore } from "@/services/store/store.hooks";
 import FeatureSection from "@/components/home/featureSection";
-import axios from "axios";
 
 const HomePage = () => {
   const {
