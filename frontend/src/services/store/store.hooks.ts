@@ -12,7 +12,7 @@ import { OnboardingDTO, UpdateStoreDTO } from '@/schema/store.schema'
 // --------------------------- GET MY STORE --------------------------- //
 export const useMyStore = () => {
   return useQuery({
-    retry: true,
+    retry: false,
     queryKey: ['my-store'],
     queryFn: () => getMyStoreApi(api),
   })

@@ -1,8 +1,9 @@
 import { useDebounce } from "ahooks";
 import { useEffect, useState } from "react";
-import { formatCurrency, parseCurrency } from "@/utils/formRules";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, InputNumber, Button, Spin, message } from "antd";
 import { useCheckSlug, useCreateStore } from "@/services/store/store.hooks";
+import { formatCurrency, parseCurrency, toEnglishDigits } from "@/utils/formRules";
 
 const stepFields = [
   ["shop_name", "slug"],
@@ -10,11 +11,9 @@ const stepFields = [
   ["shipping_cost"],
 ];
 
-interface Props {
-  onFinished?: () => void;
-}
+export default function OnboardingForm() {
+  const navigate = useNavigate()
 
-export default function OnboardingForm({ onFinished }: Props) {
   const [form] = Form.useForm();
   const [slug, setSlug] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
@@ -26,7 +25,6 @@ export default function OnboardingForm({ onFinished }: Props) {
   const { data: slugResult, isFetching: isCheckingSlug, } = useCheckSlug(debouncedSlug);
 
   const { mutate: createStore, isPending } = useCreateStore();
-
 
   useEffect(() => {
     if (debouncedSlug) {
@@ -50,24 +48,25 @@ export default function OnboardingForm({ onFinished }: Props) {
     setCurrentStep(prev => prev - 1);
   };
 
-  console.log(form.getFieldsValue(true));
-  console.log(currentStep);
-  console.log(form.getFieldValue("shipping_cost"));
 
   const submit = async () => {
     try {
-      console.log("before validate");
+      await form.validateFields();
 
-      const values = await form.validateFields();
+      const values = form.getFieldsValue(true);
 
-      console.log("after validate", values);
-      // await form.validateFields();
+      const payload = {
+        ...values,
+        card_number: toEnglishDigits(values.card_number),
+      };
 
-      createStore(form.getFieldsValue(true), {
+      createStore(payload, {
         onSuccess: () => {
-          onFinished?.();
+          navigate('/order', { replace: true });
         },
         onError: (error: any) => {
+          console.error(error);
+
           message.error(
             error?.response?.data?.message ??
             "خطا در ایجاد فروشگاه",
@@ -75,6 +74,8 @@ export default function OnboardingForm({ onFinished }: Props) {
         },
       });
     } catch (error: any) {
+      console.error(error);
+
       if (!error?.errorFields) {
         message.error("خطایی رخ داد.");
       }

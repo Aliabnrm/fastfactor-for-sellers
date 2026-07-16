@@ -57,13 +57,10 @@ export default function AuthProviderWrapper({ children }: Props) {
 
         setUser(currentUser)
       } catch (e) {
-        // console.log("BOOTSTRAP ERROR", e)
-
         tokenStore.clear()
         setUser(null)
+        
       } finally {
-        console.log("BOOTSTRAP END")
-
         setLoading(false)
       }
     }
