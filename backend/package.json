@@ -8,11 +8,13 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-serve-static-core": "^0.1.1",
     "jsonwebtoken": "^9.0.3",
     "node-pg-migrate": "^8.0.4",
     "pg": "^8.21.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
+    "qs": "^6.15.3",
     "uuid": "^14.0.1",
     "zod": "^4.4.3"
   },
@@ -20,7 +22,6 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node-dev src/server.ts",
-
     "db:up": "node-pg-migrate up",
     "db:down": "node-pg-migrate down",
     "db:status": "node-pg-migrate status",
