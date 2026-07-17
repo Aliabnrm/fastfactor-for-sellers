@@ -22,9 +22,7 @@ const OnboardingPage = () => {
           />
 
           <div className="md:flex-1">
-            <OnboardingForm
-              onFinished={() => navigate('/order', { replace: true })}
-            />
+            <OnboardingForm />
           </div>
         </div>
       </Card>

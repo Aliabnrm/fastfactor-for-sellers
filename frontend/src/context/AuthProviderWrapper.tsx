@@ -1,37 +1,85 @@
-import { supabase } from '@/lib/supabase'
-import { AuthContext } from '@/hooks/useAuth'
-import type { User } from '@supabase/supabase-js'
-import { useState, useEffect, ReactNode } from 'react'
+import api from "@/services/useApiClient";
+import { AuthContext } from "@/hooks/useAuth";
+import type { User } from "@/schema/auth.schema";
+import { tokenStore } from "@/lib/auth/tokenStore";
+import { useEffect, useState, type ReactNode } from "react";
+import { getMeApi, logoutApi, refreshApi } from "@/services/auth/auth.api";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function AuthProviderWrapper({ children }: Props) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  /**
+   * بعد از Login / Register
+   */
+  const setAuth = (user: User, accessToken: string) => {
+    tokenStore.set(accessToken);
+    setUser(user);
+  };
+
+  /**
+   * دریافت اطلاعات کاربر
+   */
+  const refreshUser = async () => {
+    try {
+      const currentUser = await getMeApi(api);
+      setUser(currentUser);
+    } catch {
+      tokenStore.clear();
+      setUser(null);
+    }
+  };
+
+  /**
+   * خروج از حساب
+   */
+  const logout = async () => {
+    try {
+      await logoutApi(api);
+    } finally {
+      tokenStore.clear();
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    const loadSession = async () => {
-      const { data } = await supabase.auth.getSession()
-      setUser(data.session?.user ?? null)
-      setLoading(false)
+    const bootstrap = async () => {
+      try {
+        const { accessToken } = await refreshApi(api)
+
+        tokenStore.set(accessToken)
+
+        const currentUser = await getMeApi(api)
+
+        setUser(currentUser)
+      } catch (e) {
+        tokenStore.clear()
+        setUser(null)
+        
+      } finally {
+        setLoading(false)
+      }
     }
 
-    loadSession()
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => {
-      listener.subscription.unsubscribe()
-    }
+    bootstrap()
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        setAuth,
+        refreshUser,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }

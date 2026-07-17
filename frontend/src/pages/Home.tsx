@@ -1,28 +1,33 @@
-import { Spin } from 'antd'
-import useSellerProfile from '@/hooks/useSellerProfile'
-import HeroSection from '@/components/home/heroSection'
-import FeatureSection from '@/components/home/featureSection'
+import axios from "axios";
+import { Spin } from "antd";
+import HeroSection from "@/components/home/heroSection";
+import { useMyStore } from "@/services/store/store.hooks";
+import FeatureSection from "@/components/home/featureSection";
 
 const HomePage = () => {
-  const { user, sellerProfile, isLoading } = useSellerProfile()
+  const {
+    error,
+    isLoading,
+    data: store,
+  } = useMyStore();
 
-  const isOnboarded = sellerProfile?.is_onboarded === true
-  const hasProfile = sellerProfile === null && sellerProfile?.is_onboarded === false
-
-  if (isLoading)
-    return <div className='flex flex-col w-full h-screen justify-center items-center'>
-      <Spin size="large" />
-    </div>
-
-  if (user && hasProfile) {
-    return <HeroSection />
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
   }
 
-  if (user && isOnboarded) {
-    return <FeatureSection sellerSlug={sellerProfile?.slug} />
+  if (axios.isAxiosError(error) && error.response?.status === 404) {
+    return <HeroSection />;
   }
 
-  return null
-}
+  if (store.is_onboarded) {
+    return <FeatureSection sellerSlug={store.slug ?? ""} />;
+  }
 
-export default HomePage
+  return <HeroSection />;
+};
+
+export default HomePage;

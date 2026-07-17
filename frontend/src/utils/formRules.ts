@@ -33,6 +33,12 @@ export const createSlugRules = (): Rule[] => [
 //   },
 // ];
 
+export const toEnglishDigits = (value: string) => {
+  return value
+    .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
+    .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
+}
+
 export const formatCardNumber = (value: string) =>
   value
     .replace(/\D/g, '')
@@ -41,19 +47,25 @@ export const formatCardNumber = (value: string) =>
     .replace(/-$/, '')
 
 export const formatCurrency = (value?: string | number | null) => {
-  if (value === undefined || value === null || value === '') {
+  if (value == null || value === '') {
     return ''
   }
-  const numeric = typeof value === 'number' ? value.toString() : value
-  return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+  const normalized =
+    typeof value === 'number' ? value.toString() : toEnglishDigits(value)
+
+  return normalized.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
 export const formatToFa = (val: number) => val.toLocaleString('fa-IR')
 
 export const parseCurrency = (value?: string | number | null) => {
-  if (value === undefined || value === null || value === '') {
+  if (value == null || value === '') {
     return undefined
   }
-  const normalized = typeof value === 'number' ? value.toString() : value
+
+  const normalized =
+    typeof value === 'number' ? value.toString() : toEnglishDigits(value)
+
   return Number(normalized.replace(/,/g, ''))
 }

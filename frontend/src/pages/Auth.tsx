@@ -1,12 +1,12 @@
 import { Sparkles } from 'lucide-react'
 import { Card, Tabs, Typography } from 'antd'
-import LoginForm from '@/components/auth/LoginForm'
-import SignupForm from '@/components/auth/SignupForm'
+import SignInPage from '@/components/auth/SignIn'
+import SignUpPage from '@/components/auth/SignUp'
 
 const AuthPage = () => {
   const tabItems = [
-    { key: 'login', label: 'ورود', children: <LoginForm /> },
-    { key: 'signup', label: 'ثبت‌نام', children: <SignupForm /> },
+    { key: 'login', label: 'ورود', children: <SignInPage /> },
+    { key: 'signup', label: 'ثبت‌نام', children: <SignUpPage /> },
   ]
 
   return (

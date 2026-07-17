@@ -1,4 +1,5 @@
-import { OrderStatus, StatusCardConfig } from '@/types/order.types'
+import { OrderStatus } from '@/schema/order.schema'
+import { StatusCardConfig } from '@/types/order.types'
 import { CheckCircle2, XCircle, Truck, Clock, Package, TrendingUp, } from 'lucide-react'
 
 export type StatusConfigMap = {

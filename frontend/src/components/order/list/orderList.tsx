@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import StatusBadge from './statusBadge'
-import { Order } from '@/types/order.types'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { formatJalali } from '@/utils/formatJalali'
@@ -8,6 +7,7 @@ import DetailRow from '@/components/global/detailRow'
 import { useUpdateOrderStatus } from '../hooks/useUpdateOrderStatus'
 import { Download, ChevronDown, CheckCircle, XCircle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Order } from '@/schema/order.schema'
 
 type OrdersListProps = {
   orders: Order[]
@@ -69,7 +69,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">مبلغ کل :</span>
                 <span className="font-medium">
-                  {order?.total_price.toLocaleString('fa-IR')} تومان
+                  {order?.total_price.toLocaleString()} تومان
                 </span>
               </div>
             </CardContent>
