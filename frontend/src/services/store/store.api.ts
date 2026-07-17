@@ -43,11 +43,13 @@ export const updateMyStoreApi = async (
 export const getStoreBySlugApi = async (api: AxiosInstance, slug: string) => {
   const res = await api.get(`/store/${slug}`)
 
-  return StoreSchema.parse(res.data.data)
+  return res.data.data
 }
+
 
 // --------------------------- GET /store/check-slug --------------------------- //
 export const checkSlugApi = async (api: AxiosInstance, slug: string) => {
   const res = await api.get(`/store/check-slug/${slug}`)
   return CheckSlugResponseSchema.parse(res.data.data)
 }
+

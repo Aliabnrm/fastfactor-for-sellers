@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { CheckoutForm } from '@/components/checkout/CheckoutForm'
 import { useCheckoutSubmit } from '@/components/checkout/hooks/useCheckoutSubmit'
 import { CheckoutSummary } from '@/components/checkout/components/CheckoutSummary'
+import { usePublicStore } from '@/services/store/store.hooks'
 
 export default function CheckoutPage() {
   const { toast } = useToast()
@@ -14,11 +15,14 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
 
-  const { data: sellerShopInfo, isLoading, error } = useSellerBySlug(slug)
+  const { data: sellerShopInfo, isLoading, error } = usePublicStore(slug)
+
+  console.log("slug", sellerShopInfo?.slug)
+
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
-    toast,
-    setResult,
     sellerShopInfo,
+    setResult,
+    toast,
   )
 
   if (isLoading || isSubmitting) {

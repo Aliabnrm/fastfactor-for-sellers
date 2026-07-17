@@ -1,54 +1,60 @@
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { CheckoutData } from '@/schema/checkoutSchema'
-import { uploadPaymentProof } from '../utils/uploadPaymentProof'
+import type { CheckoutData } from '@/schema/checkoutSchema'
+import { useCreateOrder } from '@/services/orders/order.hooks'
 
-export const useCheckoutSubmit = (seller: any, setResult: any, toast: any) => {
+export const useCheckoutSubmit = (
+  sellerShopInfo: any,
+  setResult: (order: any) => void,
+  toast: any,
+) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const createOrder = useCreateOrder()
+
   const handleCheckoutSubmit = async (data: CheckoutData) => {
-    if (!seller) return
-
-    setIsSubmitting(true)
-    const { paymentProof, ...info } = data
-
-    const productPrice = Number(info.price) || 0
-    const shipping = seller.shipping_cost ?? 0
-    const total = productPrice + shipping
+    if (!sellerShopInfo) return
 
     try {
-      let receiptUrl = null
+      setIsSubmitting(true)
 
-      if (paymentProof instanceof File) {
-        receiptUrl = await uploadPaymentProof(seller.id, paymentProof)
+      const productPrice = Number(data.price)
+
+      const shipping = sellerShopInfo.shipping_cost ?? 0
+
+      const total = productPrice + shipping
+
+      const body = {
+        customer_name: data.customerName,
+        customer_phone: data.phoneNumber,
+
+        address: data.address,
+        postal_code: data.postalCode,
+
+        product_name: data.product,
+        product_price: productPrice,
+        total_price: total,
+
+        card_last_4: data.cardLastDigits,
+
+        receipt_url: undefined,
+        product_image_url: undefined,
       }
 
-      const order = {
-        p_address: info.address,
-        p_card_last_4: info.cardLastDigits,
-        p_customer_name: info.customerName,
-        p_customer_phone: info.phoneNumber,
-        p_postal_code: info.postalCode,
-        p_product_image_url: null,
-        p_product_name: info.product,
-        p_receipt_url: receiptUrl,
-        p_seller_id: seller.id,
-        p_total_price: total,
-      }
+      const order = await createOrder.mutateAsync({
+        slug: sellerShopInfo.slug,
+        body,
+      })
 
-      const { data: newOrder, error } = await supabase
-        .rpc('submit_order', order)
-        .select()
-        .single()
+      setResult(order)
 
-      if (error) throw new Error(error.message)
-
-      setResult(newOrder)
-      toast({ title: 'ثبت موفق', description: 'سفارش با موفقیت ثبت شد.' })
+      toast({
+        title: 'ثبت موفق',
+        description: 'سفارش با موفقیت ثبت شد.',
+      })
     } catch (err: any) {
       toast({
         title: 'خطا',
-        description: err.message || 'خطا در ثبت سفارش',
+        description: err?.response?.data?.message ?? err.message,
         variant: 'destructive',
       })
     } finally {
@@ -56,5 +62,8 @@ export const useCheckoutSubmit = (seller: any, setResult: any, toast: any) => {
     }
   }
 
-  return { handleCheckoutSubmit, isSubmitting }
+  return {
+    handleCheckoutSubmit,
+    isSubmitting,
+  }
 }

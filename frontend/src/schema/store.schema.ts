@@ -7,12 +7,21 @@ export const StoreSchema = z.object({
   updated_at: z.string(),
   created_at: z.string(),
   is_onboarded: z.boolean(),
-  shipping_cost: z.string(),
+  shipping_cost: z.coerce.number(),
   slug: z.string().nullable(),
   shop_name: z.string().nullable(),
   card_owner: z.string().nullable(),
   card_number: z.string().nullable(),
 })
+
+export const PublicStoreSchema = z.object({
+  id: z.string(),
+  shop_name: z.string(),
+  slug: z.string(),
+  shipping_cost: z.coerce.number(),
+})
+
+export type PublicStore = z.infer<typeof PublicStoreSchema>
 
 // ======================== ONBOARDING ======================== //
 export const OnboardingSchema = z.object({
@@ -24,21 +33,17 @@ export const OnboardingSchema = z.object({
     .string()
     .min(3)
     .regex(/^[a-z0-9-]+$/),
-
 })
 
 // ======================== UPDATE ======================== //
 export const UpdateStoreSchema = OnboardingSchema.partial()
-
 
 // --------------------------- CHECK SLUG --------------------------- //
 export const CheckSlugResponseSchema = z.object({
   available: z.boolean(),
 })
 
-export type CheckSlugResponse = z.infer<
-  typeof CheckSlugResponseSchema
->
+export type CheckSlugResponse = z.infer<typeof CheckSlugResponseSchema>
 
 export type Store = z.infer<typeof StoreSchema>
 export type OnboardingDTO = z.infer<typeof OnboardingSchema>

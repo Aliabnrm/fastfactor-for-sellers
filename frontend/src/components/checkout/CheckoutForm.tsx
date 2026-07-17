@@ -5,15 +5,15 @@ import { useToast } from '@/hooks/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { SellerShop } from '@/types/seller.types'
 import { Textarea } from '@/components/ui/textarea'
 import { useCheckoutForm } from './hooks/useCheckoutForm'
 import { CheckoutData, checkoutSchema } from '@/schema/checkoutSchema'
 import { formatToFa } from '@/utils/formRules'
+import { PublicStore } from '@/schema/store.schema'
 
 interface CheckoutFormProps {
   isSubmitting: boolean
-  sellerShopInfo: SellerShop
+  sellerShopInfo: PublicStore
   onSubmit: (data: CheckoutData) => void
 }
 
@@ -27,19 +27,19 @@ export const CheckoutForm = ({
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (data.paymentProof instanceof File) {
-      const url = URL.createObjectURL(data.paymentProof)
-      setPreviewUrl(url)
+  // useEffect(() => {
+  //   if (data.paymentProof instanceof File) {
+  //     const url = URL.createObjectURL(data.paymentProof)
+  //     setPreviewUrl(url)
 
-      return () => {
-        URL.revokeObjectURL(url)
-        setPreviewUrl(null)
-      }
-    } else {
-      setPreviewUrl(null)
-    }
-  }, [data.paymentProof])
+  //     return () => {
+  //       URL.revokeObjectURL(url)
+  //       setPreviewUrl(null)
+  //     }
+  //   } else {
+  //     setPreviewUrl(null)
+  //   }
+  // }, [data.paymentProof])
 
   const productPrice = Number(data.price) || 0
   const shippingCost = sellerShopInfo?.shipping_cost ?? 0

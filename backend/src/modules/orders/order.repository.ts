@@ -32,11 +32,11 @@ export const createOrder = async (
     data.address,
     data.postal_code,
     data.product_name,
-    data.product_image_url,
+    data.product_image_url ?? null,
     data.product_price,
     data.total_price,
-    data.receipt_url,
-    data.card_last_4,
+    data.receipt_url ?? null,
+    data.card_last_4 ?? null,
   ];
 
   const { rows } = await pool.query(query, values);

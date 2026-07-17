@@ -7,7 +7,7 @@ import {
 } from './store.api'
 import api from '../useApiClient'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { OnboardingDTO, UpdateStoreDTO } from '@/schema/store.schema'
+import { OnboardingDTO, PublicStoreSchema, StoreSchema, UpdateStoreDTO } from '@/schema/store.schema'
 
 // --------------------------- GET MY STORE --------------------------- //
 export const useMyStore = () => {
@@ -18,14 +18,25 @@ export const useMyStore = () => {
   })
 }
 
-// --------------------------- GET STORE BY SLUG --------------------------- //
+// --------------------------- GET STORE BY SLUG for owner --------------------------- //
 export const useStore = (slug: string) => {
   return useQuery({
-    enabled: !!slug,
     queryKey: ['store', slug],
-    queryFn: () => getStoreBySlugApi(api, slug),
+    enabled: !!slug,
+    queryFn: async () => StoreSchema.parse(await getStoreBySlugApi(api, slug)),
   })
 }
+
+// --------------------------- GET STORE BY SLUG for customer --------------------------- //
+export const usePublicStore = (slug: string) => {
+  return useQuery({
+    queryKey: ['public-store', slug],
+    enabled: !!slug,
+    queryFn: async () =>
+      PublicStoreSchema.parse(await getStoreBySlugApi(api, slug)),
+  })
+}
+
 
 // --------------------------- CREATE STORE --------------------------- //
 export const useCreateStore = () => {

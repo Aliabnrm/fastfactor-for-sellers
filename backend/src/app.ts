@@ -3,9 +3,9 @@ import cookieParser from "cookie-parser";
 import express, { type Express } from "express";
 import authRoutes from "./modules/auth/auth.routes.js";
 import storeRoutes from "./modules/stores/store.routes.js";
+import orderRoutes from "./modules/orders/order.routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import { notFoundMiddleware } from "./middleware/notFound.middleware.js";
-import { requestIdMiddleware } from "./middleware/requestId.middleware.js";
 
 const app: Express = express();
 
@@ -19,10 +19,13 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// 🔐 Auth API
+// Auth API
 app.use("/api/v1/auth", authRoutes);
-// 🏪 Store API
+// Store API
 app.use("/api/v1/store", storeRoutes);
+// Order API
+app.use("/api/v1/order", orderRoutes);
+
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
