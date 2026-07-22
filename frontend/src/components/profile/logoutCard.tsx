@@ -1,17 +1,22 @@
 import { Card, Button } from 'antd'
-import { LogOut, LucideLogOut } from 'lucide-react'
+import { LogOut } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth';
 
-export const AccountLogoutCard = ({ logout, logoutLoading }) => (
-  <Card>
-    <Button
-      block
-      danger
-      size="large"
-      onClick={logout}
-      loading={logoutLoading}
-      icon={<LucideLogOut className='w-5 h-5 mt-2' />}
-    >
-      خروج از حساب
-    </Button>
-  </Card>
-)
+export const AccountLogoutCard = () => {
+  const { logout, loading } = useAuth();
+
+  return (
+    <Card>
+      <Button
+        block
+        danger
+        size="large"
+        onClick={logout}
+        loading={loading}
+        icon={<LogOut className="mt-2 h-5 w-5" />}
+      >
+        خروج از حساب
+      </Button>
+    </Card>
+  )
+}

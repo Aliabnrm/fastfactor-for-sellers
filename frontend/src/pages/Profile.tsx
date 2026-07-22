@@ -1,39 +1,39 @@
 import { useEffect } from 'react'
 import { Save } from 'lucide-react'
 import { Form, Button } from 'antd'
-import useLogout from '@/hooks/useLogout'
-import useSellerProfile from '@/hooks/useSellerProfile'
 import { PaymentCard } from '@/components/profile/paymentCard'
 import { SellerInfoCard } from '@/components/profile/infoCard'
 import MainLayout from '@/components/global/layout/MainLayout'
 import { AccountLogoutCard } from '@/components/profile/logoutCard'
-import { useUpdateSellerProfile } from '@/hooks/useUpdateSellerProfile'
+import { useMyStore, useUpdateStore } from '@/services/store/store.hooks'
 
 const ProfilePage = () => {
   const [form] = Form.useForm()
 
-  const { sellerProfile } = useSellerProfile()
-  const { logout, logoutLoading } = useLogout()
+  const {
+    data: storeProfileInfo,
+  } = useMyStore();
 
-  const updateMutation = useUpdateSellerProfile()
+  const updateMutation = useUpdateStore()
 
   useEffect(() => {
-    if (sellerProfile) {
+    if (storeProfileInfo) {
       form.setFieldsValue({
-        shopName: sellerProfile.shop_name,
-        ownerName: sellerProfile.card_owner,
-        shippingCost: sellerProfile.shipping_cost,
-        cardNumber: sellerProfile.card_number,
+        shopName: storeProfileInfo?.shop_name,
+        ownerName: storeProfileInfo?.card_owner,
+        shippingCost: storeProfileInfo?.shipping_cost,
+        cardNumber: storeProfileInfo?.card_number,
       })
     }
-  }, [sellerProfile, form])
+  }, [storeProfileInfo, form])
 
   const handleUpdate = values => {
+
     updateMutation.mutate({
       shop_name: values.shopName,
       card_owner: values.ownerName,
       shipping_cost: values.shippingCost,
-      card_number: values.cardNumber,
+      card_number: values.cardNumber.replace(/-/g, ''),
     })
   }
 
@@ -53,7 +53,7 @@ const ProfilePage = () => {
       >
         <SellerInfoCard form={form} />
         <PaymentCard form={form} handleCardChange={handleCardNumberChange} />
-        <AccountLogoutCard logout={logout} logoutLoading={logoutLoading} />
+        <AccountLogoutCard />
 
         <div className="sticky bottom-0 w-full flex justify-start rounded-2xl border border-border bg-background/90 px-6 py-3 shadow-lg backdrop-blur-sm">
           <Button
