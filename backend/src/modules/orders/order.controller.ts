@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import * as orderService from "./order.service.js";
+import type { OrderStatus } from "./order.types.js";
 
 interface OrderParams {
   orderId: string;
@@ -8,6 +9,11 @@ interface OrderParams {
 interface CreateOrderParams {
   slug: string;
 }
+
+interface UpdateOrderStatusParams {
+  orderId: string;
+}
+
 
 export const createOrder = catchAsync(
   async (req: Request<CreateOrderParams>, res: Response) => {
@@ -21,7 +27,6 @@ export const createOrder = catchAsync(
   },
 );
 
-
 export const getMyOrders = catchAsync(async (req: Request, res: Response) => {
   const orders = await orderService.getMyOrders(req.user!.userId);
 
@@ -30,7 +35,6 @@ export const getMyOrders = catchAsync(async (req: Request, res: Response) => {
     data: orders,
   });
 });
-
 
 export const getMyOrderById = catchAsync(
   async (req: Request<OrderParams>, res: Response) => {
@@ -41,6 +45,26 @@ export const getMyOrderById = catchAsync(
 
     return res.status(200).json({
       success: true,
+      data: order,
+    });
+  },
+);
+
+
+export const updateOrderStatus = catchAsync(
+  async (
+    req: Request<UpdateOrderStatusParams, unknown, { status: OrderStatus }>,
+    res: Response,
+  ) => {
+    const order = await orderService.updateOrderStatus(
+      req.user!.userId,
+      req.params.orderId,
+      req.body.status,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "وضعیت سفارش با موفقیت بروزرسانی شد.",
       data: order,
     });
   },

@@ -1,24 +1,23 @@
 import { useState } from 'react'
 import StatusBadge from './statusBadge'
 import { useToast } from '@/hooks/use-toast'
+import { Order } from '@/schema/order.schema'
 import { Button } from '@/components/ui/button'
 import { formatJalali } from '@/utils/formatJalali'
 import DetailRow from '@/components/global/detailRow'
 import { useUpdateOrderStatus } from '../hooks/useUpdateOrderStatus'
 import { Download, ChevronDown, CheckCircle, XCircle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Order } from '@/schema/order.schema'
 
 type OrdersListProps = {
   orders: Order[]
-  revalidateOrders: () => void
 }
 
-const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
+const OrdersList = ({ orders }: OrdersListProps) => {
   const { toast } = useToast()
   const [openOrderId, setOpenOrderId] = useState<string | null>(null)
 
-  const { updateStatus, isLoading } = useUpdateOrderStatus(revalidateOrders)
+  const { updateStatus, isLoading } = useUpdateOrderStatus()
 
   const toggleDetails = (orderId: string) => {
     setOpenOrderId(prevId => (prevId === orderId ? null : orderId))
@@ -34,7 +33,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
   if (!orders?.length) {
     return (
       <p className="py-10 text-center text-muted-foreground">
-         سفارشی ثبت نشده است
+        سفارشی ثبت نشده است
       </p>
     )
   }
@@ -126,7 +125,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       size="sm"
                       onClick={() => updateStatus(order.id, 'confirmed')}
                       className="w-full gap-2 bg-green-600 font-semibold text-white shadow hover:bg-green-600/90"
-                    // disabled={isActionLoading}
+                      disabled={isLoading}
                     >
                       <CheckCircle className="h-4 w-4" />
                       تأیید واریز
@@ -136,7 +135,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       onClick={() => updateStatus(order.id, 'rejected')}
                       variant="outline"
                       className="w-full gap-2 border-red-500 font-semibold text-red-500 shadow hover:bg-red-500/10"
-                    // disabled={isActionLoading}
+                      disabled={isLoading}
                     >
                       <XCircle className="h-4 w-4" />
                       رد سفارش
@@ -150,7 +149,7 @@ const OrdersList = ({ orders, revalidateOrders }: OrdersListProps) => {
                       size="sm"
                       onClick={() => updateStatus(order.id, 'delivered')}
                       className="w-full gap-2 bg-primary/90 font-semibold text-white shadow hover:bg-primary"
-                    // disabled={isActionLoading}
+                      disabled={isLoading}
                     >
                       <Download className="h-4 w-4" />
                       بسته ارسال شد

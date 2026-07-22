@@ -1,4 +1,4 @@
-import { CreateOrderDto, OrderSchema, OrdersSchema } from '@/schema/order.schema'
+import { CreateOrderDto, OrderSchema, OrdersSchema, OrderStatus } from '@/schema/order.schema'
 import type { AxiosInstance } from 'axios'
 
 export const getMyOrdersApi = async (api: AxiosInstance) => {
@@ -22,6 +22,19 @@ export const createOrderApi = async (
   body: CreateOrderDto,
 ) => {
   const res = await api.post(`/order/${slug}`, body)
+
+  return OrderSchema.parse(res.data.data)
+}
+
+
+export const updateOrderStatusApi = async (
+  api: AxiosInstance,
+  orderId: string,
+  status: OrderStatus,
+) => {
+  const res = await api.patch(`/order/${orderId}/status`, {
+    status,
+  })
 
   return OrderSchema.parse(res.data.data)
 }

@@ -4,7 +4,6 @@ import { authMiddleware } from "../../middleware/auth.middleware.js";
 
 const router: Router = Router();
 
-
 /* POST /api/v1/orders/:slug */
 router.post("/:slug", orderController.createOrder);
 
@@ -13,5 +12,12 @@ router.get("/", authMiddleware, orderController.getMyOrders);
 
 /* GET /api/v1/orders/:orderId */
 router.get("/:orderId", authMiddleware, orderController.getMyOrderById);
+
+/* PATCH /api/v1/order/:orderId/status */
+router.patch(
+  "/:orderId/status",
+  authMiddleware,
+  orderController.updateOrderStatus,
+);
 
 export default router;

@@ -1,39 +1,48 @@
-import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useToast } from '@/hooks/use-toast'
 import { OrderStatus } from '@/types/order.types'
+import { useQueryClient } from '@tanstack/react-query'
+import { useUpdateOrderState } from '@/services/orders/order.hooks'
 
-export const useUpdateOrderStatus = (refreshOrders: () => void) => {
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient()
   const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
 
-  const updateStatus = async (orderId: string, newStatus: OrderStatus) => {
-    setIsLoading(true)
-    try {
-      const { error } = await supabase.rpc('update_order_status', {
-        p_order_id: orderId,
-        p_new_status: newStatus,
-      })
+  const mutation = useUpdateOrderState()
 
-      if (error) throw error
+  const updateStatus = (orderId: string, newStatus: OrderStatus) => {
+    mutation.mutate(
+      {
+        orderId,
+        status: newStatus,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'وضعیت به‌روزرسانی شد',
+            description: `سفارش با موفقیت به وضعیت ${newStatus} تغییر یافت.`,
+          })
 
-      toast({
-        title: 'وضعیت به‌روزرسانی شد',
-        description: `سفارش با موفقیت به وضعیت ${newStatus} تغییر یافت.`,
-        variant: 'default',
-      })
+          queryClient.invalidateQueries({
+            queryKey: ['orders'],
+          })
 
-      refreshOrders()
-    } catch (e) {
-      toast({
-        title: 'خطا در آپدیت وضعیت',
-        description: 'مشکلی پیش آمد، لطفاً دوباره تلاش کنید.',
-        variant: 'destructive',
-      })
-    } finally {
-      setIsLoading(false)
-    }
+          queryClient.invalidateQueries({
+            queryKey: ['orders', orderId],
+          })
+        },
+        onError: () => {
+          toast({
+            title: 'خطا در بروزرسانی وضعیت',
+            description: 'مشکلی پیش آمد، لطفاً دوباره تلاش کنید.',
+            variant: 'destructive',
+          })
+        },
+      },
+    )
   }
 
-  return { updateStatus, isLoading }
+  return {
+    updateStatus,
+    isLoading: mutation.isPending,
+  }
 }
