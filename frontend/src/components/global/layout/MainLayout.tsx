@@ -15,12 +15,17 @@ const MainLayout = ({
   contentClassName,
   showProfile = true,
 }: MainLayoutProps) => (
-  <div className="min-h-screen bg-background">
+  <div className="app-canvas">
     <MainHeader
       showProfile={showProfile}
       rightSlot={headerRightSlot}
     />
-    <main className={clsx('container mx-auto px-4 py-6', contentClassName)}>
+    <main
+      className={clsx(
+        'relative z-10 mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8',
+        contentClassName,
+      )}
+    >
       {children}
     </main>
   </div>

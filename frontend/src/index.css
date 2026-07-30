@@ -2,64 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 215 25% 20%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 20%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 20%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 160 75% 45%;
+    --primary: 243 60% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 95%;
-    --secondary-foreground: 215 25% 20%;
+    --secondary: 226 100% 97%;
+    --secondary-foreground: 243 60% 28%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 15% 50%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 160 60% 92%;
-    --accent-foreground: 160 75% 35%;
+    --accent: 158 64% 95%;
+    --accent-foreground: 162 94% 24%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 90%;
-    --input: 215 20% 90%;
-    --ring: 160 75% 45%;
+    --border: 214 32% 91%;
+    --input: 215 20% 82%;
+    --ring: 243 60% 40%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --success: 160 75% 45%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    --shadow-sm: 0 1px 2px 0 hsl(215 25% 20% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(215 25% 20% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(215 25% 20% / 0.1);
+    --shadow-sm: 0 1px 3px hsl(222 47% 11% / 0.06);
+    --shadow-md: 0 8px 24px hsl(222 47% 11% / 0.08);
+    --shadow-lg: 0 20px 45px hsl(222 47% 11% / 0.12);
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 210 40% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 243 60% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 226 100% 97%;
+    --sidebar-accent-foreground: 243 60% 28%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 243 60% 40%;
   }
 
   .dark {
@@ -102,7 +91,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply m-0 min-w-[320px] bg-background text-foreground antialiased;
     font-family:
       'Vazirmatn',
       -apple-system,
@@ -114,5 +103,111 @@ All colors MUST be HSL.
 
   html {
     direction: rtl;
+    scroll-behavior: smooth;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    @apply bg-primary/15 text-foreground;
+  }
+}
+
+@layer components {
+  .app-canvas {
+    @apply relative min-h-screen overflow-hidden bg-background;
+    background-image:
+      radial-gradient(circle at 15% 10%, hsl(234 100% 94% / 0.7), transparent 28rem),
+      radial-gradient(circle at 90% 90%, hsl(160 84% 92% / 0.45), transparent 24rem);
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-border bg-card shadow-[var(--shadow-md)];
+  }
+
+  .page-title {
+    @apply text-2xl font-bold leading-9 tracking-tight text-foreground sm:text-3xl;
+  }
+
+  .page-subtitle {
+    @apply text-sm leading-6 text-muted-foreground sm:text-base;
+  }
+
+  .form-actions {
+    @apply sticky bottom-3 z-10 mt-8 flex flex-col gap-3 rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-md)] backdrop-blur-xl sm:static sm:flex-row-reverse sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none;
+  }
+
+  .ant-form-item .ant-form-item-label > label {
+    @apply h-auto font-medium text-foreground;
+  }
+
+  .ant-form-item {
+    @apply mb-5;
+  }
+
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-number,
+  .ant-input-group-addon {
+    @apply min-h-12 rounded-xl border-input bg-white;
+  }
+
+  .ant-input-affix-wrapper > .ant-input {
+    @apply min-h-0;
+  }
+
+  .ant-input:focus,
+  .ant-input-focused,
+  .ant-input-affix-wrapper:focus,
+  .ant-input-affix-wrapper-focused,
+  .ant-input-number-focused {
+    border-color: hsl(var(--primary)) !important;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12) !important;
+  }
+
+  .ant-btn {
+    @apply min-h-11 rounded-xl font-semibold shadow-none;
+  }
+
+  .ant-btn-primary {
+    background: linear-gradient(135deg, hsl(243 60% 35%), hsl(234 62% 52%));
+    box-shadow: 0 8px 18px hsl(var(--primary) / 0.2);
+  }
+
+  .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+    background: linear-gradient(135deg, hsl(243 60% 30%), hsl(234 62% 47%));
+  }
+
+  .ant-tabs .ant-tabs-nav::before {
+    @apply border-0;
+  }
+
+  .ant-tabs .ant-tabs-ink-bar {
+    @apply hidden;
+  }
+
+  .auth-tabs > .ant-tabs-nav {
+    @apply mb-0 rounded-full bg-slate-200/80 p-1;
+  }
+
+  .auth-tabs .ant-tabs-nav-list {
+    @apply w-full;
+  }
+
+  .auth-tabs .ant-tabs-tab {
+    @apply mx-0 flex-1 justify-center rounded-full px-4 py-2.5 text-base font-semibold text-slate-600 transition-all;
+  }
+
+  .auth-tabs .ant-tabs-tab-active {
+    background: linear-gradient(135deg, hsl(243 60% 35%), hsl(234 62% 52%));
+    box-shadow: 0 6px 16px hsl(var(--primary) / 0.22);
+  }
+
+  .auth-tabs .ant-tabs-tab-btn {
+    @apply w-full text-center;
   }
 }

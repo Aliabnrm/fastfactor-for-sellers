@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import BrandLogo from '@/components/brand/BrandLogo'
 
 type MainHeaderProps = {
   showProfile?: boolean
@@ -14,16 +15,16 @@ const MainHeader = ({
   const navigate = useNavigate()
 
   return (
-    <header className="border-b border-border bg-card shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-4">
-        <div
-          onClick={() => navigate("/")}
-          className="flex cursor-pointer items-center justify-center gap-2">
-          <span className="flex h-10 w-10 pt-1 items-center justify-center rounded-full bg-primary/10 text-lg font-extrabold text-primary">
-            F
-          </span>
-          <span className="text-xl font-bold text-foreground">FastFactor</span>
-        </div>
+    <header className="sticky top-0 z-30 border-b border-white/70 bg-white/85 shadow-sm backdrop-blur-xl">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          aria-label="صفحه اصلی"
+          className="rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+        >
+          <BrandLogo compact />
+        </button>
 
         <div className="flex items-center gap-3">
           {rightSlot
@@ -33,14 +34,11 @@ const MainHeader = ({
                 type="button"
                 aria-label="تنظیمات"
                 onClick={() => navigate('/profile')}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground transition-colors hover:border-primary hover:bg-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
               >
                 <Settings className="h-5 w-5" />
               </button>
             )}
-          {/* <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-            {avatarFallback}
-          </div> */}
         </div>
       </div>
     </header>

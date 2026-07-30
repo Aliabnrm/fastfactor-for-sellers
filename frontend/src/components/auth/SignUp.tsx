@@ -1,16 +1,16 @@
-import { useAuth } from "@/hooks/useAuth";
-import { Form, Input, Button } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRegister } from "@/services/auth/auth.hooks";
-import { SignupDTO, SignupSchema } from "@/schema/auth.schema";
+import { useAuth } from '@/hooks/useAuth'
+import { Form, Input, Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRegister } from '@/services/auth/auth.hooks'
+import { SignupDTO, SignupSchema } from '@/schema/auth.schema'
 
 const SignUpPage = () => {
-  const navigate = useNavigate();
-  const { mutate: register, isPending } = useRegister();
+  const navigate = useNavigate()
+  const { mutate: register, isPending } = useRegister()
 
-  const {setAuth} = useAuth()
+  const { setAuth } = useAuth()
 
   const {
     control,
@@ -18,27 +18,27 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm<SignupDTO>({
     resolver: zodResolver(SignupSchema),
-    mode: "onTouched",
+    mode: 'onTouched',
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-  });
+  })
 
   const onSubmit = (data: SignupDTO) => {
-    console.log("submit", data);
+    console.log('submit', data)
 
     register(data, {
-      onSuccess: (response) => {
-        setAuth(response.user, response.accessToken);
+      onSuccess: response => {
+        setAuth(response.user, response.accessToken)
 
-        navigate("/");
+        navigate('/')
       },
       onError: (error: any) => {
-        alert(error?.message || "Registration failed");
+        alert(error?.message || 'Registration failed')
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form
@@ -46,10 +46,11 @@ const SignUpPage = () => {
       requiredMark={false}
       autoComplete="off"
       onFinish={handleSubmit(onSubmit)}
+      className="auth-form pt-5"
     >
       <Form.Item
         label="ایمیل"
-        validateStatus={errors.email ? "error" : ""}
+        validateStatus={errors.email ? 'error' : ''}
         help={errors.email?.message}
       >
         <Controller
@@ -59,7 +60,8 @@ const SignUpPage = () => {
             <Input
               {...field}
               size="large"
-              placeholder="مثال: email@example.com"
+              placeholder="email@example.com"
+              dir="ltr"
             />
           )}
         />
@@ -67,7 +69,7 @@ const SignUpPage = () => {
 
       <Form.Item
         label="رمز عبور"
-        validateStatus={errors.password ? "error" : ""}
+        validateStatus={errors.password ? 'error' : ''}
         help={errors.password?.message}
       >
         <Controller
@@ -88,11 +90,12 @@ const SignUpPage = () => {
         htmlType="submit"
         loading={isPending}
         block
+        className="mt-3 !h-12"
       >
         ثبت‌نام
       </Button>
     </Form>
-  );
-};
+  )
+}
 
 export default SignUpPage;

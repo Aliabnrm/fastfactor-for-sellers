@@ -1,6 +1,5 @@
 import { FileUpload } from './components/FileUpload'
 import { Card } from '@/components/ui/card'
-import { useEffect, useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,6 +9,16 @@ import { useCheckoutForm } from './hooks/useCheckoutForm'
 import { CheckoutData, checkoutSchema } from '@/schema/checkoutSchema'
 import { formatToFa } from '@/utils/formRules'
 import { PublicStore } from '@/schema/store.schema'
+import BrandLogo from '@/components/brand/BrandLogo'
+import CheckoutSection from './components/CheckoutSection'
+import {
+  CreditCard,
+  MapPin,
+  ReceiptText,
+  ShoppingBag,
+  Store,
+  UserRound,
+} from 'lucide-react'
 
 interface CheckoutFormProps {
   isSubmitting: boolean
@@ -24,22 +33,6 @@ export const CheckoutForm = ({
 }: CheckoutFormProps) => {
   const { data, update } = useCheckoutForm()
   const { toast } = useToast()
-
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-
-  // useEffect(() => {
-  //   if (data.paymentProof instanceof File) {
-  //     const url = URL.createObjectURL(data.paymentProof)
-  //     setPreviewUrl(url)
-
-  //     return () => {
-  //       URL.revokeObjectURL(url)
-  //       setPreviewUrl(null)
-  //     }
-  //   } else {
-  //     setPreviewUrl(null)
-  //   }
-  // }, [data.paymentProof])
 
   const productPrice = Number(data.price) || 0
   const shippingCost = sellerShopInfo?.shipping_cost ?? 0
@@ -66,129 +59,205 @@ export const CheckoutForm = ({
     const val = e.target.value.replace(/\D/g, '')
     update('price', val ? Number(val) : '')
   }
+
   return (
-    <Card className="mx-auto max-w-md p-6 shadow-2xl">
-      <div className="mb-6 border-b pb-4 text-center">
-        <h2 className="mb-1 text-2xl font-bold text-primary">{shopName}</h2>
-        <p className="text-sm text-muted-foreground">فرم ثبت سفارش اختصاصی</p>
-      </div>
+    <main className="app-canvas px-3 py-5 sm:px-4 sm:py-10">
+      <div className="relative z-10 mx-auto max-w-2xl">
+        <header className="mb-6 flex items-center justify-between rounded-2xl border border-white/80 bg-white/85 p-4 shadow-sm backdrop-blur-xl sm:p-5">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-emerald-700 text-white">
+                <Store className="h-5 w-5" />
+              </span>
+              <div>
+                <h1 className="font-bold text-slate-900 sm:text-lg">
+                  {shopName}
+                </h1>
+                <p className="text-xs text-slate-500">فروشنده تأییدشده</p>
+              </div>
+            </div>
+          </div>
+          <BrandLogo compact className="hidden sm:flex" tone="emerald" />
+        </header>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="space-y-2">
-          <Label>نام محصول *</Label>
-          <Input
-            value={data.product}
-            onChange={e => update('product', e.target.value)}
-            placeholder="مثال: شال پلیسه مشکی"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <CheckoutSection
+            title="خلاصه سفارش"
+            icon={<ShoppingBag className="h-5 w-5" />}
+          >
+            <div className="grid gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="product">نام محصول *</Label>
+                <Input
+                  id="product"
+                  value={data.product}
+                  onChange={event => update('product', event.target.value)}
+                  placeholder="مثال: شال پلیسه مشکی"
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label>مبلغ توافق شده محصول (تومان) *</Label>
-          <Input
-            value={data.price ? Number(data.price).toLocaleString() : ''}
-            onChange={handlePriceChange}
-            placeholder="مبلغی که فروشنده اعلام کرده وارد کنید"
-            inputMode="numeric"
-          />
-        </div>
-        <Card className="space-y-2 border-primary/20 bg-primary/10 p-4 text-sm transition-all duration-300">
-          <div className="flex justify-between">
-            <span>قیمت محصول:</span>
-            <span
-              className={
-                productPrice > 0 ? 'font-medium' : 'text-muted-foreground'
-              }
+              <div className="space-y-2">
+                <Label htmlFor="price">
+                  مبلغ توافق شده محصول (تومان) *
+                </Label>
+                <Input
+                  id="price"
+                  value={
+                    data.price ? Number(data.price).toLocaleString() : ''
+                  }
+                  onChange={handlePriceChange}
+                  placeholder="مبلغ اعلام‌شده توسط فروشنده"
+                  inputMode="numeric"
+                />
+              </div>
+
+              <Card className="space-y-3 border-indigo-100 bg-indigo-50/60 p-4 text-sm">
+                <div className="flex justify-between gap-3">
+                  <span className="text-slate-500">قیمت محصول</span>
+                  <span
+                    className={
+                      productPrice > 0
+                        ? 'font-semibold'
+                        : 'text-muted-foreground'
+                    }
+                  >
+                    {productPrice > 0 ? formatToFa(productPrice) : '---'} تومان
+                  </span>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span className="text-slate-500">هزینه ارسال</span>
+                  <span className="font-semibold">
+                    {formatToFa(shippingCost)} تومان
+                  </span>
+                </div>
+                <div className="flex justify-between gap-3 border-t border-indigo-100 pt-3 text-base font-bold text-indigo-950">
+                  <span>مبلغ قابل پرداخت</span>
+                  <span>{formatToFa(total)} تومان</span>
+                </div>
+              </Card>
+            </div>
+          </CheckoutSection>
+
+          <CheckoutSection
+            title="اطلاعات خریدار"
+            icon={<UserRound className="h-5 w-5" />}
+          >
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="customerName">نام و نام خانوادگی *</Label>
+                <Input
+                  id="customerName"
+                  value={data.customerName}
+                  onChange={event =>
+                    update('customerName', event.target.value)
+                  }
+                  placeholder="مثال: علی رضایی"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">شماره تماس *</Label>
+                <Input
+                  id="phoneNumber"
+                  value={data.phoneNumber}
+                  maxLength={11}
+                  dir="ltr"
+                  inputMode="numeric"
+                  placeholder="09123456789"
+                  onChange={event =>
+                    update(
+                      'phoneNumber',
+                      event.target.value.replace(/\D/g, ''),
+                    )
+                  }
+                />
+              </div>
+            </div>
+          </CheckoutSection>
+
+          <CheckoutSection
+            title="اطلاعات ارسال"
+            icon={<MapPin className="h-5 w-5" />}
+          >
+            <div className="grid gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="address">آدرس کامل *</Label>
+                <Textarea
+                  id="address"
+                  value={data.address}
+                  rows={4}
+                  onChange={event => update('address', event.target.value)}
+                  placeholder="استان، شهر، خیابان اصلی، کوچه و پلاک"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="postalCode">کد پستی ۱۰ رقمی *</Label>
+                <Input
+                  id="postalCode"
+                  value={data.postalCode}
+                  maxLength={10}
+                  dir="ltr"
+                  inputMode="numeric"
+                  onChange={event =>
+                    update(
+                      'postalCode',
+                      event.target.value.replace(/\D/g, ''),
+                    )
+                  }
+                />
+              </div>
+            </div>
+          </CheckoutSection>
+
+          <CheckoutSection
+            title="تأیید پرداخت"
+            icon={<CreditCard className="h-5 w-5" />}
+          >
+            <div className="grid gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="cardLastDigits">۴ رقم آخر کارت *</Label>
+                <Input
+                  id="cardLastDigits"
+                  value={data.cardLastDigits}
+                  maxLength={4}
+                  dir="ltr"
+                  inputMode="numeric"
+                  className="text-center text-lg tracking-[0.35em]"
+                  onChange={event =>
+                    update(
+                      'cardLastDigits',
+                      event.target.value.replace(/\D/g, ''),
+                    )
+                  }
+                />
+                <p className="pt-1 text-xs leading-5 text-muted-foreground">
+                  این اطلاعات صرفاً برای پیگیری سریع‌تر فیش واریزی استفاده
+                  می‌شود.
+                </p>
+              </div>
+
+              <FileUpload
+                id="paymentProof"
+                label="تصویر فیش واریزی *"
+                fileName={data.paymentProof?.name ?? ''}
+                onChange={file => update('paymentProof', file)}
+              />
+            </div>
+          </CheckoutSection>
+
+          <div className="sticky bottom-3 z-20 rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
+            <Button
+              type="submit"
+              className="h-12 w-full bg-gradient-to-l from-teal-500 to-emerald-700 shadow-emerald-900/15 hover:from-teal-600 hover:to-emerald-800"
+              disabled={isSubmitting}
             >
-              {productPrice > 0 ? formatToFa(productPrice) : '---'} تومان
-            </span>
+              <ReceiptText className="h-5 w-5" />
+              {isSubmitting ? 'در حال ثبت...' : 'ثبت و ارسال سفارش'}
+            </Button>
           </div>
-
-          <div className="flex justify-between">
-            <span>هزینه پست (ثابت):</span>
-            <span>{formatToFa(shippingCost)} تومان</span>
-          </div>
-
-          <div className="flex justify-between border-t border-primary/20 pt-2 text-lg font-bold text-primary">
-            <span>مبلغ قابل پرداخت:</span>
-            <span>{formatToFa(total)} تومان</span>
-          </div>
-        </Card>
-
-        <div className="space-y-2">
-          <Label>نام و نام خانوادگی *</Label>
-          <Input
-            value={data.customerName}
-            onChange={e => update('customerName', e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>شماره تماس *</Label>
-          <Input
-            value={data.phoneNumber}
-            maxLength={11}
-            dir="ltr"
-            onChange={e =>
-              update('phoneNumber', e.target.value.replace(/\D/g, ''))
-            }
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>آدرس کامل *</Label>
-          <Textarea
-            value={data.address}
-            rows={4}
-            onChange={e => update('address', e.target.value)}
-            placeholder="استان، شهر، خیابان اصلی، کوچه، پلاک و کد پستی"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>کد پستی ۱۰ رقمی *</Label>
-          <Input
-            value={data.postalCode}
-            maxLength={10}
-            dir="ltr"
-            onChange={e =>
-              update('postalCode', e.target.value.replace(/\D/g, ''))
-            }
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>۴ رقم آخر کارت *</Label>
-          <Input
-            value={data.cardLastDigits}
-            maxLength={4}
-            dir="ltr"
-            className="text-center text-lg tracking-widest"
-            onChange={e =>
-              update('cardLastDigits', e.target.value.replace(/\D/g, ''))
-            }
-          />
-          <p className="pt-1 text-xs text-muted-foreground">
-            این اطلاعات صرفا جهت پیگیری سریع‌تر فیش واریزی شما استفاده می‌شود.
-          </p>
-        </div>
-
-        <FileUpload
-          id="paymentProof"
-          label="تصویر فیش واریزی *"
-          previewUrl={previewUrl}
-          fileName={data.paymentProof?.name ?? ''}
-          onChange={file => update('paymentProof', file)}
-        />
-
-        <Button
-          type="submit"
-          className="h-12 w-full font-semibold"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'در حال ثبت...' : 'ثبت و ارسال سفارش'}
-        </Button>
-      </form>
-    </Card>
+        </form>
+      </div>
+    </main>
   )
 }

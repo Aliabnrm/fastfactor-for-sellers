@@ -1,7 +1,7 @@
-import { Sparkles } from 'lucide-react'
-import { Card, Tabs, Typography } from 'antd'
+import { Tabs } from 'antd'
 import SignInPage from '@/components/auth/SignIn'
 import SignUpPage from '@/components/auth/SignUp'
+import BrandLogo from '@/components/brand/BrandLogo'
 
 const AuthPage = () => {
   const tabItems = [
@@ -10,25 +10,28 @@ const AuthPage = () => {
   ]
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 px-4 py-10">
-      <Card className="w-full max-w-lg border-none shadow-xl">
-        <div className="mb-6 flex flex-col items-center space-y-4 text-center">
-          <div className="flex items-center gap-2 text-2xl font-bold text-emerald-600">
-            <Sparkles className="h-7 w-7" />
-            <span>FastFactor</span>
+    <main className="app-canvas flex items-center justify-center px-4 py-10">
+      <section className="surface-card relative z-10 w-full max-w-[600px] overflow-hidden p-5 sm:p-10">
+        <div className="mb-8 flex flex-col items-center gap-3 text-center">
+          <BrandLogo />
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+              ورود به پنل فروشندگان
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              برای مدیریت فروشگاه وارد حساب خود شوید یا حساب تازه‌ای بسازید.
+            </p>
           </div>
-
-          <Typography.Title level={4} className="!m-0">
-            ورود یا ثبت‌نام فروشندگان
-          </Typography.Title>
-          <Typography.Paragraph className="!mb-0 text-slate-500">
-            تنها با شماره موبایل خود وارد دنیای فروش سریع و مطمئن شوید.
-          </Typography.Paragraph>
         </div>
 
-        <Tabs centered items={tabItems} />
-      </Card>
-    </div>
+        <Tabs
+          centered
+          items={tabItems}
+          className="auth-tabs"
+          defaultActiveKey="login"
+        />
+      </section>
+    </main>
   )
 }
 

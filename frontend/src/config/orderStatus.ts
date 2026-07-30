@@ -1,6 +1,13 @@
 import { OrderStatus } from '@/schema/order.schema'
 import { StatusCardConfig } from '@/types/order.types'
-import { CheckCircle2, XCircle, Truck, Clock, Package, TrendingUp, } from 'lucide-react'
+import {
+  CheckCircle2,
+  XCircle,
+  Truck,
+  Clock,
+  Package,
+  TrendingUp,
+} from 'lucide-react'
 
 export type StatusConfigMap = {
   [key in OrderStatus]: {
@@ -49,28 +56,28 @@ export const STATUS_CARD_CONFIG: StatusCardConfig[] = [
     key: 'totalOrders',
     label: 'کل سفارش‌ها',
     icon: Package,
-    bgColor: 'bg-primary/10',
-    textColor: 'text-primary',
+    bgColor: 'bg-indigo-50',
+    textColor: 'text-indigo-800',
   },
   {
     key: 'pendingOrders',
     label: 'در انتظار بررسی',
     icon: Clock,
-    bgColor: 'bg-accent/10',
-    textColor: 'text-accent-foreground',
+    bgColor: 'bg-amber-50',
+    textColor: 'text-amber-600',
   },
   {
     key: 'verifiedOrders',
     label: 'تایید شده',
     icon: TrendingUp,
-    bgColor: 'bg-success/10',
-    textColor: 'text-success',
+    bgColor: 'bg-emerald-50',
+    textColor: 'text-emerald-600',
   },
   {
     key: 'deliveredOrders',
     label: 'ارسال شده',
     icon: Truck,
-    bgColor: 'bg-success/10',
-    textColor: 'text-success',
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-600',
   },
 ]

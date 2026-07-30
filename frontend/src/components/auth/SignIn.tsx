@@ -18,19 +18,17 @@ const SignInPage = () => {
     formState: { errors },
   } = useForm<SigninDTO>({
     resolver: zodResolver(SigninSchema),
-    mode: "onTouched"
+    mode: 'onTouched',
   })
 
   const onSubmit = async (data: SigninDTO) => {
     try {
-      const response = await login.mutateAsync(data);
-      setAuth(response.user, response.accessToken);
-
-      navigate("/", { replace: true });
-
+      const response = await login.mutateAsync(data)
+      setAuth(response.user, response.accessToken)
+      navigate('/', { replace: true })
     } catch (error: any) {
-      console.log("LOGIN ERROR", error);
-      alert(error?.response?.data?.message ?? error.message);
+      console.log('LOGIN ERROR', error)
+      alert(error?.response?.data?.message ?? error.message)
     }
   }
 
@@ -40,10 +38,11 @@ const SignInPage = () => {
       autoComplete="off"
       requiredMark={false}
       onFinish={handleSubmit(onSubmit)}
+      className="auth-form pt-5"
     >
       <Form.Item
         label="ایمیل"
-        validateStatus={errors.email ? "error" : ""}
+        validateStatus={errors.email ? 'error' : ''}
         help={errors.email?.message}
       >
         <Controller
@@ -53,7 +52,8 @@ const SignInPage = () => {
             <Input
               {...field}
               size="large"
-              placeholder="مثال: email@example.com"
+              placeholder="email@example.com"
+              dir="ltr"
             />
           )}
         />
@@ -61,7 +61,7 @@ const SignInPage = () => {
 
       <Form.Item
         label="رمز عبور"
-        validateStatus={errors.password ? "error" : ""}
+        validateStatus={errors.password ? 'error' : ''}
         help={errors.password?.message}
       >
         <Controller
@@ -80,8 +80,9 @@ const SignInPage = () => {
       <Button
         type="primary"
         htmlType="submit"
-        block className="mt-2"
-        disabled={login.isPending}
+        block
+        className="mt-3 !h-12"
+        loading={login.isPending}
       >
         ورود
       </Button>

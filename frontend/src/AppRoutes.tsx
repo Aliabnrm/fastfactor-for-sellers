@@ -25,20 +25,27 @@ const AppRoutes = () => (
       direction="rtl"
       theme={{
         token: {
-          colorPrimary: '#059669',
+          colorPrimary: '#3730a3',
+          colorSuccess: '#10b981',
+          colorText: '#0f172a',
+          colorTextSecondary: '#64748b',
+          colorBorder: '#cbd5e1',
           borderRadius: 12,
+          controlHeight: 48,
           fontFamily:
             "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
         components: {
           Button: {
-            controlHeight: 44,
-            borderRadius: 999,
+            controlHeight: 48,
+            borderRadius: 12,
             fontWeight: 600,
           },
           Tabs: {
-            itemSelectedColor: '#059669',
-            inkBarColor: '#059669',
+            itemSelectedColor: '#ffffff',
+            itemActiveColor: '#ffffff',
+            itemHoverColor: '#ffffff',
+            inkBarColor: 'transparent',
           },
         },
       }}

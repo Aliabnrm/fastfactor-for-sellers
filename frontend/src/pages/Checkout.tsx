@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { Alert, Button, Spin } from 'antd'
 import { useToast } from '@/hooks/use-toast'
-import useSellerBySlug from '@/hooks/useSellerBySlug'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CheckoutForm } from '@/components/checkout/CheckoutForm'
 import { useCheckoutSubmit } from '@/components/checkout/hooks/useCheckoutSubmit'
@@ -17,8 +16,6 @@ export default function CheckoutPage() {
 
   const { data: sellerShopInfo, isLoading, error } = usePublicStore(slug)
 
-  console.log("slug", sellerShopInfo?.slug)
-
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
     sellerShopInfo,
     setResult,
@@ -30,23 +27,27 @@ export default function CheckoutPage() {
       ? 'در حال دریافت اطلاعات فروشگاه...'
       : 'در حال ثبت سفارش و آپلود مدارک...'
     return (
-      <div className="p-20 text-center">
-        <Spin size="large" tip={tipText} />
-      </div>
+      <main className="app-canvas flex items-center justify-center p-6 text-center">
+        <div className="surface-card relative z-10 p-10">
+          <Spin size="large" tip={tipText} />
+        </div>
+      </main>
     )
   }
 
   if (error || !sellerShopInfo) {
     return (
-      <div className="mx-auto max-w-lg space-y-4 p-20 text-center">
-        <Alert
-          message="خطا در دسترسی یا عدم وجود فروشگاه"
-          description={error?.message || 'فروشگاهی با این آدرس یافت نشد.'}
-          type="error"
-          showIcon
-        />
-        <Button onClick={() => navigate('/')}>بازگشت</Button>
-      </div>
+      <main className="app-canvas flex items-center justify-center p-4">
+        <div className="surface-card relative z-10 w-full max-w-lg space-y-4 p-6 text-center">
+          <Alert
+            message="خطا در دسترسی یا عدم وجود فروشگاه"
+            description={error?.message || 'فروشگاهی با این آدرس یافت نشد.'}
+            type="error"
+            showIcon
+          />
+          <Button onClick={() => navigate('/')}>بازگشت</Button>
+        </div>
+      </main>
     )
   }
 

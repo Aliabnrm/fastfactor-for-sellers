@@ -7,7 +7,7 @@
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build": "yarn lint && vite build",
+    "build": "pnpm lint && vite build",
     "build:dev": "vite build --mode development"
   },
   "dependencies": {
@@ -64,6 +64,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
     "vite-plugin-pwa": "^1.2.0",
+    "workbox-window": "^7.4.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

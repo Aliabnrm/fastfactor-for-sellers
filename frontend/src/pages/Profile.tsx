@@ -1,18 +1,23 @@
-import { useEffect } from 'react'
-import { Save } from 'lucide-react'
-import { Form, Button } from 'antd'
-import { PaymentCard } from '@/components/profile/paymentCard'
-import { SellerInfoCard } from '@/components/profile/infoCard'
+import { ChangeEvent, useEffect } from 'react'
+import { Save, Settings2 } from 'lucide-react'
+import { Form, Button, FormProps } from 'antd'
 import MainLayout from '@/components/global/layout/MainLayout'
-import { AccountLogoutCard } from '@/components/profile/logoutCard'
 import { useMyStore, useUpdateStore } from '@/services/store/store.hooks'
+import SellerInfoCard from '@/components/profile/SellerInfoCard'
+import PaymentSettingsCard from '@/components/profile/PaymentSettingsCard'
+import AccountActionsCard from '@/components/profile/AccountActionsCard'
+
+type ProfileFormValues = {
+  shopName: string
+  ownerName: string
+  shippingCost: number
+  cardNumber: string
+}
 
 const ProfilePage = () => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm<ProfileFormValues>()
 
-  const {
-    data: storeProfileInfo,
-  } = useMyStore();
+  const { data: storeProfileInfo } = useMyStore()
 
   const updateMutation = useUpdateStore()
 
@@ -27,8 +32,7 @@ const ProfilePage = () => {
     }
   }, [storeProfileInfo, form])
 
-  const handleUpdate = values => {
-
+  const handleUpdate: FormProps<ProfileFormValues>['onFinish'] = values => {
     updateMutation.mutate({
       shop_name: values.shopName,
       card_owner: values.ownerName,
@@ -37,8 +41,10 @@ const ProfilePage = () => {
     })
   }
 
-  const handleCardNumberChange = e => {
-    const value = e.target.value.replace(/\D/g, '').substring(0, 16)
+  const handleCardNumberChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value.replace(/\D/g, '').substring(0, 16)
     form.setFieldValue('cardNumber', value.replace(/(\d{4})(?=\d)/g, '$1-'))
   }
 
@@ -49,20 +55,30 @@ const ProfilePage = () => {
         layout="vertical"
         requiredMark={false}
         onFinish={handleUpdate}
-        className='flex w-full flex-col gap-4'
+        className="mx-auto flex w-full max-w-2xl flex-col gap-5"
       >
-        <SellerInfoCard form={form} />
-        <PaymentCard form={form} handleCardChange={handleCardNumberChange} />
-        <AccountLogoutCard />
+        <header className="mb-1">
+          <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-secondary text-primary">
+            <Settings2 className="h-5 w-5" />
+          </span>
+          <h1 className="page-title">تنظیمات حساب کاربری</h1>
+          <p className="page-subtitle mt-1">
+            اطلاعات فروشگاه، پرداخت و ارسال را مدیریت کنید.
+          </p>
+        </header>
 
-        <div className="sticky bottom-0 w-full flex justify-start rounded-2xl border border-border bg-background/90 px-6 py-3 shadow-lg backdrop-blur-sm">
+        <SellerInfoCard />
+        <PaymentSettingsCard handleCardChange={handleCardNumberChange} />
+        <AccountActionsCard />
+
+        <div className="sticky bottom-3 z-20 w-full rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
           <Button
             size="large"
             type="primary"
             htmlType="submit"
-            className='w-full'
+            className="!h-12 w-full"
             loading={updateMutation.isPending}
-            icon={<Save className='w-5 h-5 mt-2' />}
+            icon={<Save className="mt-1 h-5 w-5" />}
           >
             ذخیره تغییرات
           </Button>

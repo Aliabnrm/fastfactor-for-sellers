@@ -1,33 +1,35 @@
 import { Card } from '../ui/card'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
-import { Package, ShoppingBag, Zap } from 'lucide-react'
+import {
+  LogOut,
+  Package,
+  ShoppingBag,
+  Zap,
+} from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import BrandLogo from '@/components/brand/BrandLogo'
 
 const FeatureSection = ({ sellerSlug }: any) => {
-  const { logout } = useAuth();
+  const { logout } = useAuth()
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-      <div className="container mx-auto px-4 py-16">
-        <div className="mb-16 text-center">
-          <div className="mb-6 flex justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-              <Package className="h-12 w-12 text-primary" />
-            </div>
+    <main className="app-canvas px-4 py-10">
+      <div className="relative z-10 mx-auto max-w-5xl">
+        <div className="mb-10 flex flex-col items-center justify-between gap-5 sm:flex-row">
+          <div>
+            <BrandLogo />
+            <p className="mt-3 text-slate-500">
+              ابزار هوشمند فروش برای فروشندگان
+            </p>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-foreground md:text-5xl">
-            FastFactor
-          </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-xl text-muted-foreground">
-            ابزار هوشمند فروش برای فروشندگان
-          </p>
+
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button
               size="lg"
               onClick={() => navigate('/order')}
-              className="h-12 gap-2 px-8 text-lg"
+              className="gap-2 px-7"
             >
               <Package className="h-5 w-5" />
               داشبورد فروشنده
@@ -36,7 +38,7 @@ const FeatureSection = ({ sellerSlug }: any) => {
               size="lg"
               variant="outline"
               onClick={() => navigate(`/checkout/${sellerSlug}`)}
-              className="h-12 gap-2 px-8 text-lg"
+              className="gap-2 px-7"
             >
               <ShoppingBag className="h-5 w-5" />
               فرم خرید
@@ -44,8 +46,21 @@ const FeatureSection = ({ sellerSlug }: any) => {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
-          <Card className="p-6 text-center shadow-md transition-shadow hover:shadow-lg">
+        <section className="surface-card mb-8 overflow-hidden bg-gradient-to-l from-indigo-950 to-indigo-700 p-7 text-white sm:p-10">
+          <span className="text-sm font-semibold text-indigo-200">
+            فروشگاه شما آماده است
+          </span>
+          <h1 className="mt-2 text-3xl font-bold leading-10">
+            سفارش‌ها را سریع‌تر مدیریت کنید
+          </h1>
+          <p className="mt-3 max-w-2xl leading-7 text-indigo-100">
+            لینک فروشگاه را با مشتریان به اشتراک بگذارید و وضعیت سفارش‌ها را
+            از یک داشبورد ساده دنبال کنید.
+          </p>
+        </section>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          <Card className="p-6 text-center transition-shadow hover:shadow-lg">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Zap className="h-6 w-6 text-primary" />
             </div>
@@ -57,7 +72,7 @@ const FeatureSection = ({ sellerSlug }: any) => {
             </p>
           </Card>
 
-          <Card className="p-6 text-center shadow-md transition-shadow hover:shadow-lg">
+          <Card className="p-6 text-center transition-shadow hover:shadow-lg">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-success/10">
               <Package className="h-6 w-6 text-success" />
             </div>
@@ -69,7 +84,7 @@ const FeatureSection = ({ sellerSlug }: any) => {
             </p>
           </Card>
 
-          <Card className="p-6 text-center shadow-md transition-shadow hover:shadow-lg">
+          <Card className="p-6 text-center transition-shadow hover:shadow-lg">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent">
               <ShoppingBag className="h-6 w-6 text-accent-foreground" />
             </div>
@@ -79,12 +94,17 @@ const FeatureSection = ({ sellerSlug }: any) => {
             </p>
           </Card>
         </div>
-        
-        <Button onClick={logout}>
-          خروج
+
+        <Button
+          variant="ghost"
+          onClick={logout}
+          className="mx-auto mt-8 text-slate-500"
+        >
+          <LogOut className="h-4 w-4" />
+          خروج از حساب
         </Button>
       </div>
-    </div>
+    </main>
   )
 }
 

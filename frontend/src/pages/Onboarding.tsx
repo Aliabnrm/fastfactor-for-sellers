@@ -1,32 +1,28 @@
-import { Divider } from 'antd'
-import { Card } from '@/components/ui/card'
-import { useNavigate } from 'react-router-dom'
-import StepsSidebar from '@/components/onboarding/Sidebar'
-import OnboardingForm from '@/components/onboarding/onboardForm'
+import BrandLogo from '@/components/brand/BrandLogo'
+import OnboardingForm from '@/components/onboarding/OnboardingForm'
 
 const OnboardingPage = () => {
-  const navigate = useNavigate()
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 px-4 py-12">
-      <Card className="w-full max-w-3xl border-none px-8 py-6 shadow-xl">
-        <div className="flex flex-col gap-10 md:flex-row">
-          <div className="md:w-2/5">
-            <StepsSidebar />
-          </div>
+    <main className="app-canvas px-4 py-8 sm:py-12">
+      <div className="relative z-10 mx-auto w-full max-w-3xl">
+        <div className="surface-card overflow-hidden p-5 sm:p-9">
+          <header className="mb-9 text-center">
+            <BrandLogo className="justify-center" />
+            <div className="mt-7">
+              <h1 className="page-title">تکمیل اطلاعات فروشگاه</h1>
+              <p className="page-subtitle mt-2">
+                فقط چند قدم تا راه‌اندازی فروشگاه شما باقی مانده است.
+              </p>
+            </div>
+          </header>
 
-          <Divider
-            type="vertical"
-            className="hidden md:block"
-            style={{ height: 'auto' }}
-          />
-
-          <div className="md:flex-1">
+          <div>
             <OnboardingForm />
           </div>
         </div>
-      </Card>
-    </div>
+      </div>
+    </main>
   )
 }
+
 export default OnboardingPage
