@@ -47,7 +47,7 @@ services:
 
     command: pnpm dev
 
-  frontend:   # ← دقت کن اینجا دو فاصله دارد
+  frontend:   
     build:
       context: ./frontend
 

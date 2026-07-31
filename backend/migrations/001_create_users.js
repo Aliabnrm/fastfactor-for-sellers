@@ -3,7 +3,6 @@
  */
 
 export const up = (pgm) => {
-  // Extension برای تولید UUID
   pgm.createExtension("pgcrypto", {
     ifNotExists: true,
   });

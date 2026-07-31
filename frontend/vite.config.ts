@@ -42,23 +42,6 @@ export default defineConfig(({ mode }) => ({
         ],
       },
 
-      workbox: {
-        runtimeCaching: [
-          {
-            // Supabase API Caching
-            urlPattern: ({ url }) =>
-              url.origin === 'https://YOUR_PROJECT_ID.supabase.co',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'supabase-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24,
-              },
-            },
-          },
-        ],
-      },
     }),
   ].filter(Boolean),
 
