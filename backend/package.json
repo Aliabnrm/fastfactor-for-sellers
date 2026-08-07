@@ -21,10 +21,10 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
-    "db:up": "node-pg-migrate up",
-    "db:down": "node-pg-migrate down",
-    "db:status": "node-pg-migrate status",
-    "db:create": "node-pg-migrate create"
+    "db:up": "node-pg-migrate up --migrations-dir migrations",
+    "db:down": "node-pg-migrate down --migrations-dir migrations",
+    "db:status": "node-pg-migrate up --migrations-dir migrations --dry-run",
+    "db:create": "node-pg-migrate create --migrations-dir migrations"
   },
   "devDependencies": {
     "@types/bcrypt": "^6",

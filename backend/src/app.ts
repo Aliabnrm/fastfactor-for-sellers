@@ -19,6 +19,10 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (_, res) => {
+  res.send("Server is running");
+});
+
 // Auth API
 app.use("/api/v1/auth", authRoutes);
 // Store API
@@ -29,9 +33,5 @@ app.use("/api/v1/order", orderRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
-
-app.get("/", (_, res) => {
-  res.send("Server is running");
-});
 
 export default app;

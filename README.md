@@ -200,6 +200,25 @@ docker compose exec backend pnpm db:up
 
 Inspect service status and logs:
 
+### 5. Docker 
+
+docker compose up --build -d
+docker compose exec backend pnpm db:up
+\
+Open the app:
+Frontend: http://localhost:5173
+Backend:  http://localhost:4000
+API:      http://localhost:4000/api/v1
+
+DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fastfactor_db
+
+
+docker compose ps
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f postgres
+
+
 ```bash
 docker compose ps
 docker compose logs -f

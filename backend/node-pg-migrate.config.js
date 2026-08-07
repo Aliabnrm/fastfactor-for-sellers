@@ -5,5 +5,5 @@ module.exports = {
 
   migrationsTable: "pgmigrations",
 
-  dir: "database/migrations",
+  dir: "migrations",
 };
