@@ -3,6 +3,7 @@ import { CheckoutData } from '@/schema/checkoutSchema'
 
 const initialData: CheckoutData = {
   product: '',
+  price: '',
   productPhoto: null,
   customerName: '',
   phoneNumber: '',

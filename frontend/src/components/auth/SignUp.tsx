@@ -26,8 +26,6 @@ const SignUpPage = () => {
   })
 
   const onSubmit = (data: SignupDTO) => {
-    console.log('submit', data)
-
     register(data, {
       onSuccess: response => {
         setAuth(response.user, response.accessToken)

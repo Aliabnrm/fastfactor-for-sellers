@@ -12,17 +12,17 @@ import {
 import type { AxiosInstance } from 'axios'
 
 export const loginApi = async (api: AxiosInstance, body: SigninDTO) => {
-  SigninSchema.parse(body)
+  const parsedBody = SigninSchema.parse(body)
 
-  const res = await api.post('/auth/login', body)
+  const res = await api.post('/auth/login', parsedBody)
 
   return AuthResponseSchema.parse(res.data)
 }
 
 export const registerApi = async (api: AxiosInstance, body: SignupDTO) => {
-  SignupSchema.parse(body)
+  const parsedBody = SignupSchema.parse(body)
 
-  const res = await api.post('/auth/register', body)
+  const res = await api.post('/auth/register', parsedBody)
 
   return AuthResponseSchema.parse(res.data)
 }

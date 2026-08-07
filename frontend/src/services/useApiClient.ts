@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { tokenStore } from '@/lib/auth/tokenStore'
 import { API_BASE_PATH } from '../entities/baseUrl'
+import { RefreshResponseSchema } from '@/schema/auth.schema'
+import { getSafeBackendUrl } from '@/lib/sanitization'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const backendUrl = import.meta.env.VITE_API_URL
+const backendUrl = getSafeBackendUrl(import.meta.env.VITE_API_URL)
 
 const api = axios.create({
   baseURL: `${backendUrl}${API_BASE_PATH}`,
@@ -79,7 +81,7 @@ api.interceptors.response.use(
     try {
       const response = await refreshClient.post('/auth/refresh')
 
-      const newAccessToken = response.data.accessToken
+      const newAccessToken = RefreshResponseSchema.parse(response.data).accessToken
 
       tokenStore.set(newAccessToken)
 

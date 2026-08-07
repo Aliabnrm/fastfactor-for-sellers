@@ -2,6 +2,7 @@ import { Copy, Link2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
+import { encodePathSegment } from '@/lib/sanitization'
 
 type StoreLinkCardProps = {
   shopSlug: string
@@ -9,7 +10,7 @@ type StoreLinkCardProps = {
 
 const StoreLinkCard = ({ shopSlug }: StoreLinkCardProps) => {
   const { toast } = useToast()
-  const storeLink = `${window.location.origin}/checkout/${shopSlug}`
+  const storeLink = `${window.location.origin}/checkout/${encodePathSegment(shopSlug)}`
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(storeLink)

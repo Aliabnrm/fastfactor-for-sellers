@@ -20,9 +20,9 @@ export interface OnboardingDTO {
 }
 
 export interface UpdateStoreDTO {
-  slug?: string;
-  shop_name?: string;
-  card_owner?: string;
-  card_number?: string;
-  shipping_cost?: number;
+  slug?: string | undefined;
+  shop_name?: string | undefined;
+  card_owner?: string | undefined;
+  card_number?: string | undefined;
+  shipping_cost?: number | undefined;
 }

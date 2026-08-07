@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import BrandLogo from '@/components/brand/BrandLogo'
+import { encodePathSegment } from '@/lib/sanitization'
 
 const FeatureSection = ({ sellerSlug }: any) => {
   const { logout } = useAuth()
@@ -37,7 +38,7 @@ const FeatureSection = ({ sellerSlug }: any) => {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => navigate(`/checkout/${sellerSlug}`)}
+              onClick={() => navigate(`/checkout/${encodePathSegment(sellerSlug)}`)}
               className="gap-2 px-7"
             >
               <ShoppingBag className="h-5 w-5" />

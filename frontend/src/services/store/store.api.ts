@@ -7,15 +7,16 @@ import {
   CheckSlugResponseSchema,
 } from '@/schema/store.schema'
 import type { AxiosInstance } from 'axios'
+import { encodePathSegment } from '@/lib/sanitization'
 
 // ----------------------- POST /store/onboarding ---------------------- //
 export const createStoreApi = async (
   api: AxiosInstance,
   body: OnboardingDTO,
 ) => {
-  OnboardingSchema.parse(body)
+  const parsedBody = OnboardingSchema.parse(body)
 
-  const res = await api.post('/store/onboarding', body)
+  const res = await api.post('/store/onboarding', parsedBody)
 
   return StoreSchema.parse(res.data.data)
 }
@@ -32,16 +33,16 @@ export const updateMyStoreApi = async (
   api: AxiosInstance,
   body: UpdateStoreDTO,
 ) => {
-  UpdateStoreSchema.parse(body)
+  const parsedBody = UpdateStoreSchema.parse(body)
 
-  const res = await api.patch('/store/me', body)
+  const res = await api.patch('/store/me', parsedBody)
 
   return StoreSchema.parse(res.data.data)
 }
 
 // --------------------------- GET /store/:slug --------------------------- //
 export const getStoreBySlugApi = async (api: AxiosInstance, slug: string) => {
-  const res = await api.get(`/store/${slug}`)
+  const res = await api.get(`/store/${encodePathSegment(slug)}`)
 
   return res.data.data
 }
@@ -49,7 +50,6 @@ export const getStoreBySlugApi = async (api: AxiosInstance, slug: string) => {
 
 // --------------------------- GET /store/check-slug --------------------------- //
 export const checkSlugApi = async (api: AxiosInstance, slug: string) => {
-  const res = await api.get(`/store/check-slug/${slug}`)
+  const res = await api.get(`/store/check-slug/${encodePathSegment(slug)}`)
   return CheckSlugResponseSchema.parse(res.data.data)
 }
-

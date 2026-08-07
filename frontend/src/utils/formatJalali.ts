@@ -1,3 +1,5 @@
+import { sanitizeLogValue } from '@/lib/sanitization'
+
 export function formatJalali(dateString: string) {
   try {
     const date = new Date(dateString)
@@ -7,7 +9,7 @@ export function formatJalali(dateString: string) {
       timeStyle: 'short',
     }).format(date)
   } catch (error) {
-    console.error('Invalid date:', dateString)
+    console.error('Invalid date:', sanitizeLogValue(dateString))
     return ''
   }
 }

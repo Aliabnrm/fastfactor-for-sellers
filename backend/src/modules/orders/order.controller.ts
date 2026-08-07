@@ -2,6 +2,13 @@ import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import * as orderService from "./order.service.js";
 import type { OrderStatus } from "./order.types.js";
+import { parseInput } from "../../utils/parseInput.js";
+import {
+  createOrderParamsSchema,
+  createOrderSchema,
+  orderParamsSchema,
+  updateOrderStatusSchema,
+} from "./order.validation.js";
 
 interface OrderParams {
   orderId: string;
@@ -17,7 +24,9 @@ interface UpdateOrderStatusParams {
 
 export const createOrder = catchAsync(
   async (req: Request<CreateOrderParams>, res: Response) => {
-    const order = await orderService.createOrder(req.params.slug, req.body);
+    const params = parseInput(createOrderParamsSchema, req.params);
+    const body = parseInput(createOrderSchema, req.body);
+    const order = await orderService.createOrder(params.slug, body);
 
     return res.status(201).json({
       success: true,
@@ -38,9 +47,10 @@ export const getMyOrders = catchAsync(async (req: Request, res: Response) => {
 
 export const getMyOrderById = catchAsync(
   async (req: Request<OrderParams>, res: Response) => {
+    const params = parseInput(orderParamsSchema, req.params);
     const order = await orderService.getMyOrderById(
       req.user!.userId,
-      req.params.orderId,
+      params.orderId,
     );
 
     return res.status(200).json({
@@ -56,10 +66,12 @@ export const updateOrderStatus = catchAsync(
     req: Request<UpdateOrderStatusParams, unknown, { status: OrderStatus }>,
     res: Response,
   ) => {
+    const params = parseInput(orderParamsSchema, req.params);
+    const body = parseInput(updateOrderStatusSchema, req.body);
     const order = await orderService.updateOrderStatus(
       req.user!.userId,
-      req.params.orderId,
-      req.body.status,
+      params.orderId,
+      body.status,
     );
 
     return res.status(200).json({

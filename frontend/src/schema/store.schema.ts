@@ -1,4 +1,14 @@
 import { z } from 'zod'
+import { sanitizeString } from '@/lib/sanitization'
+
+const sanitizedStringSchema = z.string().transform(sanitizeString)
+const slugSchema = sanitizedStringSchema.pipe(
+  z
+    .string()
+    .min(3)
+    .max(50)
+    .regex(/^[a-z0-9-]+$/),
+)
 
 // ======================== STORE  ======================== //
 export const StoreSchema = z.object({
@@ -8,16 +18,16 @@ export const StoreSchema = z.object({
   created_at: z.string(),
   is_onboarded: z.boolean(),
   shipping_cost: z.coerce.number(),
-  slug: z.string().nullable(),
-  shop_name: z.string().nullable(),
-  card_owner: z.string().nullable(),
-  card_number: z.string().nullable(),
+  slug: slugSchema.nullable(),
+  shop_name: sanitizedStringSchema.nullable(),
+  card_owner: sanitizedStringSchema.nullable(),
+  card_number: sanitizedStringSchema.nullable(),
 })
 
 export const PublicStoreSchema = z.object({
   id: z.string(),
-  shop_name: z.string(),
-  slug: z.string(),
+  shop_name: sanitizedStringSchema,
+  slug: slugSchema,
   shipping_cost: z.coerce.number(),
 })
 
@@ -25,14 +35,11 @@ export type PublicStore = z.infer<typeof PublicStoreSchema>
 
 // ======================== ONBOARDING ======================== //
 export const OnboardingSchema = z.object({
-  shop_name: z.string().min(3),
-  card_owner: z.string().min(3),
+  shop_name: sanitizedStringSchema.pipe(z.string().min(3).max(100)),
+  card_owner: sanitizedStringSchema.pipe(z.string().min(3).max(100)),
   shipping_cost: z.number().min(0),
-  card_number: z.string().regex(/^\d{16}$/),
-  slug: z
-    .string()
-    .min(3)
-    .regex(/^[a-z0-9-]+$/),
+  card_number: sanitizedStringSchema.pipe(z.string().regex(/^\d{16}$/)),
+  slug: slugSchema,
 })
 
 // ======================== UPDATE ======================== //

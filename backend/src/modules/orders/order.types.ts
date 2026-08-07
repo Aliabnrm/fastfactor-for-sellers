@@ -3,12 +3,12 @@ export interface CreateOrderDTO {
   total_price: number;
   postal_code: string;
   product_name: string;
-  receipt_url?: string | null;
-  card_last_4?: string | null;
+  receipt_url?: string | null | undefined;
+  card_last_4?: string | null | undefined;
   product_price: number;
   customer_name: string;
   customer_phone: string;
-  product_image_url?: string | null;
+  product_image_url?: string | null | undefined;
 }
 
 export type OrderStatus = "pending" | "confirmed" | "delivered" | "rejected";

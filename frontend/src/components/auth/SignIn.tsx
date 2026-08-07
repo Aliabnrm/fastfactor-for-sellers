@@ -27,7 +27,6 @@ const SignInPage = () => {
       setAuth(response.user, response.accessToken)
       navigate('/', { replace: true })
     } catch (error: any) {
-      console.log('LOGIN ERROR', error)
       alert(error?.response?.data?.message ?? error.message)
     }
   }

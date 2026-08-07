@@ -76,7 +76,6 @@ const OnboardingForm = () => {
             navigate('/order', { replace: true })
           },
           onError: (error: any) => {
-            console.error(error)
             message.error(
               error?.response?.data?.message ?? 'خطا در ایجاد فروشگاه',
             )
@@ -84,7 +83,6 @@ const OnboardingForm = () => {
         },
       )
     } catch (error) {
-      console.error(error)
       handleUnknownError(error)
     }
   }, [createStore, form, navigate])
