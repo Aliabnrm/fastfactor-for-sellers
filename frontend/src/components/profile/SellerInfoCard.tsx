@@ -2,7 +2,7 @@ import { Info, Store } from 'lucide-react'
 import { Card, Form, Input } from 'antd'
 
 const SellerInfoCard = () => (
-  <Card className="!rounded-2xl !border-border !shadow-[var(--shadow-sm)]">
+  <Card className="!rounded-xl !border-border !shadow-[var(--shadow-sm)]">
     <div className="mb-5 flex items-center gap-3">
       <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
         <Store className="h-5 w-5" />

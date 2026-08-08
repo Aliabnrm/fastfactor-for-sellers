@@ -71,14 +71,14 @@ const ProfilePage = () => {
         <PaymentSettingsCard handleCardChange={handleCardNumberChange} />
         <AccountActionsCard />
 
-        <div className="sticky bottom-3 z-20 w-full rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
+        <div className="sticky bottom-4 z-20 w-full rounded-xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
           <Button
             size="large"
             type="primary"
             htmlType="submit"
             className="!h-12 w-full"
             loading={updateMutation.isPending}
-            icon={<Save className="mt-1 h-5 w-5" />}
+            icon={<Save className="h-5 w-5" />}
           >
             ذخیره تغییرات
           </Button>

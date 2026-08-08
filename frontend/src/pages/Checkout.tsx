@@ -27,8 +27,8 @@ export default function CheckoutPage() {
       ? 'در حال دریافت اطلاعات فروشگاه...'
       : 'در حال ثبت سفارش و آپلود مدارک...'
     return (
-      <main className="app-canvas flex items-center justify-center p-6 text-center">
-        <div className="surface-card relative z-10 p-10">
+      <main className="app-canvas flex items-center justify-center p-4 text-center">
+        <div className="surface-card relative z-10 p-6 sm:p-8">
           <Spin size="large" tip={tipText} />
         </div>
       </main>

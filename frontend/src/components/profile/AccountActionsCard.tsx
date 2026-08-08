@@ -6,7 +6,7 @@ const AccountActionsCard = () => {
   const { logout, loading } = useAuth()
 
   return (
-    <Card className="!rounded-2xl !border-border !shadow-[var(--shadow-sm)]">
+    <Card className="!rounded-xl !border-border !shadow-[var(--shadow-sm)]">
       <div className="mb-4">
         <h2 className="text-lg font-bold text-slate-900">حساب کاربری</h2>
         <p className="mt-1 text-xs text-slate-500">
@@ -19,7 +19,7 @@ const AccountActionsCard = () => {
         size="large"
         onClick={logout}
         loading={loading}
-        icon={<LogOut className="mt-1 h-5 w-5" />}
+        icon={<LogOut className="h-5 w-5" />}
         className="!h-12"
       >
         خروج از حساب

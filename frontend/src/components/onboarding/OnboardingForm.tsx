@@ -91,9 +91,9 @@ const OnboardingForm = () => {
     <>
       <OnboardingProgress currentStep={currentStep} />
 
-      <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-7">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-slate-900">
+      <section className="rounded-xl border border-border bg-white p-5 shadow-sm sm:p-6">
+        <div className="mb-5">
+          <h2 className="text-lg font-bold text-slate-900 sm:text-xl">
             {stepContent[currentStep].title}
           </h2>
           <p className="mt-1 text-sm leading-6 text-slate-500">

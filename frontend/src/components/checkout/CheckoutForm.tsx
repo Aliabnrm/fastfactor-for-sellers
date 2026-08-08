@@ -61,16 +61,16 @@ export const CheckoutForm = ({
   }
 
   return (
-    <main className="app-canvas px-3 py-5 sm:px-4 sm:py-10">
+    <main className="app-canvas px-4 py-6 sm:py-10">
       <div className="relative z-10 mx-auto max-w-2xl">
-        <header className="mb-6 flex items-center justify-between rounded-2xl border border-white/80 bg-white/85 p-4 shadow-sm backdrop-blur-xl sm:p-5">
-          <div>
+        <header className="mb-5 flex items-center justify-between gap-4 rounded-xl border border-white/80 bg-white/85 p-4 shadow-sm backdrop-blur-xl sm:mb-6 sm:p-5">
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-emerald-700 text-white">
                 <Store className="h-5 w-5" />
               </span>
-              <div>
-                <h1 className="font-bold text-slate-900 sm:text-lg">
+              <div className="min-w-0">
+                <h1 className="truncate font-bold text-slate-900 sm:text-lg">
                   {shopName}
                 </h1>
                 <p className="text-xs text-slate-500">فروشنده تأییدشده</p>
@@ -85,7 +85,7 @@ export const CheckoutForm = ({
             title="خلاصه سفارش"
             icon={<ShoppingBag className="h-5 w-5" />}
           >
-            <div className="grid gap-5">
+            <div className="grid gap-4 sm:gap-5">
               <div className="space-y-2">
                 <Label htmlFor="product">نام محصول *</Label>
                 <Input
@@ -112,27 +112,27 @@ export const CheckoutForm = ({
               </div>
 
               <Card className="space-y-3 border-indigo-100 bg-indigo-50/60 p-4 text-sm">
-                <div className="flex justify-between gap-3">
-                  <span className="text-slate-500">قیمت محصول</span>
+                <div className="flex items-start justify-between gap-3">
+                  <span className="shrink-0 text-slate-500">قیمت محصول</span>
                   <span
                     className={
                       productPrice > 0
-                        ? 'font-semibold'
+                        ? 'text-left font-semibold'
                         : 'text-muted-foreground'
                     }
                   >
                     {productPrice > 0 ? formatToFa(productPrice) : '---'} تومان
                   </span>
                 </div>
-                <div className="flex justify-between gap-3">
-                  <span className="text-slate-500">هزینه ارسال</span>
-                  <span className="font-semibold">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="shrink-0 text-slate-500">هزینه ارسال</span>
+                  <span className="text-left font-semibold">
                     {formatToFa(shippingCost)} تومان
                   </span>
                 </div>
-                <div className="flex justify-between gap-3 border-t border-indigo-100 pt-3 text-base font-bold text-indigo-950">
-                  <span>مبلغ قابل پرداخت</span>
-                  <span>{formatToFa(total)} تومان</span>
+                <div className="flex items-start justify-between gap-3 border-t border-indigo-100 pt-3 text-base font-bold text-indigo-950">
+                  <span className="shrink-0">مبلغ قابل پرداخت</span>
+                  <span className="text-left">{formatToFa(total)} تومان</span>
                 </div>
               </Card>
             </div>
@@ -142,7 +142,7 @@ export const CheckoutForm = ({
             title="اطلاعات خریدار"
             icon={<UserRound className="h-5 w-5" />}
           >
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
               <div className="space-y-2">
                 <Label htmlFor="customerName">نام و نام خانوادگی *</Label>
                 <Input
@@ -179,7 +179,7 @@ export const CheckoutForm = ({
             title="اطلاعات ارسال"
             icon={<MapPin className="h-5 w-5" />}
           >
-            <div className="grid gap-5">
+            <div className="grid gap-4 sm:gap-5">
               <div className="space-y-2">
                 <Label htmlFor="address">آدرس کامل *</Label>
                 <Textarea
@@ -214,7 +214,7 @@ export const CheckoutForm = ({
             title="تأیید پرداخت"
             icon={<CreditCard className="h-5 w-5" />}
           >
-            <div className="grid gap-5">
+            <div className="grid gap-4 sm:gap-5">
               <div className="space-y-2">
                 <Label htmlFor="cardLastDigits">۴ رقم آخر کارت *</Label>
                 <Input
@@ -223,7 +223,7 @@ export const CheckoutForm = ({
                   maxLength={4}
                   dir="ltr"
                   inputMode="numeric"
-                  className="text-center text-lg tracking-[0.35em]"
+                  className="text-center text-lg tracking-widest"
                   onChange={event =>
                     update(
                       'cardLastDigits',
@@ -246,7 +246,7 @@ export const CheckoutForm = ({
             </div>
           </CheckoutSection>
 
-          <div className="sticky bottom-3 z-20 rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
+          <div className="sticky bottom-4 z-20 rounded-xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-lg)] backdrop-blur-xl">
             <Button
               type="submit"
               className="h-12 w-full bg-gradient-to-l from-teal-500 to-emerald-700 shadow-emerald-900/15 hover:from-teal-600 hover:to-emerald-800"

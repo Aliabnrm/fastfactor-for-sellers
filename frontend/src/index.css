@@ -32,7 +32,7 @@
     --input: 215 20% 82%;
     --ring: 243 60% 40%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
@@ -91,7 +91,7 @@
   }
 
   body {
-    @apply m-0 min-w-[320px] bg-background text-foreground antialiased;
+    @apply m-0 bg-background text-foreground antialiased;
     font-family:
       'Vazirmatn',
       -apple-system,
@@ -119,18 +119,15 @@
 
 @layer components {
   .app-canvas {
-    @apply relative min-h-screen overflow-hidden bg-background;
-    background-image:
-      radial-gradient(circle at 15% 10%, hsl(234 100% 94% / 0.7), transparent 28rem),
-      radial-gradient(circle at 90% 90%, hsl(160 84% 92% / 0.45), transparent 24rem);
+    @apply relative min-h-screen overflow-x-hidden bg-background;
   }
 
   .surface-card {
-    @apply rounded-2xl border border-border bg-card shadow-[var(--shadow-md)];
+    @apply rounded-xl border border-border bg-card shadow-[var(--shadow-sm)];
   }
 
   .page-title {
-    @apply text-2xl font-bold leading-9 tracking-tight text-foreground sm:text-3xl;
+    @apply text-2xl font-bold leading-9 text-foreground sm:text-3xl;
   }
 
   .page-subtitle {
@@ -138,7 +135,7 @@
   }
 
   .form-actions {
-    @apply sticky bottom-3 z-10 mt-8 flex flex-col gap-3 rounded-2xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-md)] backdrop-blur-xl sm:static sm:flex-row-reverse sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none;
+    @apply sticky bottom-4 z-10 mt-8 flex flex-col gap-3 rounded-xl border border-white/70 bg-white/90 p-3 shadow-[var(--shadow-md)] backdrop-blur-xl sm:static sm:flex-row-reverse sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none;
   }
 
   .ant-form-item .ant-form-item-label > label {
@@ -146,7 +143,7 @@
   }
 
   .ant-form-item {
-    @apply mb-5;
+    @apply mb-4;
   }
 
   .ant-input,

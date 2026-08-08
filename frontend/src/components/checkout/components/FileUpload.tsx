@@ -83,7 +83,9 @@ export const FileUpload = ({
         </span>
 
         {fileName ? (
-          <p className="text-sm font-medium text-foreground">{fileName}</p>
+          <p className="truncate text-sm font-medium text-foreground">
+            {fileName}
+          </p>
         ) : (
           <>
             <p className="mb-1 text-sm font-medium text-foreground">

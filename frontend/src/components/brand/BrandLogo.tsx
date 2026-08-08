@@ -15,7 +15,7 @@ const BrandLogo = ({
   <div
     aria-label="FastFactor"
     className={cn(
-      'inline-flex items-center gap-2.5 font-bold tracking-tight',
+      'inline-flex items-center gap-2.5 font-bold',
       compact ? 'text-lg' : 'text-2xl sm:text-3xl',
       className,
     )}

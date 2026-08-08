@@ -1,4 +1,4 @@
-import cors from "cors";
+import cors, { type CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import express, { type Express } from "express";
 import authRoutes from "./modules/auth/auth.routes.js";
@@ -9,11 +9,30 @@ import { notFoundMiddleware } from "./middleware/notFound.middleware.js";
 
 const app: Express = express();
 
+const defaultAllowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
+const allowedOrigins = (process.env.CORS_ORIGINS ?? defaultAllowedOrigins.join(","))
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions: CorsOptions = {
+  credentials: true,
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
+};
+
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  }),
+  cors(corsOptions),
 );
 
 app.use(express.json());

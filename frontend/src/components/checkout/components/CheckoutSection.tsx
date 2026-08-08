@@ -16,7 +16,7 @@ const CheckoutSection = ({
 }: CheckoutSectionProps) => (
   <section
     className={cn(
-      'rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6',
+      'rounded-xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6',
       className,
     )}
   >

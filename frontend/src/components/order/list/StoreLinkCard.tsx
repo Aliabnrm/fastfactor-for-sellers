@@ -35,7 +35,7 @@ const StoreLinkCard = ({ shopSlug }: StoreLinkCardProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-xl bg-slate-100 p-2 sm:flex-row">
+      <div className="flex flex-col gap-2 rounded-xl bg-slate-100 p-2 sm:flex-row sm:items-center">
         <code
           className="min-w-0 flex-1 truncate px-3 py-2 text-left text-sm text-slate-700"
           dir="ltr"
@@ -43,7 +43,7 @@ const StoreLinkCard = ({ shopSlug }: StoreLinkCardProps) => {
         >
           {storeLink}
         </code>
-        <Button onClick={handleCopyLink} className="shrink-0">
+        <Button onClick={handleCopyLink} className="w-full shrink-0 sm:w-auto">
           <Copy className="h-4 w-4" />
           کپی لینک
         </Button>

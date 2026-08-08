@@ -17,7 +17,7 @@ const OrderStats = (props: OrderStatsProps) => (
       return (
         <Card
           key={item.key}
-          className="flex min-h-36 flex-col justify-between p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-lg sm:min-h-40 sm:p-5"
+          className="flex min-h-32 flex-col justify-between p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-lg sm:min-h-36 sm:p-5"
         >
           <div
             className={`${item.bgColor} flex h-11 w-11 items-center justify-center rounded-xl`}
@@ -28,7 +28,7 @@ const OrderStats = (props: OrderStatsProps) => (
             <span className="block text-sm text-muted-foreground">
               {item.label}
             </span>
-            <span className={`mt-1 block text-3xl font-bold ${item.textColor}`}>
+            <span className={`mt-1 block text-2xl font-bold sm:text-3xl ${item.textColor}`}>
               {value.toLocaleString('fa-IR')}
             </span>
           </div>

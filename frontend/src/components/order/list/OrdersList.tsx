@@ -47,7 +47,7 @@ const OrdersList = ({ orders }: OrdersListProps) => {
 
   if (!orders.length) {
     return (
-      <Card className="p-10 text-center">
+      <Card className="p-6 text-center sm:p-10">
         <p className="font-medium text-slate-700">هنوز سفارشی ثبت نشده است.</p>
         <p className="mt-2 text-sm text-muted-foreground">
           پس از ثبت اولین سفارش، اطلاعات آن در این بخش نمایش داده می‌شود.
@@ -66,10 +66,10 @@ const OrdersList = ({ orders }: OrdersListProps) => {
             key={order.id}
             className="overflow-hidden transition-[border-color,box-shadow] hover:border-indigo-200 hover:shadow-lg"
           >
-            <CardHeader className="gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
+            <CardHeader className="gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-lg font-bold text-slate-900">
+                  <span className="min-w-0 break-words text-base font-bold text-slate-900 sm:text-lg">
                     {order.customer_name}
                   </span>
                   <span className="text-xs text-slate-400" dir="ltr">
@@ -83,15 +83,15 @@ const OrdersList = ({ orders }: OrdersListProps) => {
               <OrderStatusBadge status={order.status} />
             </CardHeader>
 
-            <CardContent className="grid gap-3 border-y bg-slate-50/70 px-5 py-4 sm:grid-cols-2">
-              <div className="flex justify-between gap-4 text-sm">
-                <span className="text-muted-foreground">نام محصول</span>
-                <span className="truncate font-semibold text-slate-800">
+            <CardContent className="grid gap-3 border-y bg-slate-50/70 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div className="flex min-w-0 justify-between gap-4 text-sm">
+                <span className="shrink-0 text-muted-foreground">نام محصول</span>
+                <span className="min-w-0 truncate font-semibold text-slate-800">
                   {order.product_name}
                 </span>
               </div>
-              <div className="flex justify-between gap-4 text-sm">
-                <span className="text-muted-foreground">مبلغ کل</span>
+              <div className="flex min-w-0 justify-between gap-4 text-sm">
+                <span className="shrink-0 text-muted-foreground">مبلغ کل</span>
                 <span className="whitespace-nowrap font-bold text-slate-900">
                   {Number(order.total_price).toLocaleString('fa-IR')} تومان
                 </span>
@@ -99,7 +99,7 @@ const OrdersList = ({ orders }: OrdersListProps) => {
             </CardContent>
 
             {isOpen && (
-              <CardContent className="space-y-5 px-5 py-5">
+              <CardContent className="space-y-5 px-4 py-5 sm:px-5">
                 <div>
                   <h3 className="mb-3 font-bold text-slate-900">
                     آدرس و جزئیات مشتری

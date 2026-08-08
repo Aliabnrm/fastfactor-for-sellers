@@ -26,7 +26,7 @@ const steps = [
 const OnboardingProgress = ({
   currentStep,
 }: OnboardingProgressProps) => (
-  <div className="relative mb-8" aria-label="مراحل تکمیل اطلاعات فروشگاه">
+  <div className="relative mb-7" aria-label="مراحل تکمیل اطلاعات فروشگاه">
     <div className="absolute right-[16.66%] top-6 h-px w-2/3 bg-slate-200" />
     <div
       className="absolute right-[16.66%] top-6 h-px bg-primary transition-[width] duration-300"
@@ -47,7 +47,7 @@ const OnboardingProgress = ({
           >
             <span
               className={cn(
-                'flex h-12 w-12 items-center justify-center rounded-xl border bg-white text-slate-400 shadow-sm transition-colors',
+                'flex h-11 w-11 items-center justify-center rounded-xl border bg-white text-slate-400 shadow-sm transition-colors sm:h-12 sm:w-12',
                 isComplete &&
                   'border-emerald-500 bg-emerald-500 text-white',
                 isCurrent &&
@@ -62,7 +62,7 @@ const OnboardingProgress = ({
             </span>
             <span
               className={cn(
-                'mt-3 text-xs font-semibold text-slate-500 sm:text-sm',
+                'mt-3 text-xs font-semibold leading-5 text-slate-500 sm:text-sm',
                 (isComplete || isCurrent) && 'text-slate-900',
               )}
             >
