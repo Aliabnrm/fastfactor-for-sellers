@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { API_BASE_PATH } from '@/entities/baseUrl'
-import { getSafeBackendUrl } from '@/lib/sanitization'
+import { getBackendUrl } from '@/lib/sanitization'
 
-const backendUrl = getSafeBackendUrl(import.meta.env.VITE_API_URL)
+const backendUrl = getBackendUrl(import.meta.env.VITE_API_URL, import.meta.env.DEV)
 
 export const coreApi = axios.create({
   baseURL: `${backendUrl}${API_BASE_PATH}`,

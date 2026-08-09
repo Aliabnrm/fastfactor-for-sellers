@@ -2,10 +2,10 @@ import axios from 'axios'
 import { tokenStore } from '@/lib/auth/tokenStore'
 import { API_BASE_PATH } from '../entities/baseUrl'
 import { RefreshResponseSchema } from '@/schema/auth.schema'
-import { getSafeBackendUrl } from '@/lib/sanitization'
+import { getBackendUrl } from '@/lib/sanitization'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const backendUrl = getSafeBackendUrl(import.meta.env.VITE_API_URL)
+const backendUrl = getBackendUrl(import.meta.env.VITE_API_URL, import.meta.env.DEV)
 
 const api = axios.create({
   baseURL: `${backendUrl}${API_BASE_PATH}`,

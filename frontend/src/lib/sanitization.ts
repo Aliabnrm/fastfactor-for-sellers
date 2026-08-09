@@ -29,9 +29,26 @@ export const hasSafeUrlProtocol = (value: string) => {
   }
 }
 
-export const getSafeBackendUrl = (value: string | undefined) => {
-  const fallbackUrl = 'http://localhost:4000'
-  const backendUrl = sanitizeString(value ?? fallbackUrl)
+const getLocalBackendUrl = () => 'http://localhost:4000'
 
-  return hasSafeUrlProtocol(backendUrl) ? backendUrl : fallbackUrl
+export const getSafeBackendUrl = (value: string | undefined) => {
+  const backendUrl = sanitizeString(value ?? '')
+
+  if (hasSafeUrlProtocol(backendUrl)) {
+    return backendUrl.replace(/\/+$/, '')
+  }
+
+  throw new Error('VITE_API_URL must be set to the backend origin')
+}
+
+export const getBackendUrl = (value: string | undefined, isDevelopment = false) => {
+  try {
+    return getSafeBackendUrl(value)
+  } catch (error) {
+    if (isDevelopment) {
+      return getLocalBackendUrl()
+    }
+
+    throw error
+  }
 }
