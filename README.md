@@ -1,541 +1,197 @@
 # FastFactor for Sellers
 
-FastFactor is a mobile-first, right-to-left web application designed for
-Persian-speaking sellers. After creating an account and completing store setup,
-each seller receives a public checkout link. Customers use this link to submit
-orders, while sellers manage the order lifecycle from a dedicated dashboard.
+FastFactor is a lightweight B2B order collection platform designed for small sellers who operate primarily through social media or direct messaging and need a simple, reliable way to collect structured orders and payment proofs.
 
-This repository contains two independent applications:
+Instead of managing orders through scattered chat messages, sellers can create a storefront, generate a unique order link, and let customers submit orders through a structured form.
 
-- `frontend`: React user interface and Progressive Web App
-- `backend`: Express REST API backed by PostgreSQL
+---
 
-## Core Features
+## 🚀 Problem Statement
 
-- Seller registration, login, session refresh, and logout
-- Multi-step store setup covering identity, payment, and shipping information
-- A unique public checkout link for every store
+Many small businesses and individual sellers:
+- Sell products through Instagram, WhatsApp, or Telegram
+- Collect orders manually via chat messages
+- Receive payment receipts as images in DMs
+- Manually track customer details, addresses, and orders
+
+This leads to:
+- Lost or incomplete order information
+- Difficult order tracking
+- No centralized order history
+- High cognitive load for sellers
+
+FastFactor aims to solve this by providing a **single, structured order flow** without requiring sellers to build a full e-commerce website.
+
+---
+
+## 🎯 Target Users
+
+**Primary users (B2B):**
+- Small business owners
+- Instagram-based sellers
+- Home businesses
+- Individual sellers without technical background
+
+**Secondary users:**
+- Customers submitting orders via a public order form
+
+---
+
+## 🧠 Solution Overview
+
+FastFactor provides:
+- Seller authentication and dashboard
+- Store profile creation (name, payment info, delivery cost)
+- Unique public order link per seller
 - Public customer order form
-- Automatic order-total calculation, including shipping cost
-- Seller dashboard for viewing and managing order statuses
-- Store, payment-card, and shipping settings
-- Responsive RTL interface with PWA installation support
+- Payment receipt upload
+- Centralized order management panel
 
-## System Architecture
+The platform focuses on **speed, simplicity, and low setup cost**.
 
-```mermaid
-flowchart LR
-    U[Customer or Seller Browser]
-    F[React SPA / PWA]
-    A[Axios REST Client]
-    E[Express API /api/v1]
-    M[Auth, Store, and Order Modules]
-    P[(PostgreSQL 17)]
+---
 
-    U --> F
-    F --> A
-    A --> E
-    E --> M
-    M --> P
-```
-
-The frontend uses the project's internal REST API for all active application
-operations. Data is validated with Zod at the frontend and backend boundaries,
-and the database is accessed exclusively through backend repositories.
-
-### Authentication Flow
-
-1. The user authenticates through `/api/v1/auth/login` or
-   `/api/v1/auth/register`.
-2. The access token is held in frontend memory and sent through the
-   `Authorization: Bearer <token>` header.
-3. The refresh token is stored in an `HttpOnly` cookie.
-4. During session renewal, the previous refresh token is revoked in the
-   database and a new token is issued.
-5. Protected backend routes are secured by `authMiddleware`.
-
-## Technology Stack
+## 🏗 Architecture Overview
 
 ### Frontend
+- **React + TypeScript**
+- **Vite** for fast builds and development
+- **TailwindCSS + shadcn/ui** for consistent UI
+- **React Router** for routing
+- **TanStack Query** for server-state management
+- **PWA support** for installability on mobile devices
 
-| Area | Technology |
-| --- | --- |
-| Framework | React 18 + TypeScript |
-| Build Tool | Vite 5 + SWC |
-| Routing | React Router 6 |
-| Server State | TanStack Query 5 |
-| HTTP Client | Axios |
-| Forms | React Hook Form + Ant Design Form |
-| Validation | Zod |
-| UI | Tailwind CSS, shadcn/ui, Radix UI, and Ant Design 5 |
-| Icons | Lucide React |
-| PWA | Vite Plugin PWA + Workbox |
-| Code Quality | ESLint + TypeScript |
+### Backend / Infrastructure
+- **Supabase**
+  - Authentication
+  - PostgreSQL database
+  - File storage for payment receipts
+  - Row Level Security (RLS)
 
-### Backend
+### Deployment
+- Frontend deployed on **Vercel**
+- Backend managed by Supabase
 
-| Area | Technology |
-| --- | --- |
-| Runtime | Node.js 22 |
-| Framework | Express 5 + TypeScript |
-| Database | PostgreSQL 17 + `pg` |
-| Migrations | node-pg-migrate |
-| Authentication | JWT, bcrypt, and HttpOnly cookies |
-| Validation | Zod |
-| Logging | Pino + pino-pretty |
-| Error Handling | Middleware and custom error classes |
+---
 
-### Infrastructure
+## 🔄 User Flow
 
-- pnpm
-- Docker
-- Docker Compose
-- PostgreSQL health check and persistent volume
+### Seller Flow
+1. Seller signs up / logs in
+2. Creates or updates store profile
+3. Receives a unique public order link
+4. Shares the link with customers
+5. Views incoming orders in dashboard
 
-## Repository Structure
+### Customer Flow
+1. Opens seller’s public order link
+2. Fills order form (product, quantity, address)
+3. Uploads payment receipt
+4. Submits order
 
-```text
-fastfactor-for-sellers/
-├── backend/
-│   ├── migrations/             # Database schema history
-│   ├── docs/                   # PRD and data-model documentation
-│   ├── src/
-│   │   ├── database/           # PostgreSQL connection
-│   │   ├── errors/             # Domain-specific errors
-│   │   ├── logger/             # Pino configuration
-│   │   ├── middleware/         # Auth, error, not-found, and request ID
-│   │   ├── modules/
-│   │   │   ├── auth/           # Controllers, services, repositories, routes
-│   │   │   ├── orders/
-│   │   │   └── stores/
-│   │   ├── app.ts              # Express application
-│   │   └── server.ts           # Process lifecycle and HTTP listener
-│   ├── Dockerfile
-│   └── package.json
-├── frontend/
-│   ├── public/                 # Public assets and PWA icons
-│   ├── src/
-│   │   ├── components/         # UI primitives and feature components
-│   │   ├── config/             # Presentation and order-status configuration
-│   │   ├── context/            # Authentication context
-│   │   ├── guard/              # Route guards
-│   │   ├── hooks/              # React hooks
-│   │   ├── pages/              # Route-level pages
-│   │   ├── schema/             # Zod contracts and validation
-│   │   ├── services/           # REST clients and query hooks
-│   │   └── AppRoutes.tsx       # Routes and application providers
-│   ├── Dockerfile
-│   ├── vite.config.ts
-│   └── package.json
-├── docker-compose.yml
-└── README.md
-```
+---
 
-## Prerequisites
+## 🗂 Data Model (Simplified)
 
-The following tools are required to run the complete project:
+- **users**
+  - id
+  - email
 
-- Node.js 22
-- Corepack
-- pnpm
-- Docker and Docker Compose for containerized development
+- **stores**
+  - id
+  - owner_id
+  - name
+  - payment_info
+  - shipping_cost
 
-Enable pnpm through Corepack:
+- **orders**
+  - id
+  - store_id
+  - customer_name
+  - customer_phone
+  - address
+  - product_details
+  - receipt_url
+  - created_at
 
-```bash
-corepack enable
-```
+---
 
-The expected package-manager version for each application is declared in that
-application's `package.json`.
+## 🔐 Security Considerations
 
-## Quick Start with Docker
+- Supabase Auth for authentication
+- Row Level Security (RLS) ensures:
+  - Sellers can only access their own stores and orders
+  - Public order creation is limited to insert-only operations
+- Uploaded payment receipts are stored securely in Supabase Storage
 
-The current Docker Compose configuration is intended for local development. It
-provides hot reload for both the frontend and backend.
+---
 
-### 1. Configure Environment Variables
+## ⚙️ State Management Strategy
 
-Create `backend/.env.docker`:
+- **TanStack Query** is used for:
+  - Fetching orders
+  - Caching server responses
+  - Preventing unnecessary refetches
+- Local UI state handled with React hooks
+- Clear separation between server state and UI state
 
-```env
-DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fastfactor_db
-ACCESS_TOKEN_SECRET=replace-with-a-long-random-secret
-REFRESH_TOKEN_SECRET=replace-with-another-long-random-secret
-NODE_ENV=development
-PORT=4000
-LOG_LEVEL=info
-```
+---
 
-Create `frontend/.env.docker`:
+## 🧪 Testing Strategy (Planned)
 
-```env
-VITE_API_URL=http://localhost:4000
-```
+Currently, the project focuses on functional completeness.
+Planned improvements include:
+- Unit tests for Supabase service layer
+- Integration tests for order submission flow
 
-> `VITE_API_URL` must contain the backend origin only. Do not append `/api/v1`;
-> the frontend adds this prefix internally.
+---
 
-### 2. Build and Start the Services
+## 📈 Trade-offs & Design Decisions
 
-Run from the repository root:
+### Why Supabase?
+- Fast backend setup
+- Built-in authentication
+- PostgreSQL with RLS
+- Minimal backend maintenance
 
-```bash
-docker compose up --build -d
-```
+**Trade-off:** Less flexibility compared to a fully custom backend.
 
-### 3. Apply Database Migrations
+### Why TanStack Query?
+- Clear separation of server and client state
+- Automatic caching and revalidation
+- Reduced boilerplate compared to Redux for async data
 
-```bash
-docker compose exec backend pnpm db:up
-```
+### Why not a full e-commerce system?
+- Target users need **simplicity**, not feature overload
+- Lower friction means higher adoption for small sellers
 
-### 4. Access the Services
+---
 
-| Service | Address |
-| --- | --- |
-| Frontend | http://localhost:5173 |
-| Backend | http://localhost:4000 |
-| PostgreSQL | `localhost:5432` |
+## 🔮 Future Improvements
 
-Inspect service status and logs:
+- Order status management (pending / confirmed / shipped)
+- Seller analytics dashboard
+- SMS or WhatsApp notifications
+- Multi-product orders
+- Admin moderation tools
 
-### 5. Docker 
+---
 
-docker compose up --build -d
-docker compose exec backend pnpm db:up
-\
-Open the app:
-Frontend: http://localhost:5173
-Backend:  http://localhost:4000
-API:      http://localhost:4000/api/v1
+## 🧑‍💻 Developer Notes
 
-DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fastfactor_db
+This project was built to demonstrate:
+- Product thinking
+- End-to-end ownership
+- Clean frontend architecture
+- Real-world integration with backend services
+- B2B-focused problem solving
 
+It reflects how I approach building production-ready internal tools and customer-facing workflows.
 
-docker compose ps
-docker compose logs -f backend
-docker compose logs -f frontend
-docker compose logs -f postgres
+---
 
+## 📦 Installation
 
 ```bash
-docker compose ps
-docker compose logs -f
-```
-
-Stop the services:
-
-```bash
-docker compose down
-```
-
-Stop the services and delete the database volume:
-
-```bash
-docker compose down -v
-```
-
-> The last command permanently removes all PostgreSQL data stored in the Docker
-> volume.
-
-## Local Development Without Docker
-
-This approach requires an accessible PostgreSQL instance on the host system.
-
-### Backend
-
-Create `backend/.env`:
-
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fastfactor_db
-ACCESS_TOKEN_SECRET=replace-with-a-long-random-secret
-REFRESH_TOKEN_SECRET=replace-with-another-long-random-secret
-NODE_ENV=development
-PORT=4000
-LOG_LEVEL=info
-```
-
-Install dependencies, apply migrations, and start the backend:
-
-```bash
-cd backend
-pnpm install
-pnpm db:up
-pnpm dev
-```
-
-### Frontend
-
-Create `frontend/.env`:
-
-```env
-VITE_API_URL=http://localhost:4000
-```
-
-Open another terminal and run:
-
-```bash
-cd frontend
-pnpm install
-pnpm dev
-```
-
-## Environment Variables
-
-### Backend
-
-| Variable | Required | Description |
-| --- | --- | --- |
-| `DATABASE_URL` | Yes | Complete PostgreSQL connection string |
-| `ACCESS_TOKEN_SECRET` | Yes | Secret used to sign access tokens |
-| `REFRESH_TOKEN_SECRET` | Yes | Independent secret used to sign refresh tokens |
-| `NODE_ENV` | No | `development` or `production` |
-| `PORT` | No | HTTP port; defaults to `4000` |
-| `LOG_LEVEL` | No | Pino log level; defaults to `info` |
-
-### Frontend
-
-| Variable | Required | Description |
-| --- | --- | --- |
-| `VITE_API_URL` | Yes | Backend origin, such as `http://localhost:4000` |
-
-Variables prefixed with `VITE_` are embedded in the frontend bundle. Never
-store secrets in these variables.
-
-## Application Routes
-
-| Route | Access | Purpose |
-| --- | --- | --- |
-| `/auth` | Public | Registration and login |
-| `/` | Protected | Seller landing page and shortcuts |
-| `/onboarding` | Protected | Store setup |
-| `/order` | Protected | Order-management dashboard |
-| `/profile` | Protected | Store and account settings |
-| `/checkout/:slug` | Public | Store-specific checkout form |
-
-## REST API
-
-All API endpoints use the following prefix:
-
-```text
-/api/v1
-```
-
-### Authentication
-
-| Method | Endpoint | Access | Description |
-| --- | --- | --- | --- |
-| `POST` | `/auth/register` | Public | Create an account and session |
-| `POST` | `/auth/login` | Public | Sign in |
-| `POST` | `/auth/refresh` | Cookie | Rotate the refresh token |
-| `POST` | `/auth/logout` | Cookie | Revoke the current session |
-| `GET` | `/auth/me` | Bearer token | Return the current user |
-
-### Stores
-
-| Method | Endpoint | Access | Description |
-| --- | --- | --- | --- |
-| `POST` | `/store/onboarding` | Protected | Create a store |
-| `GET` | `/store/me` | Protected | Return the current user's store |
-| `PATCH` | `/store/me` | Protected | Update the current store |
-| `GET` | `/store/check-slug/:slug` | Public | Check slug availability |
-| `GET` | `/store/:slug` | Public | Return public store information |
-
-### Orders
-
-| Method | Endpoint | Access | Description |
-| --- | --- | --- | --- |
-| `POST` | `/order/:slug` | Public | Create an order for a store |
-| `GET` | `/order` | Protected | List the seller's orders |
-| `GET` | `/order/:orderId` | Protected | Return one order |
-| `PATCH` | `/order/:orderId/status` | Protected | Update an order status |
-
-Valid order statuses:
-
-```text
-pending | confirmed | delivered | rejected
-```
-
-## Database and Migration Management
-
-Migrations are stored in `backend/migrations` and currently define:
-
-- `users`
-- `refresh_tokens`
-- `stores`
-- `orders`
-- The order-status enum
-
-Run these commands from the `backend` directory:
-
-```bash
-pnpm db:up
-pnpm db:down
-pnpm db:status
-pnpm db:create descriptive_migration_name
-```
-
-Equivalent Docker commands:
-
-```bash
-docker compose exec backend pnpm db:up
-docker compose exec backend pnpm db:down
-docker compose exec backend pnpm db:status
-docker compose exec backend pnpm db:create descriptive_migration_name
-```
-
-Every new migration should support rollback and include the corresponding
-repository, type, and schema changes where required.
-
-## Available Scripts
-
-### Frontend
-
-```bash
-pnpm dev          # Start the Vite development server
-pnpm lint         # Run ESLint
-pnpm build        # Run lint and create a production bundle
-pnpm build:dev    # Create a bundle in development mode
-pnpm preview      # Preview the production build
-```
-
-### Backend
-
-```bash
-pnpm dev          # Start the server in watch mode
-pnpm build        # Compile TypeScript into dist
-pnpm start        # Run the compiled output
-pnpm db:up        # Apply pending migrations
-pnpm db:down      # Roll back the latest migration
-pnpm db:status    # Show migration status
-pnpm db:create    # Create a new migration
-```
-
-## Progressive Web App
-
-The frontend uses `vite-plugin-pwa` and Workbox. During a production build:
-
-- A Web App Manifest is generated.
-- A Service Worker is registered in `autoUpdate` mode.
-- Required installable-app assets are added to the precache.
-
-The build output is written to `frontend/dist`.
-
-## Engineering Conventions
-
-- Controllers translate HTTP requests and responses.
-- Domain logic belongs in services.
-- PostgreSQL queries belong exclusively in repositories.
-- Input and output contracts are validated with Zod.
-- Operational errors flow through dedicated error classes.
-- Frontend server state is managed with TanStack Query.
-- UI components must not depend directly on the database or transport details.
-- Database schema changes must be introduced through migrations.
-
-## Security Considerations
-
-- Never commit `.env` files containing real secrets.
-- Use separate, cryptographically random secrets for access and refresh tokens.
-- Refresh tokens are persisted in the database and rotated during session
-  renewal.
-- Cookies currently use `secure: false` for local development. Production must
-  use `secure: true`, HTTPS, and appropriate reverse-proxy settings.
-- CORS currently allows `http://localhost:5173`. Production deployments should
-  manage the allowed origin through environment-specific configuration.
-- Always validate API input on the backend, even when the frontend performs its
-  own validation.
-
-## Build and Deployment
-
-### Frontend
-
-```bash
-cd frontend
-pnpm install --frozen-lockfile
-pnpm build
-```
-
-The contents of `frontend/dist` can be deployed to any static host that
-supports single-page applications. The host must rewrite unknown routes to
-`index.html`.
-
-### Backend
-
-```bash
-cd backend
-pnpm install --frozen-lockfile
-pnpm build
-pnpm start
-```
-
-Apply approved database migrations before starting a new release. The current
-Dockerfiles and Compose configuration target development. A production setup
-should use multi-stage builds, a non-root user, a health endpoint, and managed
-secrets.
-
-## Troubleshooting
-
-### The frontend sends requests to `undefined/api/v1`
-
-`VITE_API_URL` is missing. Check `frontend/.env` and restart the Vite
-development server.
-
-### The backend cannot connect to PostgreSQL from Docker
-
-Containers must use the Compose service name as the database hostname:
-
-```env
-DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fastfactor_db
-```
-
-When running outside Docker, the hostname is typically `localhost`.
-
-### A database table or type does not exist
-
-Inspect and apply pending migrations:
-
-```bash
-docker compose exec backend pnpm db:status
-docker compose exec backend pnpm db:up
-```
-
-### Authentication requests return `401`
-
-- Verify the configured `ACCESS_TOKEN_SECRET` and `REFRESH_TOKEN_SECRET`.
-- Confirm that cookies and `withCredentials` are enabled.
-- Ensure that the frontend origin matches the backend CORS configuration.
-- Confirm that the corresponding `refresh_tokens` record exists and has not
-  been revoked.
-
-### Connect Directly to PostgreSQL
-
-```bash
-docker compose exec postgres psql -U postgres -d fastfactor_db
-```
-
-## Recommended Development Workflow
-
-1. Create a clearly named branch.
-2. Apply the change in the appropriate architectural layer.
-3. Add a migration when the database schema changes.
-4. Lint and build the frontend.
-5. Build the backend.
-6. Verify the affected paths manually or through automated tests.
-7. Keep changes in small, reviewable commits.
-
-Minimum checks before opening a pull request:
-
-```bash
-cd frontend
-pnpm lint
-pnpm build
-
-cd ../backend
-pnpm build
-```
-
-## License
-
-This repository does not currently include a license. Add a `LICENSE` file and
-select an appropriate license before public distribution.
+npm install
+npm run dev
