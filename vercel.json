@@ -1,6 +1,6 @@
 {
   "installCommand": "cd frontend && corepack pnpm install --frozen-lockfile",
-  "buildCommand": "node -e \"const value = process.env.VITE_API_URL; if (!value) throw new Error('Missing VITE_API_URL'); const url = new URL(value); if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Invalid VITE_API_URL protocol'); if (url.pathname !== '/' && url.pathname !== '') throw new Error('VITE_API_URL must be the backend origin only');\" && cd frontend && corepack pnpm build",
+  "buildCommand": "npm run validate:vercel-env && cd frontend && corepack pnpm build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     {

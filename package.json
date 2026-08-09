@@ -2,6 +2,7 @@
   "name": "fastfactor-for-sellers",
   "private": true,
   "scripts": {
+    "validate:vercel-env": "node scripts/validate-vercel-env.mjs",
     "build": "cd frontend && corepack pnpm build",
     "build:frontend": "cd frontend && corepack pnpm build",
     "build:backend": "cd backend && corepack pnpm build",
