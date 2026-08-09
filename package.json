@@ -1,0 +1,13 @@
+{
+  "name": "fastfactor-for-sellers",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && corepack pnpm build",
+    "build:frontend": "cd frontend && corepack pnpm build",
+    "build:backend": "cd backend && corepack pnpm build",
+    "lint": "cd frontend && corepack pnpm lint"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
