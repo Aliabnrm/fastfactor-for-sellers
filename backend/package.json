@@ -21,6 +21,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
+    "migrate:deploy": "node-pg-migrate up --migrations-dir migrations",
     "db:up": "node-pg-migrate up --migrations-dir migrations",
     "db:down": "node-pg-migrate down --migrations-dir migrations",
     "db:status": "node-pg-migrate up --migrations-dir migrations --dry-run",
