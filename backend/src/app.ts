@@ -42,6 +42,10 @@ app.get("/", (_, res) => {
   res.send("Server is running");
 });
 
+app.get("/health", (_, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // Auth API
 app.use("/api/v1/auth", authRoutes);
 // Store API

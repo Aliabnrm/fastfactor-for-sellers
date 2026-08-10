@@ -4,7 +4,8 @@ import { logger } from "./logger/logger.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.PORT) || 4000;
+const HOST = process.env.HOST || "0.0.0.0";
 
 process.on("uncaughtException", (error) => {
   logger.fatal(error);
@@ -16,6 +17,6 @@ process.on("unhandledRejection", (reason) => {
   process.exit(1);
 });
 
-app.listen(PORT, () => {
-  logger.info(`🚀 Server running on port ${PORT}`);
+app.listen(PORT, HOST, () => {
+  logger.info(`🚀 Server running on ${HOST}:${PORT}`);
 });
