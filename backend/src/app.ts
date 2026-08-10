@@ -15,10 +15,17 @@ const defaultAllowedOrigins = [
   "https://fastfactor.vercel.app",
 ];
 
-const allowedOrigins = (process.env.CORS_ORIGINS ?? defaultAllowedOrigins.join(","))
+const configuredAllowedOrigins = (process.env.CORS_ORIGINS ?? "")
   .split(",")
   .map((origin) => origin.trim().replace(/\/+$/, ""))
   .filter(Boolean);
+
+const allowedOrigins = Array.from(
+  new Set([
+    ...defaultAllowedOrigins,
+    ...configuredAllowedOrigins,
+  ]),
+);
 
 const corsOptions: CorsOptions = {
   credentials: true,
