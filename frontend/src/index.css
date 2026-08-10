@@ -179,32 +179,4 @@
     background: linear-gradient(135deg, hsl(243 60% 30%), hsl(234 62% 47%));
   }
 
-  .ant-tabs .ant-tabs-nav::before {
-    @apply border-0;
-  }
-
-  .ant-tabs .ant-tabs-ink-bar {
-    @apply hidden;
-  }
-
-  .auth-tabs > .ant-tabs-nav {
-    @apply mb-0 rounded-full bg-slate-200/80 p-1;
-  }
-
-  .auth-tabs .ant-tabs-nav-list {
-    @apply w-full;
-  }
-
-  .auth-tabs .ant-tabs-tab {
-    @apply mx-0 flex-1 justify-center rounded-full px-4 py-2.5 text-base font-semibold text-slate-600 transition-all;
-  }
-
-  .auth-tabs .ant-tabs-tab-active {
-    background: linear-gradient(135deg, hsl(243 60% 35%), hsl(234 62% 52%));
-    box-shadow: 0 6px 16px hsl(var(--primary) / 0.22);
-  }
-
-  .auth-tabs .ant-tabs-tab-btn {
-    @apply w-full text-center;
-  }
 }
