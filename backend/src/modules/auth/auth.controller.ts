@@ -10,11 +10,13 @@ import {
   userIdSchema,
 } from "./auth.validation.js";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const REFRESH_COOKIE_OPTIONS = {
   path: "/",
-  secure: false,
   httpOnly: true,
-  sameSite: "lax" as const,
+  secure: isProduction,
+  sameSite: isProduction ? ("none" as const) : ("lax" as const),
 };
 
 export const register = catchAsync(async (req: Request, res: Response) => {
@@ -70,10 +72,7 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
   }
 
   res.clearCookie("refreshToken", {
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    ...REFRESH_COOKIE_OPTIONS,
   });
 
   return res.status(200).json({

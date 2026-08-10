@@ -12,17 +12,20 @@ const app: Express = express();
 const defaultAllowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "https://fastfactor.vercel.app",
 ];
 
 const allowedOrigins = (process.env.CORS_ORIGINS ?? defaultAllowedOrigins.join(","))
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ""))
   .filter(Boolean);
 
 const corsOptions: CorsOptions = {
   credentials: true,
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const normalizedOrigin = origin?.replace(/\/+$/, "");
+
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
       return;
     }
