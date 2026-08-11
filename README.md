@@ -67,18 +67,20 @@ The platform focuses on **speed, simplicity, and low setup cost**.
 - **TanStack Query** for server-state management
 - **PWA support** for installability on mobile devices
 
-### Backend / Infrastructure
+### Backend
 
-- **Supabase**
-  - Authentication
-  - PostgreSQL database
-  - File storage for payment receipts
-  - Row Level Security (RLS)
+- **Node.js + Express + TypeScript**
+- **PostgreSQL** for relational data storage
+- **node-pg-migrate** for versioned database migrations
+- **JWT authentication** with access token and refresh token rotation
+- **Zod** for request validation and input sanitization
+- **Pino** for structured logging
 
 ### Deployment
 
 - Frontend deployed on **Vercel**
-- Backend managed by Supabase
+- Backend deployed independently on **Render**
+- PostgreSQL database hosted independently on **Render**
 
 ---
 
@@ -106,12 +108,22 @@ The platform focuses on **speed, simplicity, and low setup cost**.
 - **users**
   - id
   - email
+  - password_hash
+
+- **refresh_tokens**
+  - id
+  - user_id
+  - token
+  - expires_at
+  - is_revoked
 
 - **stores**
   - id
   - owner_id
-  - name
-  - payment_info
+  - shop_name
+  - slug
+  - card_number
+  - card_owner
   - shipping_cost
 
 - **orders**
@@ -120,19 +132,25 @@ The platform focuses on **speed, simplicity, and low setup cost**.
   - customer_name
   - customer_phone
   - address
-  - product_details
+  - postal_code
+  - product_name
+  - product_price
+  - total_price
   - receipt_url
+  - status
   - created_at
 
 ---
 
 ## 🔐 Security Considerations
 
-- Supabase Auth for authentication
-- Row Level Security (RLS) ensures:
-  - Sellers can only access their own stores and orders
-  - Public order creation is limited to insert-only operations
-- Uploaded payment receipts are stored securely in Supabase Storage
+- Passwords are hashed with **bcrypt** before storage
+- Access tokens are short-lived and sent through the `Authorization` header
+- Refresh tokens are stored in an **HTTP-only cookie** and persisted in PostgreSQL
+- Refresh token rotation revokes the previous token before issuing a new one
+- Protected routes use JWT middleware to attach the authenticated user to the request
+- Seller-owned resources are queried through owner-scoped repository methods
+- Zod schemas validate and sanitize request payloads, route params, bearer tokens, and URLs
 
 ---
 
@@ -152,21 +170,21 @@ The platform focuses on **speed, simplicity, and low setup cost**.
 Currently, the project focuses on functional completeness.
 Planned improvements include:
 
-- Unit tests for Supabase service layer
+- Unit tests for backend service and repository layers
 - Integration tests for order submission flow
 
 ---
 
 ## 📈 Trade-offs & Design Decisions
 
-### Why Supabase?
+### Why a custom Express backend?
 
-- Fast backend setup
-- Built-in authentication
-- PostgreSQL with RLS
-- Minimal backend maintenance
+- Full control over authentication, refresh token rotation, and API behavior
+- Clear separation between controller, service, repository, and validation layers
+- Easier to evolve business rules directly inside the application backend
+- Direct PostgreSQL access with explicit migrations and predictable schema changes
 
-**Trade-off:** Less flexibility compared to a fully custom backend.
+**Trade-off:** More backend code and operational responsibility compared to fully managed services.
 
 ### Why TanStack Query?
 
