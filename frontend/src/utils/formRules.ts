@@ -39,10 +39,16 @@ export const toEnglishDigits = (value: string) => {
     .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
 }
 
-export const formatCardNumber = (value: string) =>
-  value
-    .replace(/\D/g, '')
-    .slice(0, 16)
+export const getCardNumberDigits = (value?: string | number | null) => {
+  if (value == null) {
+    return ''
+  }
+
+  return toEnglishDigits(String(value)).replace(/\D/g, '').slice(0, 16)
+}
+
+export const formatCardNumber = (value?: string | number | null) =>
+  getCardNumberDigits(value)
     .replace(/(\d{4})(?=\d)/g, '$1-')
     .replace(/-$/, '')
 

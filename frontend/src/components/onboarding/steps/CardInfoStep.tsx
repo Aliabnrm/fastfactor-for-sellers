@@ -3,6 +3,7 @@ import {
   cardNumberRules,
   cardOwnerRules,
 } from '@/lib/validation/rules'
+import { formatCardNumber } from '@/utils/formRules'
 
 const CardInfoStep = () => (
   <>
@@ -18,10 +19,12 @@ const CardInfoStep = () => (
       name="card_number"
       label="شماره کارت"
       rules={cardNumberRules}
+      getValueFromEvent={event => formatCardNumber(event.target.value)}
     >
       <Input
         size="large"
         inputMode="numeric"
+        maxLength={19}
         placeholder="0000-0000-0000-0000"
         dir="ltr"
       />

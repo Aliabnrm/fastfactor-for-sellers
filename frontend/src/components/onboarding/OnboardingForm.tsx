@@ -2,7 +2,7 @@ import { useDebounce } from 'ahooks'
 import { Button, Form, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
-import { toEnglishDigits } from '@/utils/formRules'
+import { getCardNumberDigits } from '@/utils/formRules'
 import { handleUnknownError } from '@/lib/unknownError'
 import { useCheckSlug, useCreateStore } from '@/services/store/store.hooks'
 import ShopInfoStep from './steps/ShopInfoStep'
@@ -69,7 +69,7 @@ const OnboardingForm = () => {
       createStore(
         {
           ...values,
-          card_number: toEnglishDigits(values.card_number),
+          card_number: getCardNumberDigits(values.card_number),
         },
         {
           onSuccess: () => {
