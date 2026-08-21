@@ -69,11 +69,11 @@ export const CheckoutForm = ({
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-emerald-700 text-white">
                 <Store className="h-5 w-5" />
               </span>
-              <div className="min-w-0">
-                <h1 className="truncate font-bold text-slate-900 sm:text-lg">
+              <div className="flex flex-col gap-0">
+                <span className=" font-bold text-slate-900 sm:text-lg">
                   {shopName}
-                </h1>
-                <p className="text-xs text-slate-500">فروشنده تأییدشده</p>
+                </span>
+                <span className="text-xs text-slate-500">فروشنده تأییدشده</span>
               </div>
             </div>
           </div>

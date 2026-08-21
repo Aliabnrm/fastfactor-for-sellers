@@ -24,11 +24,11 @@ const OrderStats = (props: OrderStatsProps) => (
           >
             <Icon className={`h-5 w-5 ${item.textColor}`} />
           </div>
-          <div className="mt-5">
-            <span className="block text-sm text-muted-foreground">
-              {item.label}
+          <div className="mt-5 flex items-center gap-1">
+            <span className="block text-md text-muted-foreground">
+              {item.label} :
             </span>
-            <span className={`mt-1 block text-2xl font-bold sm:text-3xl ${item.textColor}`}>
+            <span className={` block text-2xl font-bold sm:text-3xl ${item.textColor}`}>
               {value.toLocaleString('fa-IR')}
             </span>
           </div>

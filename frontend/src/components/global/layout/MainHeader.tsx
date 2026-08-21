@@ -17,14 +17,6 @@ const MainHeader = ({
   return (
     <header className="sticky top-0 z-30 border-b border-white/70 bg-white/85 shadow-sm backdrop-blur-xl">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
-        <button
-          type="button"
-          onClick={() => navigate('/')}
-          aria-label="صفحه اصلی"
-          className="rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-        >
-          <BrandLogo compact />
-        </button>
 
         <div className="flex items-center gap-3">
           {rightSlot
@@ -40,6 +32,14 @@ const MainHeader = ({
               </button>
             )}
         </div>
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          aria-label="صفحه اصلی"
+          className="rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+        >
+          <BrandLogo compact />
+        </button>
       </div>
     </header>
   )

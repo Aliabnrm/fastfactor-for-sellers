@@ -10,7 +10,7 @@ const OrderStatusBadge = ({ status }: { status: OrderStatus }) => {
 
   return (
     <Badge
-      className={`flex min-w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${data.bgColor} ${data.textColor} ${data.borderColor}`}
+      className={`flex max-w-[100px] min-w-fit items-center gap-1.5  rounded-full border px-3 py-1 text-xs font-semibold ${data.bgColor} ${data.textColor} ${data.borderColor}`}
     >
       <Icon className="h-3.5 w-3.5" />
       {data.label}

@@ -26,7 +26,7 @@ const CheckoutSection = ({
           {icon}
         </span>
       )}
-      <h2 className="font-bold text-slate-900 sm:text-lg">{title}</h2>
+      <span className="font-bold text-slate-900 sm:text-lg">{title}</span>
     </div>
     {children}
   </section>
