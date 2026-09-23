@@ -68,7 +68,17 @@ const SignUpPage = () => {
       <Form.Item
         label="رمز عبور"
         validateStatus={errors.password ? 'error' : ''}
-        help={errors.password?.message}
+        help={
+          errors.password ? (
+            <span
+              id="signup-password-error"
+              role="alert"
+              className="block pt-1 text-right text-sm text-red-600"
+            >
+              {errors.password.message}
+            </span>
+          ) : null
+        }
       >
         <Controller
           name="password"
@@ -77,7 +87,13 @@ const SignUpPage = () => {
             <Input.Password
               {...field}
               size="large"
-              placeholder="یک رمز امن انتخاب کنید"
+              minLength={8}
+              autoComplete="new-password"
+              placeholder="حداقل ۸ کاراکتر"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={
+                errors.password ? 'signup-password-error' : undefined
+              }
             />
           )}
         />

@@ -39,6 +39,10 @@ const sanitizedStringSchema: z.ZodType<string> = z
   .transform(sanitizeString)
 const emailSchema = sanitizedStringSchema.pipe(z.string().email().max(255))
 const tokenSchema = sanitizedStringSchema.pipe(z.string().min(1).max(4096))
+const passwordSchema = z
+  .string()
+  .min(1, 'رمز عبور را وارد کنید.')
+  .min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد.')
 const nullableNameSchema: z.ZodType<string | null | undefined> = z.preprocess(value => {
   if (value === '') {
     return undefined
@@ -62,7 +66,7 @@ export const UserSchema = z.object({
 // ========================
 export const SignupSchema = z.object({
   email: emailSchema,
-  password: z.string().min(8).max(72),
+  password: passwordSchema.max(72),
   first_name: nullableNameSchema,
   last_name: nullableNameSchema,
 }) as unknown as z.ZodType<SignupDTO>
@@ -72,7 +76,7 @@ export const SignupSchema = z.object({
 // ========================
 export const SigninSchema = z.object({
   email: emailSchema,
-  password: z.string().max(1024),
+  password: passwordSchema.max(1024),
 }) as unknown as z.ZodType<SigninDTO>
 
 // ========================

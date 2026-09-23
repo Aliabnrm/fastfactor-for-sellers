@@ -19,8 +19,8 @@ export const passwordRules: Rule[] = [
     message: 'رمز عبور را وارد کنید.',
   },
   {
-    min: 6,
-    message: 'رمز عبور حداقل باید ۶ کاراکتر باشد.',
+    min: 8,
+    message: 'رمز عبور باید حداقل ۸ کاراکتر باشد.',
   },
 ]
 

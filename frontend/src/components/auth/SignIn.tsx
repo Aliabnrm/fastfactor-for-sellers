@@ -61,7 +61,17 @@ const SignInPage = () => {
       <Form.Item
         label="رمز عبور"
         validateStatus={errors.password ? 'error' : ''}
-        help={errors.password?.message}
+        help={
+          errors.password ? (
+            <span
+              id="signin-password-error"
+              role="alert"
+              className="block pt-1 text-right text-sm text-red-600"
+            >
+              {errors.password.message}
+            </span>
+          ) : null
+        }
       >
         <Controller
           name="password"
@@ -70,7 +80,13 @@ const SignInPage = () => {
             <Input.Password
               {...field}
               size="large"
-              placeholder="یک رمز امن انتخاب کنید"
+              minLength={8}
+              autoComplete="current-password"
+              placeholder="حداقل ۸ کاراکتر"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={
+                errors.password ? 'signin-password-error' : undefined
+              }
             />
           )}
         />
