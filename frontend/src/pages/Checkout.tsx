@@ -1,6 +1,7 @@
 'use client'
+import LoadingState from '@/components/global/LoadingState'
 import { useState } from 'react'
-import { Alert, Button, Spin } from 'antd'
+import { Alert, Button } from 'antd'
 import { useToast } from '@/hooks/use-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CheckoutForm } from '@/components/checkout/CheckoutForm'
@@ -14,7 +15,12 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
 
-  const { data: sellerShopInfo, isLoading, error } = usePublicStore(slug)
+  const {
+    data: sellerShopInfo,
+    isLoading,
+    error,
+    refetch,
+  } = usePublicStore(slug)
 
   const { handleCheckoutSubmit, isSubmitting } = useCheckoutSubmit(
     sellerShopInfo,
@@ -27,11 +33,14 @@ export default function CheckoutPage() {
       ? 'در حال دریافت اطلاعات فروشگاه...'
       : 'در حال ثبت سفارش و آپلود مدارک...'
     return (
-      <main className="app-canvas flex items-center justify-center p-4 text-center">
-        <div className="surface-card relative z-10 p-6 sm:p-8">
-          <Spin size="large" tip={tipText} />
-        </div>
-      </main>
+      <LoadingState
+        title={tipText}
+        description={
+          isSubmitting
+            ? 'لطفاً تا پایان ثبت سفارش این صفحه را باز نگه دارید.'
+            : undefined
+        }
+      />
     )
   }
 
@@ -45,7 +54,17 @@ export default function CheckoutPage() {
             type="error"
             showIcon
           />
-          <Button onClick={() => navigate('/')}>بازگشت</Button>
+          <div className="flex justify-center gap-3">
+            <Button
+              type="primary"
+              onClick={() => {
+                void refetch()
+              }}
+            >
+              تلاش مجدد
+            </Button>
+            <Button onClick={() => navigate('/')}>بازگشت</Button>
+          </div>
         </div>
       </main>
     )

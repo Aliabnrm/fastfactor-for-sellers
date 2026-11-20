@@ -93,7 +93,7 @@
   body {
     @apply m-0 bg-background text-foreground antialiased;
     font-family:
-      'Vazirmatn',
+      'Vazirmatn Variable',
       -apple-system,
       BlinkMacSystemFont,
       'Segoe UI',

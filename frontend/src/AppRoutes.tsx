@@ -1,12 +1,8 @@
-import AuthPage from './pages/Auth'
-import HomePage from './pages/Home'
+import { lazy, Suspense } from 'react'
+import LoadingState from '@/components/global/LoadingState'
+import PageErrorBoundary from '@/components/global/PageErrorBoundary'
 import { ConfigProvider } from 'antd'
 import faIR from 'antd/locale/fa_IR'
-import OrderPage from './pages/Order'
-import Checkout from './pages/Checkout'
-import ProfilePage from './pages/Profile'
-import NotFoundPage from './pages/NotFound'
-import OnboardingPage from './pages/Onboarding'
 import { Toaster } from '@/components/ui/toaster'
 import ProtectedRoute from './guard/ProtectedRoute'
 import PublicAuthRoute from './guard/PublicAuthRoute'
@@ -14,9 +10,36 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import AuthProviderWrapper from '@/context/AuthProviderWrapper'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from 'react-router-dom'
 
-const queryClient = new QueryClient()
+const AuthPage = lazy(() => import('./pages/Auth'))
+
+const HomePage = lazy(() => import('./pages/Home'))
+
+const OrderPage = lazy(() => import('./pages/Order'))
+
+const Checkout = lazy(() => import('./pages/Checkout'))
+
+const ProfilePage = lazy(() => import('./pages/Profile'))
+
+const NotFoundPage = lazy(() => import('./pages/NotFound'))
+
+const OnboardingPage = lazy(() => import('./pages/Onboarding'))
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      retry: false,
+    },
+  },
+})
 
 const AppRoutes = () => (
   <QueryClientProvider client={queryClient}>
@@ -33,7 +56,7 @@ const AppRoutes = () => (
           borderRadius: 12,
           controlHeight: 48,
           fontFamily:
-            "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            "'Vazirmatn Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
         components: {
           Button: {
@@ -55,61 +78,76 @@ const AppRoutes = () => (
         <Sonner />
 
         <BrowserRouter>
-          <AuthProviderWrapper>
-            <Routes>
-              {/* PUBLIC */}
-              <Route
-                path="/auth"
-                element={
-                  <PublicAuthRoute>
-                    <AuthPage />
-                  </PublicAuthRoute>
-                }
-              />
+          <PageErrorBoundary>
+            <Suspense
+              fallback={<LoadingState title="در حال آماده‌سازی صفحه" />}
+            >
+              <Routes>
+                <Route
+                  element={
+                    <AuthProviderWrapper>
+                      <Outlet />
+                    </AuthProviderWrapper>
+                  }
+                >
+                  {/* PUBLIC */}
+                  <Route
+                    path="/auth"
+                    element={
+                      <PublicAuthRoute>
+                        <AuthPage />
+                      </PublicAuthRoute>
+                    }
+                  />
 
-              {/* PROTECTED */}
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <HomePage />
-                  </ProtectedRoute>
-                }
-              />
+                  {/* PROTECTED */}
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <HomePage />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/onboarding"
-                element={
-                  <ProtectedRoute>
-                    <OnboardingPage />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/onboarding"
+                    element={
+                      <ProtectedRoute>
+                        <OnboardingPage />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/order"
-                element={
-                  <ProtectedRoute>
-                    <OrderPage />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/order"
+                    element={
+                      <ProtectedRoute>
+                        <OrderPage />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <ProfilePage />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              {/* OTHER */}
-              <Route path="/login" element={<Navigate to="/auth" replace />} />
-              <Route path="/checkout/:slug" element={<Checkout />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </AuthProviderWrapper>
+                  {/* OTHER */}
+                  <Route
+                    path="/login"
+                    element={<Navigate to="/auth" replace />}
+                  />
+                </Route>
+                <Route path="/checkout/:slug" element={<Checkout />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </PageErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
     </ConfigProvider>

@@ -1,3 +1,4 @@
+import '@fontsource-variable/vazirmatn'
 import './index.css'
 import 'antd/dist/reset.css'
 import AppRoutes from './AppRoutes.tsx'

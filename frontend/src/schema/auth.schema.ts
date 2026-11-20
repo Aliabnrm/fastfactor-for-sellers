@@ -32,6 +32,7 @@ export interface AuthResponse {
 
 export interface RefreshResponse {
   accessToken: string
+  user: User
 }
 
 const sanitizedStringSchema: z.ZodType<string> = z
@@ -43,13 +44,16 @@ const passwordSchema = z
   .string()
   .min(1, 'رمز عبور را وارد کنید.')
   .min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد.')
-const nullableNameSchema: z.ZodType<string | null | undefined> = z.preprocess(value => {
-  if (value === '') {
-    return undefined
-  }
+const nullableNameSchema: z.ZodType<string | null | undefined> = z.preprocess(
+  value => {
+    if (value === '') {
+      return undefined
+    }
 
-  return value
-}, sanitizedStringSchema.optional().nullable())
+    return value
+  },
+  sanitizedStringSchema.optional().nullable(),
+)
 
 // ========================
 // USER
@@ -97,5 +101,5 @@ export const AuthResponseSchema = z.object({
 
 export const RefreshResponseSchema = z.object({
   accessToken: tokenSchema,
-  // refreshToken: z.string(),
+  user: UserSchema,
 }) as unknown as z.ZodType<RefreshResponse>

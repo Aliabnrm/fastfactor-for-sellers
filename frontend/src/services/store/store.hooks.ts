@@ -6,8 +6,13 @@ import {
   getStoreBySlugApi,
 } from './store.api'
 import api from '../useApiClient'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { OnboardingDTO, PublicStoreSchema, StoreSchema, UpdateStoreDTO } from '@/schema/store.schema'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  OnboardingDTO,
+  PublicStoreSchema,
+  StoreSchema,
+  UpdateStoreDTO,
+} from '@/schema/store.schema'
 
 // --------------------------- GET MY STORE --------------------------- //
 export const useMyStore = () => {
@@ -37,18 +42,21 @@ export const usePublicStore = (slug: string) => {
   })
 }
 
-
 // --------------------------- CREATE STORE --------------------------- //
 export const useCreateStore = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: OnboardingDTO) => createStoreApi(api, data),
+    onSuccess: store => queryClient.setQueryData(['my-store'], store),
   })
 }
 
 // --------------------------- UPDATE STORE --------------------------- //
 export const useUpdateStore = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: UpdateStoreDTO) => updateMyStoreApi(api, data),
+    onSuccess: store => queryClient.setQueryData(['my-store'], store),
   })
 }
 

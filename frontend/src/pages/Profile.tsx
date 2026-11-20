@@ -1,3 +1,4 @@
+import LoadingState from '@/components/global/LoadingState'
 import { ChangeEvent, useEffect } from 'react'
 import { Save, Settings2 } from 'lucide-react'
 import { Form, Button, FormProps } from 'antd'
@@ -17,7 +18,7 @@ type ProfileFormValues = {
 const ProfilePage = () => {
   const [form] = Form.useForm<ProfileFormValues>()
 
-  const { data: storeProfileInfo } = useMyStore()
+  const { data: storeProfileInfo, isLoading, error, refetch } = useMyStore()
 
   const updateMutation = useUpdateStore()
 
@@ -41,12 +42,23 @@ const ProfilePage = () => {
     })
   }
 
-  const handleCardNumberChange = (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replace(/\D/g, '').substring(0, 16)
     form.setFieldValue('cardNumber', value.replace(/(\d{4})(?=\d)/g, '$1-'))
   }
+
+  if (isLoading) return <LoadingState title="در حال دریافت تنظیمات فروشگاه" />
+  if (error)
+    return (
+      <LoadingState
+        error
+        title="تنظیمات فروشگاه دریافت نشد"
+        description="لطفاً دوباره تلاش کنید."
+        onRetry={() => {
+          void refetch()
+        }}
+      />
+    )
 
   return (
     <MainLayout showProfile={false}>

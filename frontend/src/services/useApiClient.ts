@@ -1,15 +1,20 @@
 import axios from 'axios'
+import { sessionHint } from '@/lib/auth/sessionHint'
 import { tokenStore } from '@/lib/auth/tokenStore'
 import { API_BASE_PATH } from '../entities/baseUrl'
 import { RefreshResponseSchema } from '@/schema/auth.schema'
 import { getBackendUrl } from '@/lib/sanitization'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const backendUrl = getBackendUrl(import.meta.env.VITE_API_URL, import.meta.env.DEV)
+const backendUrl = getBackendUrl(
+  import.meta.env.VITE_API_URL,
+  import.meta.env.DEV,
+)
 
 const api = axios.create({
   baseURL: `${backendUrl}${API_BASE_PATH}`,
   withCredentials: true,
+  timeout: 60_000,
 })
 
 let isRefreshing = false
@@ -47,9 +52,10 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest: any = error.config
 
-    const isAuthEndpoint = originalRequest.url?.includes('/auth')
+    const isAuthEndpoint = originalRequest?.url?.includes('/auth')
 
     if (
+      !originalRequest ||
       error.response?.status !== 401 ||
       originalRequest?._retry ||
       isAuthEndpoint
@@ -76,12 +82,15 @@ api.interceptors.response.use(
     const refreshClient = axios.create({
       baseURL: `${backendUrl}${API_BASE_PATH}`,
       withCredentials: true,
+      timeout: 60_000,
     })
 
     try {
       const response = await refreshClient.post('/auth/refresh')
 
-      const newAccessToken = RefreshResponseSchema.parse(response.data).accessToken
+      const newAccessToken = RefreshResponseSchema.parse(
+        response.data,
+      ).accessToken
 
       tokenStore.set(newAccessToken)
 
@@ -93,9 +102,14 @@ api.interceptors.response.use(
     } catch (refreshError) {
       processQueue(refreshError)
 
-      tokenStore.clear()
-
-      window.location.href = '/sign-in'
+      if (
+        axios.isAxiosError(refreshError) &&
+        refreshError.response?.status === 401
+      ) {
+        tokenStore.clear()
+        sessionHint.set('guest')
+        window.location.href = '/auth'
+      }
 
       return Promise.reject(refreshError)
     } finally {

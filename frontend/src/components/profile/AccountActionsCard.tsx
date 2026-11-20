@@ -1,9 +1,27 @@
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 import { Card, Button } from 'antd'
 import { LogOut } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 
 const AccountActionsCard = () => {
-  const { logout, loading } = useAuth()
+  const { logout } = useAuth()
+  const { toast } = useToast()
+  const [pending, setPending] = useState(false)
+  const handleLogout = async () => {
+    setPending(true)
+    try {
+      await logout()
+    } catch {
+      toast({
+        variant: 'destructive',
+        title: 'خروج از حساب انجام نشد',
+        description: 'اتصال اینترنت را بررسی کنید و دوباره تلاش کنید.',
+      })
+    } finally {
+      setPending(false)
+    }
+  }
 
   return (
     <Card className="!rounded-xl !border-border !shadow-[var(--shadow-sm)]">
@@ -17,8 +35,8 @@ const AccountActionsCard = () => {
         block
         danger
         size="large"
-        onClick={logout}
-        loading={loading}
+        onClick={handleLogout}
+        loading={pending}
         icon={<LogOut className="h-5 w-5" />}
         className="!h-12"
       >

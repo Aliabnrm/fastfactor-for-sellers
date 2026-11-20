@@ -9,7 +9,7 @@ import {
   SignupSchema,
   UserSchema,
 } from '@/schema/auth.schema'
-import type { AxiosInstance } from 'axios'
+import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 export const loginApi = async (api: AxiosInstance, body: SigninDTO) => {
   const parsedBody = SigninSchema.parse(body)
@@ -27,8 +27,11 @@ export const registerApi = async (api: AxiosInstance, body: SignupDTO) => {
   return AuthResponseSchema.parse(res.data)
 }
 
-export const refreshApi = async (api: AxiosInstance) => {
-  const res = await api.post('/auth/refresh')
+export const refreshApi = async (
+  api: AxiosInstance,
+  config?: AxiosRequestConfig,
+) => {
+  const res = await api.post('/auth/refresh', undefined, config)
 
   return RefreshResponseSchema.parse(res.data)
 }

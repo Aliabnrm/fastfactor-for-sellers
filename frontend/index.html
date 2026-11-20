@@ -7,12 +7,78 @@
     <meta name="description" content="ابزار فروش آنلاین برای فروشندگان" />
     <meta name="author" content="FastFactor" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <style>
+      body {
+        margin: 0;
+        background: #f8fafc;
+        color: #0f172a;
+        font-family: Tahoma, sans-serif;
+      }
+      .boot {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .boot-card {
+        width: min(100%, 384px);
+        padding: 32px 24px;
+        box-sizing: border-box;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        text-align: center;
+        box-shadow: 0 1px 3px #0f172a0f;
+      }
+      .boot-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font:
+          700 24px system-ui,
+          sans-serif;
+      }
+      .boot-icon {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1, #1e1b4b);
+        color: white;
+      }
+      .boot-spinner {
+        width: 24px;
+        height: 24px;
+        margin: 32px auto 20px;
+        border: 3px solid #eef2ff;
+        border-top-color: #3730a3;
+        border-radius: 50%;
+        animation: boot-spin 1s linear infinite;
+      }
+      .boot-title {
+        font-size: 17px;
+        line-height: 1.8;
+        font-weight: 700;
+      }
+      .boot-note {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 2;
+      }
+      @keyframes boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-spinner {
+          animation: none;
+        }
+      }
+    </style>
 
     <meta property="og:title" content="FastFactor - اپلیکیشن فروش سریع" />
     <meta
@@ -34,7 +100,21 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="boot">
+        <section class="boot-card" role="status" aria-live="polite">
+          <div class="boot-brand" dir="ltr">
+            <span class="boot-icon" aria-hidden="true">✦</span>FastFactor
+          </div>
+          <div class="boot-spinner" aria-hidden="true"></div>
+          <div class="boot-title">در حال آماده‌سازی فست‌فاکتور</div>
+          <p class="boot-note">فقط چند لحظه صبر کنید…</p>
+        </section>
+      </main>
+    </div>
+    <noscript
+      >برای استفاده از فست‌فاکتور، جاوااسکریپت مرورگر را فعال کنید.</noscript
+    >
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
